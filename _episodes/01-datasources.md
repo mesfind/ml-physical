@@ -14,6 +14,7 @@ objectives:
 keypoints:
 - "Essential libaries for data online data sources"
 - "Data retrieval from the CDS Toolbox"
+- "netCDF and GRIB data formats"
 ---
 
 # Copernicus Climate Data Store (CDS)
