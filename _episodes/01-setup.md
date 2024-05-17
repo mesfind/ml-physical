@@ -1,5 +1,5 @@
 ---
-title: Basic Package Installations
+title: Data sources
 teaching: 1
 exercises: 0
 questions:
