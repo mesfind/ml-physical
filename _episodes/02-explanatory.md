@@ -24,11 +24,11 @@ We will be exploring the xarray architecture using some sample climate data from
 
 If you visit the ECMWF page you will find that you can download a large number of different climate fields. Here we have prepared tutorial examples around 4 variables. Note that we provide a full resolution (global) version as well as a subsetted version (Alaska). Choose the Alaska data if you are limited for space or processing power on your local computer. 
 
-## multidimensional arrays
+## Multidimensional arrays
 
 N-dimensional arrays of numbers, like NumPy's ndarray, are fundamental in scientific computing, widely used for data representation. Geoscientists, in particular, rely on arrays to structure their data. For instance, climate scientists work with spatially and temporally varying climate variables (e.g., temperature, precipitation) on gridded datasets. Tasks include subsetting global grids for regional analysis, selecting specific time slices, and applying statistical functions to derive summary insights from these subsets.
 
-![png](..fig/dataset-diagram.png)
+![png](../fig/dataset-diagram.png)
 
 The tools in this tutorial have some similarity to raster image processing tools. Both require computational engines that can manipulate large stacks of data formatted as arrays. Here we focus on tools that are optimized to handle data that have many variables spanning dimensions of time and space. See the raster tutorials for tools that are optimized for image processing of remote sensing datasets.
 

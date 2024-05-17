@@ -13,100 +13,8 @@ keypoints:
 - "Essential libaries for data manipulation and preprocessing"
 ---
 
-# Visualize Climate data with Python
+# 
 
-## Get Metadata
-
-~~~
-import xarray as xr
-
-# the line above is necessary for getting 
-# your plot embedded within the notebook
-%matplotlib inline
-
-dset = xr.open_dataset("data/ERA5_REANALYSIS_precipitation_200306.nc")
-print(dset)
-~~~
-{: .python}
-
-Printing dset returns ERA5_REANALYSIS_precipitation_200306.nc metadata:
-
-~~~
-<xarray.Dataset>
-Dimensions:    (latitude: 721, longitude: 1440, time: 1)
-Coordinates:
-  * longitude  (longitude) float32 0.0 0.25 0.5 0.75 ... 359.25 359.5 359.75
-  * latitude   (latitude) float32 90.0 89.75 89.5 89.25 ... -89.5 -89.75 -90.0
-  * time       (time) datetime64[ns] 2003-06-01
-Data variables:
-    tp         (time, latitude, longitude) float32 ...
-Attributes:
-    Conventions:  CF-1.6
-    history:      2019-05-31 19:05:13 GMT by grib_to_netcdf-2.10.0: /opt/ecmw...
-~~~
-{: .output}
-
-
-We can see that our dset object is an xarray.Dataset, which when printed shows all the metadata associated with our netCDF data file.
-
-In this case, we are interested in the precipitation variable contained within that xarray Dataset:
-
-~~~
-print(dset['tp'])
-~~~
-{: .python}
-
-
-~~~
-xarray.DataArray 'tp' (time: 1, latitude: 721, longitude: 1440)>
-[1038240 values with dtype=float32]
-Coordinates:
-  * longitude  (longitude) float32 0.0 0.25 0.5 0.75 ... 359.25 359.5 359.75
-  * latitude   (latitude) float32 90.0 89.75 89.5 89.25 ... -89.5 -89.75 -90.0
-  * time       (time) datetime64[ns] 2003-06-01
-Attributes:
-    units:      m
-    long_name:  Total precipitation
-~~~
-{: .output}
-
-
-The total precipitation is in units of “metre of water per day”.
-
-
-## Quick visualization
-
-~~~
-dset['tp'].plot()
-~~~
-{: .python}
-
-
-We can change the colormap and adjust the maximum (remember the total precipitation is in metre):
-
-~~~
-dset['tp'].plot(cmap='jet', vmax=0.02)
-~~~
-{: .python}
-
-
-We can see there is a band around the equator and areas especially in Asia and South America with a lot of rain. Let’s add continents and a projection using cartopy:
-
-~~~
-import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
-
-fig = plt.figure(figsize=[12,5])
-
-# 111 means 1 row, 1 col and index 1
-ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=0))
-
-dset['tp'].plot(ax=ax, vmax=0.02, cmap='jet',
-                   transform=ccrs.PlateCarree())
-ax.coastlines()
-
-plt.show()
-~~~
 
 
 # Copernicus Climate Data Store (CDS)
@@ -133,3 +41,162 @@ Before starting, and once registred, login to the Climate Data Store (CDS).
 ![](fig/CDS_login)
 
 
+## Retrieve Climate data with CDS API
+
+Using CDS web interface is very useful when you need to retrieve small amount of data and you do not need to customize your request. However, it is often very useful to retrieve climate data directly on the computer where you need to run your postprocessing workflow.
+
+In that case, you can use the CDS API (Application Programming Interface) to retrieve Climate data directly in Python from the Climate Data Store.
+
+We will be using `cdsapi` python package.
+
+### Get your API key
+
+- Make sure you login to the [Climate Data Store](https://cds.climate.copernicus.eu/#!/home)
+
+- Click on your username (top right of the main page) to get your API key.
+ 
+![../fig/get_your_cds_api_key.png]
+
+- Copy the code displayed beside, in the file $HOME/.cdsapirc
+
+~~~
+url: https://cds.climate.copernicus.eu/api/v2
+key: UID:KEY
+~~~
+{: .bash}
+
+Where UID is your `uid` and KEY your API key. See [documentation](https://cds.climate.copernicus.eu/api-how-to) to get your API and related information.
+
+### Use CDS API
+
+Once the CDS API client is installed, it can be used to request data from the datasets listed in the CDS catalogue. It is necessary to agree to the Terms of Use of every datasets that you intend to download.
+
+Attached to each dataset download form, the button Show API Request displays the python code to be used. The request can be formatted using the interactive form. The api call must follow the syntax:
+
+~~~
+import cdsapi
+c = cdsapi.Client()
+
+c.retrieve("dataset-short-name", 
+           {... sub-selection request ...}, 
+           "target-file")
+~~~
+{: .python}
+
+For instance to retrieve the same ERA5 dataset e.g. near surface air temperature for June 2003:
+
+![](../fig/CDSAPI_t2m_ERA5.png
+
+Let’s try it:
+
+~~~
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'reanalysis-era5-single-levels-monthly-means',
+    {
+        'product_type':'monthly_averaged_reanalysis',
+        'variable':'2m_temperature',
+        'year':'2003',
+        'month':'06',
+        'time':'00:00',
+        'format':'netcdf'
+    },
+    'download.nc')
+~~~
+{: .python}
+
+### Geographical subset
+
+~~~
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'reanalysis-era5-single-levels-monthly-means',
+    {      
+        'area'          : [60, -10, 50, 2], # North, West, South, East. Default: global
+        'product_type':'monthly_averaged_reanalysis',
+        'variable':'2m_temperature',
+        'year':'2003',
+        'month':'06',
+        'time':'00:00',
+        'format':'netcdf'
+    },
+    'download_small_area.nc')
+~~~
+{: .python}
+
+### Change horizontal resolution
+
+For instance to get a coarser resolution:
+~~~
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'reanalysis-era5-single-levels-monthly-means',
+    {      
+        'area'          : [60, -10, 50, 2], # North, West, South, East. Default: global
+        'grid'          : [1.0, 1.0], # Latitude/longitude grid: east-west (longitude) and north-south resolution (latitude). Default: 0.25 x 0.25
+        'product_type':'monthly_averaged_reanalysis',
+        'variable':'2m_temperature',
+        'year':'2003',
+        'month':'06',
+        'time':'00:00',
+        'format':'netcdf'
+    },
+    'download_small.nc')
+~~~
+{: .python}
+
+More information can be found [here](https://confluence.ecmwf.int/display/CKB/C3S+ERA5%3A+Web+API+to+CDS+API).
+
+### To download CMIP 5 Climate data via CDS API
+
+~~~
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'projections-cmip5-monthly-single-levels',
+    {
+        'variable':'2m_temperature',
+        'model':'noresm1_m',
+        'experiment':'historical',
+        'ensemble_member':'r1i1p1',
+        'period':'185001-200512'
+    },
+    'download_CMIP5.nc')
+~~~
+{: .python}
+
+> ## Download CMIP5 from Climate Data Store with `cdsapi`
+> - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
+> What do you get when you unzip this file?
+> > ## Solution
+> > - Download the file ~~~ import cdsapi
+> >  ~~~
+> > import cdsapi
+> > c = cdsapi.Client()
+> > c.retrieve( 'projections-cmip5-monthly-single-levels', { 'variable':[ '2m_temperature','mean_precipitation_flux' ], 'model':'noresm1_m', 'experiment':'historical', 'ensemble_member':'r1i1p1', 'period':'185001-200512', 'format':'tgz' }, 'cmip5_sfc_monthly_1850-200512.zip')
+> > ~~~
+> > {: .python}
+> > - Uncompress it
+> > If you select one variable, one experiment, one model, etc. then you get one file only and it is a netCDF file (even if it says otherwise!) As soon as you select more than one variable, or more than one experiment, etc. then you get a zip or tgz (depending on the format you chose)
+> > ~~~
+> > import os
+> > import zipfile
+> > ## create a new directory
+> > os.mkdir("./cmpip5")
+> > zip_ref= zipfile.ZipFile('cmip5_sfc_monthly_1850-200512.zip', 'r')
+> > zip_ref.extractall(‘./cmip5’) zip_ref.close()
+> > ~~~
+> > {: .python}
+> {: .solution}
+{: .challenge}
