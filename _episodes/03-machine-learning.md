@@ -34,6 +34,20 @@ There are three main categories of machine learning algorithms:
 ## Evaluation Metrics and Model Selection
 
 ## Supervised Learning 
+~~~
+# Encoding categorical data
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder = LabelEncoder()
+X[:, 3] = labelencoder.fit_transform(X[:, 3])
+onehotencoder = OneHotEncoder(categorical_features = [3])
+X = onehotencoder.fit_transform(X).toarray()
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+
 ### Regression
 
 ### Classification
