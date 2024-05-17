@@ -26,7 +26,7 @@ There are many online services to get climate data, and it is often difficult to
 
 This is a service operated by the [European Centre for Medium-range Weather Forecasts (ECMWF)](https://www.ecmwf.int/) on behalf of the European Union. The [C3S](https://climate.copernicus.eu/) combines observations of the climate system with the latest science to develop authoritative, quality-assured information about the past, current and future states of the climate in Europe and worldwide.
 
-![](fig/C3S_frontpage)
+![](../fig/C3S_frontpage.png)
 
 ## The Climate Data Store (CDS)
 
@@ -37,7 +37,7 @@ This is a web portal providing a single point of access to a wide range of infor
 To be able to use CDS services, you need to [register](https://cds.climate.copernicus.eu/user/login?destination=%2F%23!%2Fhome). Registration to the Climate Data Store (CDS) is free as well as access to climate data.
 Before starting, and once registred, login to the Climate Data Store (CDS).
 
-![](fig/CDS_login)
+![](../fig/CDS_login)
 
 
 ## Retrieve Climate data with CDS API
