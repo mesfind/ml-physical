@@ -209,3 +209,17 @@ c.retrieve(
 > {: .python}
 > {: .solution}
 {: .challenge}
+
+
+> ## Exercise: Download CMIP5 from Climate Data Store with `cdsapi`
+> Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`.
+> What do you get when you unzip this file?
+> ## Count the Gs using Python in a Jupyter Notebook
+>
+> Replicate one of the solutions give above in a Jupyter notebook. Add some Markdown text to describe your program.
+>
+> > ## Solution
+> >
+> > ![jupyter browser](../fig/jupyter3.png)
+> {: .solution}
+{: .challenge}
