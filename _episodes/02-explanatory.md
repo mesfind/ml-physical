@@ -1604,7 +1604,7 @@ interact_plot = widgets.interact(generate_plot, date = select_date, variable = s
 ~~~
 {: .python}
 
-## Satelite data preprocessing
+## Satellite Data Preprocessing
 
 
 Satellites are spaceborne platforms that carry earth observation (EO) sensors and use remote sensing technologies to collect information about the earth. There are numerous satellites orbiting the earth and collecting vast amount of data that can be utilized for:
