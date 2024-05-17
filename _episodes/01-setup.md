@@ -1,14 +1,16 @@
 ---
 title: Data Sources
 teaching: 1
-exercises: 0
+exercises: 1
 questions:
 - "Understanding data sources"
 - "How to get data from online sources"
+- "How to retrieve dataset with the Toolbox?"
 objectives:
 - "Brief overview of various data souces"
 - "Discuss the benefits and disadvantages of each."
 - "Learn to combine Climate data with your own research topic"
+- "Learn how to manipulate netCDF data within the CDS Toolbox"
 keypoints:
 - "Essential libaries for data online data sources"
 - "Data retrieval from the CDS Toolbox"
