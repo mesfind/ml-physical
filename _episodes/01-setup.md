@@ -245,6 +245,6 @@ c.retrieve(
 > > with zipfile.ZipFile('cmip5_sfc_monthly_1850-200512.zip', 'r') as zip_ref:
 > >     zip_ref.extractall('./cmip5')
 > > ~~~
-> > {: .python}
+> {: .python}
 > {: .solution}
 {: .challenge}
