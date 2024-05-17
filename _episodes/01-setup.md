@@ -4,13 +4,18 @@ teaching: 1
 exercises: 0
 questions:
 - "Understanding data sources"
-- "How do I use Python?"
+- "How to get data from online sources"
 objectives:
 - "Brief overview of various data souces"
 - "Discuss the benefits and disadvantages of each."
-- "Exploratory data analysis and preprocess techniques"
+- "Learn to combine Climate data with your own research topic"
 keypoints:
-- "Essential libaries for data manipulation and preprocessing"
+- "Essential libaries for data online data sources are:"
+  - "cds api"
+  - "Pysal"
+  - "xarray"
+  - "cartopy"
+  - "GeoPandas"
 ---
 
 # Copernicus Climate Data Store (CDS)
