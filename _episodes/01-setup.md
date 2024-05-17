@@ -10,12 +10,7 @@ objectives:
 - "Discuss the benefits and disadvantages of each."
 - "Learn to combine Climate data with your own research topic"
 keypoints:
-- "Essential libaries for data online data sources are:"
-  - "cds api"
-  - "Pysal"
-  - "xarray"
-  - "cartopy"
-  - "GeoPandas"
+- "Essential libaries for data online data sources"
 - "Data retrieval from the CDS Toolbox"
 ---
 
@@ -214,7 +209,7 @@ c.retrieve(
 > {: .solution}
 {: .challenge}
 
-# Climate Data Store Toolbox
+## Climate Data Store Toolbox
 
 Let’s make the same selection as before. Go to ["your requests"](https://cds.climate.copernicus.eu/cdsapp#!/yourrequests?tab=form) tab and select the last product you downloaded.
 
