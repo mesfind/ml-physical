@@ -1,5 +1,5 @@
-Data Science for Physical Sciences
+Machine Learning  for Physical Sciences
 ==========================
 
-An introduction to Python for non-programmers using inflammation data.
+An introduction to machine learning, deep learing and RNN models for phsyical sciences applications
 
