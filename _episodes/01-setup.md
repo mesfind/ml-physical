@@ -1,5 +1,5 @@
 ---
-title: Data sources
+title: Data Sources
 teaching: 1
 exercises: 0
 questions:
