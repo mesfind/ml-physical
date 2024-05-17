@@ -177,8 +177,8 @@ c.retrieve(
 {: .python}
 
 > ## Download CMIP5 from Climate Data Store with `cdsapi`
-> - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
-> What do you get when you unzip this file?
+> - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`.
+> - What do you get when you unzip this file?
 > > ## Solution
 > > - Download the file 
 > > ~~~
@@ -196,7 +196,8 @@ c.retrieve(
 > > c.retrieve(
 > >     'projections-cmip5-monthly-single-levels', 
 > >     { 
-> >         'variable': ['2m_temperature', 'mean_precipitation_flux'],
+> >         'variable': ['2m_temperature', 
+> >         'mean_precipitation_flux'],
 > >         'model': 'noresm1_m',
 > >         'experiment': 'historical',
 > >         'ensemble_member': 'r1i1p1',
@@ -211,7 +212,7 @@ c.retrieve(
 {: .challenge}
 
 
-> ## Exercise: Download CMIP5 from Climate Data Store with `cdsapi`
+> # Exercise: Download CMIP5 from Climate Data Store with `cdsapi`
 > - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
 > - What do you get when you unzip this file?
 >
