@@ -1,5 +1,5 @@
 ---
-title: Data Processing and Visualization
+title: Data Preprocessing and Visualization
 teaching: 1
 exercises: 0
 questions:
@@ -14,121 +14,11 @@ objectives:
 
 ---
 
-To preprocess datasets for machine learning and deep learning models using Xarray, GeoPandas, and PySAL tools, you can follow these steps:
 
-1. **Data Loading and Preparation**:
-   - Use GeoPandas to read and manipulate geospatial vector data, such as shapefiles or GeoJSON files, preparing them for analysis.
-   - Leverage Xarray to handle multi-dimensional labeled arrays, which can be beneficial for organizing and preprocessing multi-temporal satellite images or other raster datasets.
-
-2. **Feature Engineering**:
-   - Utilize PySAL for advanced spatial analysis to identify spatial patterns and dependencies within the dataset, which can help in feature engineering for machine learning models.
-   - Employ GeoPandas to create, manipulate, and analyze geospatial data structures, enabling the extraction of relevant features for model training[2].
-
-3. **Spatial Data Processing**:
-   - Use GeoPandas and PySAL to perform spatial operations, such as buffering, spatial joins, and spatial autocorrelation, to enrich the dataset with spatial information for improved model performance[1][2][3].
-   - Leverage Xarray for handling and analyzing multi-dimensional raster data, which can be crucial for processing satellite imagery or other spatial datasets before feeding them into machine learning models[3][5].
-
-By integrating the capabilities of Xarray, GeoPandas, and PySAL, you can preprocess geospatial datasets effectively for machine learning and deep learning tasks, ensuring that the data is structured, enriched with spatial information, and ready for model training and analysis.
+# Data preprocessing
 
 
-### Python's Basic in Time Series Data
-
-### Some Useful Pandas Tools
-
-#### Changing Index to Datetime
-
-To convert the index of a pandas DataFrame to datetime format, you can use the `to_datetime` function. Here's how you can do it:
-
-~~~
-df.index = df.to_datetime(df.index)
-~~~
-
-#### Plotting the Time Series Data
-
-Once the index is in datetime format, you can plot the time series data using the `plot` function:
-
-~~~
-df.plot()
-~~~
-{: .python}
-
-#### Slicing the Data
-
-After converting the index to datetime format, you can slice the data based on specific dates. For example, to get the data for the year 2012:
-
-~~~
-df['2012']
-~~~
-{: .python}
-
-#### Join two dataframes
-
-~~~
-df1.join(df2)
-~~~
-{: .python}
-
-
-- computing the percentage change and differenes in time series
-
-~~~
-df['col'].pct_changes()
-df['col'].diff()
-~~~
-{: .python} 
-
-- pandas correlation method of Series
-
-~~~
-df['ABC'].corr(df['XYZ'])
-~~~
-
-- Pandas autocorrelation
-
-~~~
-df['ABC'].autocorr()
-~~~
-
-
-These tools are essential for working with time series data in Python using the pandas library.
-
-## Correlation of Two Time Series
-
-To understand the correlation between two time series variables, especially in the context of time-dependent data, several key points need to be considered based on the provided sources:
-
-1. **Pearson Correlation and Time Series**:
-   - Pearson correlation is commonly used to measure the linear relationship between two variables. However, when dealing with time series data, the assumption of independence between data points may not hold true due to the temporal nature of the data[2].
-   - Time series data often exhibits within-series dependence, where observations are correlated over time. This can lead to misleading results when using Pearson correlation, as it assumes independence between data points[2].
-
-2. **Cross-Correlation Function**:
-   - The cross-correlation function (CCF) is used to explore how one time series may predict or explain another. It helps in understanding the relationship between two time series variables and can reveal patterns like leading or lagging effects between them[4].
-
-3. **Computing Correlations in Time Series Data**:
-   - When analyzing multiple variables in a time series dataset, computing correlations between variables can provide valuable insights. Visualizing correlations as a heat map can help identify patterns, such as positive or negative correlations between variables over time[5].
-
-4. **Practical Application**:
-
-   - In practice, it is essential to consider the temporal aspect of data when calculating correlations between time series variables. Understanding the nuances of time-dependent relationships and the impact of within-series dependence is crucial for accurate analysis and interpretation.
-
-The correlation between two time series variables is a statistical measure that assesses how closely their movements are related over time. This concept is particularly relevant in the context of climate data, where understanding the relationships between different climate variables can provide valuable insights into the dynamics of the Earth's climate system.
-For instance, consider a scenario where you are analyzing the relationship between two climate variables: temperature and precipitation. By computing the correlation between these two variables, you can determine if there is a significant association between them. If the correlation is high, it could indicate that changes in temperature are closely linked to changes in precipitation patterns, which could have important implications for understanding and predicting climate trends.
-
-~~~
-import pandas as pd
-import numpy as np
-
-# Load the data
-df = pd.read_csv('climate_data.csv')
-
-# Calculate the correlation
-correlation = df['temperature'].corr(df['precipitation'])
-
-print(f'The correlation between temperature and precipitation is: {correlation}')
-~~~
-{: .python}
-
-
-# Preprocessing with xarray
+## Preprocessing with xarray
 
 We will be exploring the xarray architecture using some sample climate data from the European Centre for Medium-Range Weather Forecasts (ECMWF). We will use their ERA-Intrim climate reanalysis project. You can download the data in netCDF format here. As is the case for many climate products, the process involves downloading large netCDF files to a local machine.
 
@@ -841,6 +731,10 @@ plt.title(title)
 plt.show()
 ~~~
 {: .python}
+
+
+
+
 
 # Geopandas 
 # Pysal
