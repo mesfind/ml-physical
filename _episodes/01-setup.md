@@ -54,7 +54,7 @@ We will be using `cdsapi` python package.
 
 - Click on your username (top right of the main page) to get your API key.
  
-![../fig/get_your_cds_api_key.png]
+![](../fig/get_your_cds_api_key)
 
 - Copy the code displayed beside, in the file $HOME/.cdsapirc
 
@@ -84,7 +84,7 @@ c.retrieve("dataset-short-name",
 
 For instance to retrieve the same ERA5 dataset e.g. near surface air temperature for June 2003:
 
-![](../fig/CDSAPI_t2m_ERA5.png
+![](../fig/CDSAPI_t2m_ERA5)
 
 Let’s try it:
 
