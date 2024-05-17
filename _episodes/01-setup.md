@@ -180,8 +180,8 @@ c.retrieve(
 > - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
 > What do you get when you unzip this file?
 > > ## Solution
-> > - Download the file ~~~ import cdsapi
-> >  ~~~
+> > - Download the file 
+> > ~~~
 > > import cdsapi
 > > c = cdsapi.Client()
 > > c.retrieve( 'projections-cmip5-monthly-single-levels', { 'variable':[ '2m_temperature','mean_precipitation_flux' ], 'model':'noresm1_m', 'experiment':'historical', 'ensemble_member':'r1i1p1', 'period':'185001-200512', 'format':'tgz' }, 'cmip5_sfc_monthly_1850-200512.zip')
