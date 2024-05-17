@@ -35,36 +35,32 @@ There are three main categories of machine learning algorithms:
 
 ## Preprocessing
 
+Data preprocessing describes the steps needed to encode data with the purpose of transforming it into a numerical state that machines can read. Data preprocessing techniques are part of data mining, which creates end products out of raw data which is standardized/normalized, contains no null values, and more.
+
+### Replacing Null Values 
+
+Replacing null values is usually the most common of data preprocessing techniques because it allows us to have a full dataset of values to work with. To execute replacing null values as part of data preprocessing, I suggest using Google Colab or opening a Jupyter notebook. For simplicity’s sake, I will be using Google Colab. Your first step will be to import `SimpleImputer` which is part of the `sklearn` library. The SimpleImputer class provides basic strategies for imputing, or representing missing values.
+
 ~~~
-# Encoding categorical data
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
-labelencoder = LabelEncoder()
-X[:, 3] = labelencoder.fit_transform(X[:, 3])
-onehotencoder = OneHotEncoder(categorical_features = [3])
-X = onehotencoder.fit_transform(X).toarray()
+from sklearn.impute import SimpleImputer
+~~~
+{: python}
+
+Next, you’re going to want to specify which missing values to replace. We will be replacing those missing values with the mean of that row of the dataset, which we can do by setting the strategy variable equal to the mean.
+
+~~~
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
 ~~~
 {: .python}
 
-~~~
-array([[1.799e+01, 1.038e+01, 1.228e+02, ..., 2.654e-01, 4.601e-01,
-        1.189e-01],
-       [2.057e+01, 1.777e+01, 1.329e+02, ..., 1.860e-01, 2.750e-01,
-        8.902e-02],
-       [1.969e+01, 2.125e+01, 1.300e+02, ..., 2.430e-01, 3.613e-01,
-        8.758e-02],
-       ...,
-       [1.660e+01, 2.808e+01, 1.083e+02, ..., 1.418e-01, 2.218e-01,
-        7.820e-02],
-       [2.060e+01, 2.933e+01, 1.401e+02, ..., 2.650e-01, 4.087e-01,
-        1.240e-01],
-       [7.760e+00, 2.454e+01, 4.792e+01, ..., 0.000e+00, 2.871e-01,
-        7.039e-02]])
-~~~
-{: .output}
+The imputer fills missing values with some statistics (e.g., mean, median) of the data. To avoid data leakage during cross-validation, it computes the statistic on the train data during the fit and then stores it. It then uses that data on the test portion, done during the transform. 
 
+~~~
+imputer.fit(X[:, 1:3]) #looks @ rows and columns X[:, 1:3] = imputer.transform(X[:, 1:3])
+~~~
+{: .python}
 
-![](../fig/heatmap.png)
+### Feature Scaling
 
 
 ## Evaluation Metrics and Model Selection
