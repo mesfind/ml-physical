@@ -62,6 +62,10 @@ imputer.fit(X[:, 1:3]) #looks @ rows and columns X[:, 1:3] = imputer.transform(X
 
 ### Feature Scaling
 
+Feature scaling is a data preprocessing technique used to normalize our set of data values. The reason we use feature scaling is that some sets of data might be overtaken by others in such a way that the machine learning model disregards the overtaken data. The sets of data, in this case, represent separate features.
+
+Normalization puts all values between 0 and 1. However, normalization is a recommended data preprocessing technique when most of your features exhibit a normal distribution – which may not always be the case.
+
 
 ## Evaluation Metrics and Model Selection
 
