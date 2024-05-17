@@ -16,6 +16,7 @@ keypoints:
   - "xarray"
   - "cartopy"
   - "GeoPandas"
+- "Data retrieval from the CDS Toolbox"
 ---
 
 # Copernicus Climate Data Store (CDS)
@@ -212,3 +213,44 @@ c.retrieve(
 > > {: .python}
 > {: .solution}
 {: .challenge}
+
+# Climate Data Store Toolbox
+
+Let’s make the same selection as before. Go to ["your requests"](https://cds.climate.copernicus.eu/cdsapp#!/yourrequests?tab=form) tab and select the last product you downloaded.
+
+![](../fig/ERA5_request.png)
+
+Click on “Open request form” and you will be re-directed to the selection page with all your previous choices already pre-selected.
+
+This time, instead of clicking on “Submit Form”, we click on “Show Toolbox request”:
+
+![](../fig/ERA5_show_toolbox)
+
+Copy the content in your clipboard so we can paste it later in the CDS Toolbox.
+
+The CDS Toolbox package is still under active development and the current documentation can be found here.
+~~~
+mport cdstoolbox as ct  
+ data = ct.catalogue.retrieve(  
+     'reanalysis-era5-single-levels-monthly-means', 
+     {  
+         'product_type':'monthly_averaged_reanalysis',  
+         'variable':'total_precipitation',  
+         'year':'2003', 
+         'month':'06',  
+         'time':'00:00',    
+         'format':'netcdf'  
+     }) 
+~~~
+{: .python}
+
+Then click on “Toolbox” tab to start the CDS toolbox:
+
+![](../fig/ERA5_start_toolbox.png)
+
+
+- Create a new workspace and name it ERA5_precipitation (make sure you press the enter button to validate your choice otherwise the new workspace will not be created.
+- Finally paste your previous selection in the toolbox console:
+
+![](../fig/ERA5_console_toolbox.png)
+
