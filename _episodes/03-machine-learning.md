@@ -30,13 +30,12 @@ There are three main categories of machine learning algorithms:
 - Unsupervised Learning: Algorithms find hidden patterns in unlabeled data. A common task is clustering, which groups similar examples together.
 - Reinforcement Learning: Algorithms learn by interacting with an environment and receiving rewards or penalties for actions to maximize performance
 
+## Preprocessing
 
-## Evaluation Metrics and Model Selection
-
-## Supervised Learning 
 ~~~
 # Encoding categorical data
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 labelencoder = LabelEncoder()
 X[:, 3] = labelencoder.fit_transform(X[:, 3])
 onehotencoder = OneHotEncoder(categorical_features = [3])
@@ -47,6 +46,13 @@ X = onehotencoder.fit_transform(X).toarray()
 ~~~
 ~~~
 {: .output}
+
+
+## Evaluation Metrics and Model Selection
+
+## Supervised Learning
+
+
 
 ### Regression
 
