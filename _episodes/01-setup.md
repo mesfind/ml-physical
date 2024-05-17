@@ -191,12 +191,20 @@ c.retrieve(
 > > - Uncompress it
 > > If you select one variable, one experiment, one model, etc. then you get one file only and it is a netCDF file (even if it says otherwise!) As soon as you select more than one variable, or more than one experiment, etc. then you get a zip or tgz (depending on the format you chose)
 > > ~~~
-> > import os
-> > import zipfile
-> > ## create a new directory
-> > os.mkdir("./cmpip5")
-> > zip_ref= zipfile.ZipFile('cmip5_sfc_monthly_1850-200512.zip', 'r')
-> > zip_ref.extractall(‘./cmip5’) zip_ref.close()
+> > import cdsapi
+> > c = cdsapi.Client()
+> > c.retrieve(
+> >     'projections-cmip5-monthly-single-levels', 
+> >     { 
+> >         'variable': ['2m_temperature', 'mean_precipitation_flux'],
+> >         'model': 'noresm1_m',
+> >         'experiment': 'historical',
+> >         'ensemble_member': 'r1i1p1',
+> >         'period': '185001-200512',
+> >         'format': 'tgz'
+> >     },
+> >     'cmip5_sfc_monthly_1850-200512.zip'
+> > )
 > > ~~~
 > > {: .python}
 > {: .solution}
