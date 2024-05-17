@@ -1,5 +1,5 @@
 ---
-title: Exploratory Data Analysis
+title: Basic Package Installations
 teaching: 1
 exercises: 0
 questions:
