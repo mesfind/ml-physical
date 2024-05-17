@@ -13,10 +13,6 @@ keypoints:
 - "Essential libaries for data manipulation and preprocessing"
 ---
 
-# 
-
-
-
 # Copernicus Climate Data Store (CDS)
 
 ## Where to get Climate data?
