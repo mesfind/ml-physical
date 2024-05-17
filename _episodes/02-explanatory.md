@@ -1604,7 +1604,47 @@ interact_plot = widgets.interact(generate_plot, date = select_date, variable = s
 ~~~
 {: .python}
 
-# Geopandas 
-# Pysal
+## Satelite data preprocessing
 
-# Dask-GeoPandas
+
+Satellites are spaceborne platforms that carry earth observation (EO) sensors and use remote sensing technologies to collect information about the earth. There are numerous satellites orbiting the earth and collecting vast amount of data that can be utilized for:
+
+- Agriculture: crop monitoring
+- Forestry: forestry planning and prevention of illegal logging
+- Fishing: prevention of illegal fishing
+- Energy: pipeline and right-of-way monitoring
+- Insurance: infrastructure integrity monitoring
+- Land use: infrastructure planning and monitoring of building activity
+- Sea traffic: iceberg monitoring, oil spills detection
+- Security: coastal traffic monitoring
+- Disaster response: fast response to natural catastrophes
+
+Depending on the type of sensor equipment onboard a satellite, the format of data collected by a satellite can be one of:
+
+- GeoTIFF
+- HDF
+- NDF
+- NITF
+- NetCDF
+- XML
+
+These variety of data formats have specialized tools used for reading and processing them.
+
+In this section, we will go through how to use  `Xarray` which can be used for reading, processing and writing most of the common satellite data formats including NetCDF, HDF, XML and GeoTIFF.
+
+~~~
+# Install required libraries
+#!pip install -q earthpy rioxarray cftime h5pyd Bottleneck
+
+# Import packages
+import warnings
+import xarray as xr
+import rioxarray as rxr
+import geopandas as gpd
+import earthpy as et
+import random
+import numpy as np
+import pandas as pd
+warnings.simplefilter('ignore')
+~~~
+{: .python}
