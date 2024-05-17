@@ -3,15 +3,13 @@ title: Machine Learning for Physical Sciences
 teaching: 1
 exercises: 0
  Questions:
--  What are the key machine learning concepts commonly used in physical sciences?
--  How can data preprocessing be optimized for machine learning applications in Python?
--  What are the best practices for training and evaluating machine learning models in the context of physical sciences
-
+-  "What are the key machine learning concepts commonly used in physical sciences?"
+-  "How can data preprocessing be optimized for machine learning applications in Python?"
+-  "What are the best practices for training and evaluating machine learning models in the context of physical sciences"
 Objectives:
-- Gain an understanding of fundamental machine learning concepts relevant to physical sciences.
-- Develop proficiency in optimizing data preprocessing techniques for machine learning tasks in Python.
-- Learn and apply best practices for training, evaluating, and interpreting machine learning models in the domain of physical sciences.
-
+- "Gain an understanding of fundamental machine learning concepts relevant to physical sciences."
+- "Develop proficiency in optimizing data preprocessing techniques for machine learning tasks in Python."
+- "Learn and apply best practices for training, evaluating, and interpreting machine learning models in the domain of physical sciences."
 Key Point:
 - "machine learning applications in physical sciences."
 ---
