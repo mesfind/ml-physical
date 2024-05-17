@@ -251,3 +251,9 @@ Then click on “Toolbox” tab to start the CDS toolbox:
 
 ![](../fig/ERA5_console_toolbox.png)
 
+
+
+
+> ## Is it python syntax?
+> If you are a python programmer, you probably have recognized the syntax. Otherwise, it may be a bit difficult to understand! The goal here is not to learn how to use the Python CDS toolbox package as it is currently not open source. For now, we make our selection via the web interface and then copy paste the request.
+{: .callout}
