@@ -437,3 +437,28 @@ Whenever we can, we will choose to download data in NetCDF format but we will al
 
 NetCDF format is a binary format and to be able to read or visualize it, we would need to use dedicated software or libraries that can handle this "special" format.
 
+##  Radiant Earth MLHub
+
+To automatically download the dataset, you need an API key from the [Radiant Earth MLHub](https://mlhub.earth/). This is completely free, and will give you access to a growing catalog of ML-ready remote sensing datasets.
+
+~~~
+# Set this to your API key (available for free at https://beta.source.coop/auth/registration)
+RADIANT_EARTH_API_KEY = ""
+
+data_dir = os.path.join(tempfile.gettempdir(), "cyclone_data")
+
+datamodule = CycloneDataModule(
+    root_dir=data_dir,
+    seed=1337,
+    batch_size=64,
+    num_workers=6,
+    api_key=RADIANT_EARTH_API_KEY
+)
+
+~~~
+{: .python}
+
+## [geospatial-datasets](https://torchgeo.readthedocs.io/en/stable/api/datasets.html#geospatial-datasets)
+
+
+GeoDataset is designed for datasets that contain geospatial information, like latitude, longitude, coordinate system, and projection. Datasets containing this kind of information can be combined using IntersectionDataset and UnionDataset.
