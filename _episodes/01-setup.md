@@ -1,7 +1,7 @@
 ---
 title: Data Sources
 teaching: 1
-exercises: 1
+exercises: 0
 questions:
 - "Understanding data sources"
 - "How to get data from online sources"
