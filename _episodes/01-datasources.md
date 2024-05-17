@@ -38,7 +38,7 @@ This is a web portal providing a single point of access to a wide range of infor
 To be able to use CDS services, you need to [register](https://cds.climate.copernicus.eu/user/login?destination=%2F%23!%2Fhome). Registration to the Climate Data Store (CDS) is free as well as access to climate data.
 Before starting, and once registred, login to the Climate Data Store (CDS).
 
-![](../fig/CDS_login)
+![](../fig/CDS_login.png)
 
 
 ## Retrieve Climate data with CDS API
