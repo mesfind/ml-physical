@@ -203,13 +203,13 @@ c.retrieve(
 {: .challenge}
 
 
-## Download CMIP5 from Climate Data Store with `cdsapi`
-- Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
-- What do you get when you unzip this file?
+> ## Download CMIP5 from Climate Data Store with `cdsapi`
+> - Get near surface air temperature (2m temperature) and precipitation (mean precipitation flux) in one single request and save the result in a file `cmip5_sfc_monthly_1850-200512.zip`
+> - What do you get when you unzip this file?
 
 > ## Solution
 > - Download the file 
-> ```python
+> ~~~
 > import cdsapi
 > c = cdsapi.Client()
 > c.retrieve(
@@ -224,20 +224,19 @@ c.retrieve(
 >     },
 >     'cmip5_sfc_monthly_1850-200512.zip'
 > )
-> ```
+> ~~~
 > {: .python}
 >
 > - Uncompress it
 > - If you select one variable, one experiment, one model, etc., then you get one file only, and it is a netCDF file (even if it says otherwise!). As soon as you select more than one variable, or more than one experiment, etc., then you get a zip or tgz (depending on the format you chose).
-> ```python
+
+> ~~~
 > import os
 > import zipfile
->
-> ## create a new directory
 > os.mkdir("./cmip5")
 > with zipfile.ZipFile('cmip5_sfc_monthly_1850-200512.zip', 'r') as zip_ref:
 >     zip_ref.extractall('./cmip5')
-> ```
+> ~~~
 > {: .python}
 {: .solution}
 {: .challenge}
