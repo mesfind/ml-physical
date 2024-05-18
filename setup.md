@@ -119,4 +119,18 @@ Finally, let’s see how we remove environments. Removing environments is useful
 ~~~
 {: .bash}
 
-# Climate Dataset sources
+## Install TorchGeo
+
+TorchGeo is a PyTorch domain library, similar to torchvision, providing datasets, samplers, transforms, and pre-trained models specific to geospatial data.
+
+The recommended way to install TorchGeo is with pip
+
+~~~
+$ pip install 'torchgeo[all]'
+~~~
+{: .bash}
+
+## Install EarthPy
+
+
+

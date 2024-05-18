@@ -1646,5 +1646,401 @@ import random
 import numpy as np
 import pandas as pd
 warnings.simplefilter('ignore')
+# pip install earthpy
+import earthpy as et
+et.data.path = "."
+et.data.get_data()
+# Available Datasets
+et.data.get_data('cs-test-landsat')
+et.data.get_data('cold-springs-modis-h4')
+et.data.get_data('cold-springs-fire')
+
 ~~~
 {: .python}
+
+~~~
+$ wget -q -O world_boundaries.zip 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/world-administrative-boundaries/exports/shp'
+$ unzip -q world_boundaries.zip
+~~~
+{: .bash}
+
+
+### Reading HDF Data
+
+Reading a HDF file using Xarray (Rioxarray) requires a complete installation of GDAL which is not obtainable using pip install rasterio.
+~~~
+ds = rxr.open_rasterio(hdf_file, engine='h5netcdf')
+~~~
+
+See [here](https://rasterio.readthedocs.io/en/latest/installation.html#advanced-installation) for a complete installation of GDAL which is required for reading HDF files
+
+### GeoTIFF
+
+~~~
+tif_file = 'cs-test-landsat/LC08_L1TP_034032_20160621_20170221_01_T1_sr_band4.tif'
+
+ds = xr.open_dataset(tif_file)
+~~~
+{: .python}
+
+### Reading Shapefile
+
+A Coordinate reference system (CRS) defines, with the help of coordinates, how the two-dimensional, projected map is related to real locations on the earth.
+
+There are two different types of coordinate reference systems:
+
+Geographic Coordinate Systems
+Projected Coordinate Systems
+The most popular geographic coordinate system is called WGS84 (EPSG:4326). It comprises of lines of latitude that run parallel to the equator and divide the earth into 180 equally spaced sections from North to South (or South to North) and lines of longitude that run perpendicular to the equator and converge at the poles.
+
+Using the geographic coordinate system, we have a grid of lines dividing the earth into squares of 1 degrees (appprox. 111 Km) resolution that cover approximately 12363.365 square kilometres at the equator — a good start, but not very useful for determining the location of anything within that square.
+
+We can divide a map grid into sub-units of degrees such as 0.1 degrees (11.1 km), 0.01 (1.11 km) etc. See [here](https://www.usna.edu/Users/oceano/pguth/md_help/html/approx_equivalents.htm) for approximate metric equivalent of degrees
+
+A shapefile is a simple, nontopological format for storing the geometric location and attribute information of geographic features. Geographic features in a shapefile can be represented by points, lines, or polygons (areas).
+
+~~~
+shapefile_path = "data/world-administrative-boundaries.shp"
+gdf = gpd.read_file(shapefile_path)
+gdf[gdf['name']=='Ethiopia'].geometry.plot()
+
+~~~
+{: .python}
+
+#### Cropping
+
+We can use a shapefile to crop a dataarray. Lets download a global temperature data from [Physical Sciences Laboratory (PSL)](https://psl.noaa.gov/)
+
+~~~
+%%bash
+wget -q 'https://downloads.psl.noaa.gov/Datasets/cpc_global_temp/tmin.2013.nc'
+
+~~~
+{: .python}
+
+~~~
+ds = xr.open_dataset('data/tmin.2013.nc')
+ds
+~~~
+{: .python}
+
+~~~
+<xarray.Dataset>
+Dimensions:  (lat: 360, lon: 720, time: 365)
+Coordinates:
+  * lat      (lat) float32 89.75 89.25 88.75 88.25 ... -88.75 -89.25 -89.75
+  * lon      (lon) float32 0.25 0.75 1.25 1.75 2.25 ... 358.2 358.8 359.2 359.8
+  * time     (time) datetime64[ns] 2013-01-01 2013-01-02 ... 2013-12-31
+Data variables:
+    tmin     (time, lat, lon) float32 ...
+Attributes:
+    Conventions:    CF-1.0
+    Source:         ftp://ftp.cpc.ncep.noaa.gov/precip/wd52ws/global_temp/
+    version:        V1.0
+    title:          CPC GLOBAL TEMP V1.0
+    dataset_title:  CPC GLOBAL TEMP
+    history:        Updated 2019-09-10 20:13:53
+    References:     https://www.psl.noaa.gov/data/gridded/data.cpc.globaltemp...
+~~~
+{: .output}
+
+Here we visualize a map of global minimum temperature for the day 2013-01-01
+
+~~~
+ds.sel(time='2013-01-01')['tmin'].plot();
+~~~
+
+![](../fig/map_global_tmin_2013.png)
+
+
+To visualize the map for a single country, all we need to do is to use the shapifle for the country( e.g Ethiopia) to crop the global map
+
+~~~
+country = 'Ethiopia'
+da  = ds.sel(time='2013-01-01')['tmin']
+
+# we specify the CRS as EPSG:4326
+ds.rio.write_crs('epsg:4326', inplace=True)
+
+selected_country_shapefile = gdf[gdf['name']==country].geometry
+cropped_ds = ds.rio.clip(selected_country_shapefile)
+cropped_ds.sel(time='2013-10-10')['tmin'].plot()
+~~~
+{: .python}
+
+![](../fig/map_ethiopia_tmin_2013.png)
+
+Do you notice that the map is highly pixelated? This is because the resolution of the data is low
+
+~~~
+cropped_ds['lon'][1] - cropped_ds['lon'][0]
+~~~
+{: .python}
+
+~~~
+    
+<xarray.DataArray 'lon' ()>
+array(0.5, dtype=float32)
+Coordinates:
+    spatial_ref  int64 0
+~~~
+{. output}
+
+
+~~~
+cropped_ds['lat'][0] - cropped_ds['lat'][1]
+~~~
+{: .python
+
+~~~
+<xarray.DataArray 'lat' ()>
+array(0.5, dtype=float32)
+Coordinates:
+    spatial_ref  int64 0
+~~~
+{: .output}
+
+The resolution on both the longitude and latitudes axes is 0.5 degrees which means each pixel covers an approximate area of 3,080 square kilometres. Hence, we can increase/decrease the spatial resolution by resampling.
+
+#### Resampling (Upsampling/Downsampling)
+
+To upsample an xarray DataArray, you can use the resample() method to change the frequency of the time dimension or the interp() method to increase the resolution of spatial dimensions. Here are examples of both approaches:
+
+Many atimes geospatial datasets would need to be resampled wither by increasing the resolution (upsampling) or decreasing the resolution (downsampling) on either the spatial dimensions (lat/lon) or time dimension.
+
+##### Time Dimension
+
+For example, a dataset may contain weekly records and we desire to resample to daily or monthly. These type of resampling involves the time dimension and we use the resample() method of Xarray
+
+~~~
+cropped_ds
+~~~
+{: .python}
+
+~~~
+<xarray.Dataset>
+Dimensions:      (lat: 19, lon: 24, time: 365)
+Coordinates:
+  * lat          (lat) float32 13.75 13.25 12.75 12.25 ... 6.25 5.75 5.25 4.75
+  * lon          (lon) float32 2.75 3.25 3.75 4.25 ... 12.75 13.25 13.75 14.25
+  * time         (time) datetime64[ns] 2013-01-01 2013-01-02 ... 2013-12-31
+    spatial_ref  int64 0
+Data variables:
+    tmin         (time, lat, lon) float32 nan nan nan nan ... nan nan nan nan
+Attributes:
+    Conventions:    CF-1.0
+    Source:         ftp://ftp.cpc.ncep.noaa.gov/precip/wd52ws/global_temp/
+    version:        V1.0
+    title:          CPC GLOBAL TEMP V1.0
+    dataset_title:  CPC GLOBAL TEMP
+    history:        Updated 2019-09-10 20:13:53
+    References:     https://www.psl.noaa.gov/data/gridded/data.cpc.globaltemp...
+~~~
+{: .output}
+
+Note how the size of the time dimension changes from 365 (days) to 53 (weeks)
+
+~~~
+weekly_ds = cropped_ds.resample(time='W').interpolate('linear')
+weekly_ds
+~~~
+{: .python}
+
+~~~
+xarray.Dataset>
+Dimensions:      (lat: 22, lon: 29, time: 53)
+Coordinates:
+  * lat          (lat) float32 14.25 13.75 13.25 12.75 ... 5.25 4.75 4.25 3.75
+  * lon          (lon) float32 33.25 33.75 34.25 34.75 ... 46.25 46.75 47.25
+    spatial_ref  int64 0
+  * time         (time) datetime64[ns] 2013-01-06 2013-01-13 ... 2014-01-05
+Data variables:
+    tmin         (time, lat, lon) float64 nan nan nan nan ... nan nan nan nan
+Attributes:
+    Conventions:    CF-1.0
+    Source:         ftp://ftp.cpc.ncep.noaa.gov/precip/wd52ws/global_temp/
+    version:        V1.0
+    title:          CPC GLOBAL TEMP V1.0
+    dataset_title:  CPC GLOBAL TEMP
+    history:        Updated 2019-09-10 20:13:53
+    References:     https://www.psl.noaa.gov/data/gridded/data.cpc.globaltemp...
+~~~
+{: .output}
+
+##### Spatial Dimensions
+
+As we saw earlier that our dataset has spatial resolutions of 0.5 degrees (equivalent to 55km) along both latitude and longitude diemensions. This may be too low for some applications.
+
+We can increase/decrease the spatial resolutions of Xarray datarrays by resampling using the `interp()` method
+
+
+~~~
+cropped_ds.sel(time='2013-10-10')['tmin'].plot();
+~~~
+{: .python}
+
+![](../fig/map_ethiopia_tmin_xresampled.png)
+
+
+~~~
+country_ds = ds.sel(lat=slice(16, 2), lon=slice(33, 48))
+new_lon = np.linspace(country_ds.lon[0], country_ds.lon[-1], country_ds.dims["lon"] * 4)
+new_lat = np.linspace(country_ds.lat[0], country_ds.lat[-1], country_ds.dims["lat"] * 4)
+
+higher_resolution_ds = country_ds.interp(lat=new_lat, lon=new_lon)
+
+# we specify the CRS as EPSG:4326
+higher_resolution_ds.rio.write_crs('epsg:4326', inplace=True)
+
+selected_country_shapefile = gdf[gdf['name']==country].geometry
+higher_resolution_cropped_ds = higher_resolution_ds.rio.clip(selected_country_shapefile)
+higher_resolution_cropped_ds.sel(time='2013-10-10')['tmin'].plot();
+~~~
+{: .python}
+
+![](../fig/map_ethiopia_tmin_2013_high_resolution.png)
+
+##### Nan-Filling
+
+Geo-spatial datasets often contain gaps or missing values, which can impact the analysis and visualization of the data. To address these missing values, several methods can be employed:
+
+1. **fillna**: This method involves filling the missing values with a specified constant or a calculated value. It allows for directly replacing the missing data with a chosen value.
+
+2. **ffill (forward fill)**: With this method, missing values are filled by propagating the last known value forward along the dataset. It is useful when the data has a trend or pattern that can be carried forward.
+
+3. **bfill (backward fill)**: In contrast to ffill, bfill fills missing values by propagating the next known value backward along the dataset. This method is beneficial when the data exhibits a pattern that can be extended backward.
+
+Lets also syntheticaly add more variables to our dataset, so that when we sample we can retrieve four variables including `tmin`, `tmax`, `pressure` and `wind_speed`
+
+~~~
+time_dim, lat_dime, lon_dim = higher_resolution_ds['tmin'].shape
+
+higher_resolution_ds['tmax'] = higher_resolution_ds['tmin'] * (1+np.random.rand(time_dim, lat_dime, lon_dim))
+higher_resolution_ds['pressure'] = higher_resolution_ds['tmin'] * (np.cos(np.random.rand(time_dim, lat_dime, lon_dim)))
+higher_resolution_ds['wind_speed'] = higher_resolution_ds['tmin'] * (np.sin(np.random.rand(time_dim, lat_dime, lon_dim)))
+higher_resolution_ds
+~~~
+{: .python}
+
+~~~
+<xarray.Dataset>
+Dimensions:      (time: 365, lat: 112, lon: 120)
+Coordinates:
+  * time         (time) datetime64[ns] 2013-01-01 2013-01-02 ... 2013-12-31
+  * lat          (lat) float64 15.75 15.63 15.51 15.39 ... 2.493 2.372 2.25
+  * lon          (lon) float64 33.25 33.37 33.49 33.62 ... 47.51 47.63 47.75
+    spatial_ref  int64 0
+Data variables:
+    tmin         (time, lat, lon) float64 18.42 18.56 18.7 18.83 ... nan nan nan
+    tmax         (time, lat, lon) float64 30.9 24.76 23.39 37.38 ... nan nan nan
+    pressure     (time, lat, lon) float64 16.33 14.39 12.63 ... nan nan nan
+    wind_speed   (time, lat, lon) float64 5.568 12.15 1.572 ... nan nan nan
+Attributes:
+    Conventions:    CF-1.0
+    Source:         ftp://ftp.cpc.ncep.noaa.gov/precip/wd52ws/global_temp/
+    version:        V1.0
+    title:          CPC GLOBAL TEMP V1.0
+    dataset_title:  CPC GLOBAL TEMP
+    history:        Updated 2019-09-10 20:13:53
+    References:     https://www.psl.noaa.gov/data/gridded/data.cpc.globaltemp...
+~~~
+{: .output}
+
+~~~
+lat = np.random.uniform(2, 16, 100).tolist()
+lon = np.random.uniform(33, 48, 100).tolist()
+
+dates = pd.date_range(start='2013-01-01', end='2013-12-31', freq='D')
+time = random.sample(list(dates), 100)
+data = pd.DataFrame({'lat': lat, 'lon': lon, 'time':time})
+data
+~~~
+{: .python}
+
+~~~
+          lat        lon       time
+0    3.903489  37.250512 2013-03-23
+1    6.592635  46.735060 2013-04-22
+2   10.021625  39.345432 2013-05-03
+3   13.983304  45.731566 2013-02-06
+4    6.105293  35.664100 2013-05-26
+..        ...        ...        ...
+95   7.741817  44.221370 2013-09-08
+96   2.491084  38.560937 2013-04-24
+97  14.669314  44.535139 2013-01-06
+98   4.273452  38.612193 2013-02-19
+99   2.363141  38.282740 2013-12-22
+
+[100 rows x 3 columns]
+~~~
+{: .output}
+
+~~~
+dataset = higher_resolution_ds.sel(
+    lat=xr.DataArray(data["lat"], dims="z"),
+    lon=xr.DataArray(data["lon"], dims="z"),
+    time=xr.DataArray(data["time"], dims="z"),
+    method='nearest'
+)
+dataset
+~~~
+{: .python}
+
+~~~
+<xarray.Dataset>
+Dimensions:      (z: 100)
+Coordinates:
+    time         (z) datetime64[ns] 2013-10-12 2013-06-12 ... 2013-07-24
+    lat          (z) float64 11.25 4.074 14.9 5.534 ... 5.899 2.615 12.83 11.49
+    lon          (z) float64 46.04 33.74 41.66 43.61 ... 41.29 36.54 47.75 38.61
+    spatial_ref  int64 0
+  * z            (z) int64 0 1 2 3 4 5 6 7 8 9 ... 90 91 92 93 94 95 96 97 98 99
+Data variables:
+    tmin         (z) float64 nan 20.13 nan 22.28 22.68 ... 20.63 23.46 nan 14.38
+    tmax         (z) float64 nan 34.22 nan 23.21 40.23 ... 36.35 27.96 nan 20.45
+    pressure     (z) float64 nan 16.73 nan 19.47 22.27 ... 12.89 15.94 nan 13.99
+    wind_speed   (z) float64 nan 5.641 nan 16.39 8.23 ... 16.23 9.55 nan 9.868
+Attributes:
+    Conventions:    CF-1.0
+    Source:         ftp://ftp.cpc.ncep.noaa.gov/precip/wd52ws/global_temp/
+    version:        V1.0
+    title:          CPC GLOBAL TEMP V1.0
+    dataset_title:  CPC GLOBAL TEMP
+    history:        Updated 2019-09-10 20:13:53
+    References:     https://www.psl.noaa.gov/data/gridded/data.cpc.globaltemp...
+~~~
+{: .output}
+
+~~~
+dataset_df = dataset.to_dataframe().reset_index()[['tmin', 'tmax', 'pressure', 'wind_speed']].dropna(how="all")
+dataset_df
+~~~
+{: .python}
+
+
+~~~
+      tmin       tmax     pressure   wind_speed
+1   20.134108  34.216812  16.731225    5.640895
+3   22.279944  23.211976  19.469766   16.390574
+4   22.675937  40.226501  22.273046    8.230098
+5   18.908172  26.481716  16.766963   14.388920
+6   23.847037  42.906728  17.507207   13.681055
+..        ...        ...        ...         ...
+94  23.607236  46.954574  23.605141    5.492570
+95  19.637835  35.957441  13.043338   16.507524
+96  20.629210  36.350215  12.889924   16.226357
+97  23.455832  27.960924  15.941195    9.550094
+99  14.376755  20.446728  13.990531    9.867571
+
+~~~
+{: .output}
+
+
+~~~
+dataset_df.to_csv('geospatial_dataset.csv',index=0)
+~~~
+{: .python
+
+The above steps show how to read and preprocess satellite data using Xarray and other anciliary libraries.
+
+
