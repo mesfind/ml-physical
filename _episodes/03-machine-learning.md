@@ -76,6 +76,42 @@ Normalization puts all values between 0 and 1. However, normalization is a recom
 ### Regression
 
 ### Classification
+
+* Classification is a **supervised learning** task where the objective is to predict **categorical labels** for new instances based on past observations. It is widely used in various applications, such as email filtering, medical diagnosis, and image recognition. 
+* In the context of physical sciences, particularly climate science, classification can be used to categorize weather patterns, predict climate events, and classify types of vegetation based on satellite imagery.
+
+* **Types of Classification**
+
+**Binary Classification**:  involves distinguishing between two classes.
+
+_**Examples**_:
+- Spam vs. Non-Spam: Identifying whether an email is spam or not.
+- Disease vs. No Disease: Diagnosing whether a patient has a disease or not.
+* Climate Example: Predicting whether a day will be rainy or not based on weather data.
+
+**Multiclass Classification**: involves distinguishing among more than two classes.
+
+_**Examples**_:
+- Handwritten Digit Recognition: Classifying digits from 0 to 9.
+- Animal Species Classification: Identifying different species of animals.
+- Climate Example: Classifying weather events into categories such as sunny, cloudy, rainy, and snowy.
+
+**Multilabel Classification**: involves assigning multiple labels to each instance.
+
+_**Examples**_:
+- Image Tagging: Identifying multiple objects in an image.
+- News Categorization: Categorizing news articles into multiple topics.
+- Climate Example: Classifying a satellite image of a region by both vegetation type and the presence of various climate phenomena (e.g., drought, flooding).
+
+**Example: Climate Classification**
+To illustrate classification in climate science, consider the task of classifying weather patterns. This can help meteorologists predict and understand climate phenomena, leading to better preparation and response strategies.
+
+**Problem Statement**: Predict the type of weather (e.g., sunny, cloudy, rainy, snowy) for a given day based on historical weather data.
+**Dataset** : 
+    * Features: Temperature, humidity, wind speed, atmospheric pressure, previous day's weather.
+    * Labels: Weather type (sunny, cloudy, rainy, snowy).
+
+
 * To thoroughly explore classification algorithms, we will examine the following examples and predict whether it will rain tomorrow using various classification techniques.
 
 
