@@ -318,50 +318,234 @@ plt.title('Missing Values Heatmap')
 plt.show()
 ~~~
 {: .python}
-
 ~~~
+![](../fig/missing.png)
 ~~~
 {: .output}
+**Get the data types of all columns**
 ~~~
+# Get the data types of all columns
+column_data_types = data.dtypes
+
+# Separate columns into numerical and categorical
+numerical_columns = column_data_types[column_data_types != 'object'].index.tolist()
+categorical_columns = column_data_types[column_data_types == 'object'].index.tolist()
+
+# Print the lists of numerical and categorical columns
+print("Numerical columns:", numerical_columns)
+print("Categorical columns:", categorical_columns)
+~~~
+{: .python}
+~~~
+Numerical columns: ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am', 'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm', 'Temp9am', 'Temp3pm']
+Categorical columns: ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
+~~~
+{: .output}
+#### 5. Replace missing values
+~~~
+from sklearn.impute import SimpleImputer
+# Assuming df is your DataFrame
+
+# Numerical columns
+numerical_cols = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am', 'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm', 'Temp9am', 'Temp3pm']
+
+# Categorical columns
+categorical_cols = ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
+
+# Impute numerical columns with mean
+num_imputer = SimpleImputer(strategy='mean')
+data[numerical_cols] = num_imputer.fit_transform(data[numerical_cols])
+
+# Impute categorical columns with the most frequent value
+cat_imputer = SimpleImputer(strategy='most_frequent')
+data[categorical_cols] = cat_imputer.fit_transform(data[categorical_cols])
+
+print(data.head())
 ~~~
 {: .python}
 
 ~~~
+         Date Location  MinTemp  MaxTemp  Rainfall  Evaporation  Sunshine  \
+0  01-12-2008   Albury     13.4     22.9       0.6     5.468232  7.611178   
+1  02-12-2008   Albury      7.4     25.1       0.0     5.468232  7.611178   
+2  03-12-2008   Albury     12.9     25.7       0.0     5.468232  7.611178   
+3  04-12-2008   Albury      9.2     28.0       0.0     5.468232  7.611178   
+4  05-12-2008   Albury     17.5     32.3       1.0     5.468232  7.611178   
+
+  WindGustDir  WindGustSpeed WindDir9am  ... Humidity9am  Humidity3pm  \
+0           W           44.0          W  ...        71.0         22.0   
+1         WNW           44.0        NNW  ...        44.0         25.0   
+2         WSW           46.0          W  ...        38.0         30.0   
+3          NE           24.0         SE  ...        45.0         16.0   
+4           W           41.0        ENE  ...        82.0         33.0   
+
+   Pressure9am  Pressure3pm  Cloud9am  Cloud3pm  Temp9am  Temp3pm  RainToday  \
+0       1007.7       1007.1  8.000000   4.50993     16.9     21.8         No   
+1       1010.6       1007.8  4.447461   4.50993     17.2     24.3         No   
+2       1007.6       1008.7  4.447461   2.00000     21.0     23.2         No   
+3       1017.6       1012.8  4.447461   4.50993     18.1     26.5         No   
+4       1010.8       1006.0  7.000000   8.00000     17.8     29.7         No   
+
+   RainTomorrow  
+0            No  
+1            No  
+2            No  
+3            No  
+4            No  
+
+[5 rows x 23 columns]
 ~~~
 {: .output}
 ~~~
+data.isnull().sum()
 ~~~
 {: .python}
+~~~
+Date             0
+Location         0
+MinTemp          0
+MaxTemp          0
+Rainfall         0
+Evaporation      0
+Sunshine         0
+WindGustDir      0
+WindGustSpeed    0
+WindDir9am       0
+WindDir3pm       0
+WindSpeed9am     0
+WindSpeed3pm     0
+Humidity9am      0
+Humidity3pm      0
+Pressure9am      0
+Pressure3pm      0
+Cloud9am         0
+Cloud3pm         0
+Temp9am          0
+Temp3pm          0
+RainToday        0
+RainTomorrow     0
+dtype: int64
+~~~
+{: .output}
+###### Data Encoding
+Data encoding is a process of transforming categorical data into a numerical format suitable for analysis by machine learning algorithms. Categorical data consists of discrete labels, such as colors, types, or categories, which are not inherently numerical. Two common encoding techniques are Label Encoding and One-Hot Encoding.
+
+**Label Encoding**:
+
+* Method: In label encoding, each unique category is assigned a unique integer label.
+* Example: If we have categories like 'Red,' 'Green,' and 'Blue,' label encoding might assign them labels 0, 1, and 2, respectively.
+* Use Case: Label encoding is often used when there is an ordinal relationship between categories, meaning there is a meaningful order or ranking among them.
+
+**One-Hot Encoding**:
+
+* Method: One-hot encoding creates binary columns for each category and indicates the presence or absence of the category with a 1 or 0, respectively.
+* Example: For the categories 'Red,' 'Green,' and 'Blue,' one-hot encoding would create three binary columns, each representing one color, with values like [1, 0, 0] for 'Red,' [0, 1, 0] for 'Green,' and [0, 0, 1] for 'Blue.'
+* Use Case: One-hot encoding is commonly used when there is no inherent order among categories, and each category is considered equally distinct.
+
+**Considerations**:
+
+* Label encoding might introduce unintended ordinal relationships in the data, which can be problematic for some algorithms.
+* One-hot encoding avoids this issue by representing categories independently, but it can lead to a large number of features, especially when dealing with a high number of categories.
+* The choice between label encoding and one-hot encoding depends on the nature of the data and the requirements of the machine learning algorithm being used.
+
+**Application**:
+
+* Data encoding is crucial when working with machine learning models that require numerical input, such as linear regression, support vector machines, or neural networks.
+* Many machine learning libraries and frameworks provide convenient functions for implementing these encoding techniques.
 
 ~~~
+from sklearn.preprocessing import LabelEncoder
+
+# Create an instance of LabelEncoder
+label_encoder = LabelEncoder()
+
+# Encode categoricalencode categorical data into numerical data  columns
+for column in categorical_cols:
+    data[column] = label_encoder.fit_transform(data[column])
+
+# Print the first few rows to verify encoding
+print(data.head())
+~~~
+{: .python}
+~~~
+ Date  Location  MinTemp  MaxTemp  Rainfall  Evaporation  Sunshine  \
+0   105         2     13.4     22.9       0.6     5.468232  7.611178   
+1   218         2      7.4     25.1       0.0     5.468232  7.611178   
+2   331         2     12.9     25.7       0.0     5.468232  7.611178   
+3   444         2      9.2     28.0       0.0     5.468232  7.611178   
+4   557         2     17.5     32.3       1.0     5.468232  7.611178   
+
+   WindGustDir  WindGustSpeed  WindDir9am  ...  Humidity9am  Humidity3pm  \
+0           13           44.0          13  ...         71.0         22.0   
+1           14           44.0           6  ...         44.0         25.0   
+2           15           46.0          13  ...         38.0         30.0   
+3            4           24.0           9  ...         45.0         16.0   
+4           13           41.0           1  ...         82.0         33.0   
+
+   Pressure9am  Pressure3pm  Cloud9am  Cloud3pm  Temp9am  Temp3pm  RainToday  \
+0       1007.7       1007.1  8.000000   4.50993     16.9     21.8          0   
+1       1010.6       1007.8  4.447461   4.50993     17.2     24.3          0   
+2       1007.6       1008.7  4.447461   2.00000     21.0     23.2          0   
+3       1017.6       1012.8  4.447461   4.50993     18.1     26.5          0   
+4       1010.8       1006.0  7.000000   8.00000     17.8     29.7          0   
+
+   RainTomorrow  
+0             0  
+1             0  
+2             0  
+3             0  
+4             0  
+
+[5 rows x 23 columns]
+~~~
+{: .output}
+**Correlation with Target**
+* Calculate the correlation of numerical features with RainTomorrow. For categorical features, we can use other methods like Chi-square test for independence or converting them to numerical and checking correlation.
+~~~
+# Calculate correlation of each numerical feature with the target variable
+correlation_with_target = data.corr()['RainTomorrow'].sort_values(ascending=False)
+
+# Print correlation values
+print(correlation_with_target)
+~~~
+{: .python}
+~~~
+RainTomorrow     1.000000
+Humidity3pm      0.433179
+RainToday        0.305744
+Cloud3pm         0.298050
+Humidity9am      0.251470
+Cloud9am         0.249978
+Rainfall         0.233900
+WindGustSpeed    0.220442
+WindSpeed9am     0.086661
+WindSpeed3pm     0.084207
+MinTemp          0.082173
+WindGustDir      0.048774
+WindDir9am       0.035341
+WindDir3pm       0.028890
+Date             0.005732
+Location        -0.005498
+Temp9am         -0.025555
+Evaporation     -0.088288
+MaxTemp         -0.156851
+Temp3pm         -0.187806
+Pressure3pm     -0.211977
+Pressure9am     -0.230975
+Sunshine        -0.321533
+Name: RainTomorrow, dtype: float64
 ~~~
 {: .output}
 ~~~
+correlation_matrix = data.corr()
+plt.figure(figsize=(12, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation with Target Variable (RainTomorrow)')
+plt.show()
 ~~~
 {: .python}
-
 ~~~
-~~~
-{: .output}
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-~~~
-~~~
-{: .python}
-
-~~~
+![](../fig/missing.png)
 ~~~
 {: .output}
 ~~~
