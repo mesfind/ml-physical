@@ -2039,7 +2039,7 @@ dataset_df
 ~~~
 dataset_df.to_csv('geospatial_dataset.csv',index=0)
 ~~~
-{: .python
+{: .python}
 
 The above steps show how to read and preprocess satellite data using Xarray and other anciliary libraries.
 
