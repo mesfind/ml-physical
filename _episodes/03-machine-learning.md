@@ -499,6 +499,7 @@ print(data.head())
 [5 rows x 23 columns]
 ~~~
 {: .output}
+
 **Correlation with Target**
 * Calculate the correlation of numerical features with RainTomorrow. For categorical features, we can use other methods like Chi-square test for independence or converting them to numerical and checking correlation.
 ~~~
@@ -545,7 +546,7 @@ plt.show()
 ~~~
 {: .python}
 ~~~
-![](../fig/missing.png)
+![](../fig/heatmap_tomo.png)
 ~~~
 {: .output}
 ~~~
