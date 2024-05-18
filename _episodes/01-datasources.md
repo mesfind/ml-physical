@@ -462,3 +462,23 @@ datamodule = CycloneDataModule(
 
 
 GeoDataset is designed for datasets that contain geospatial information, like latitude, longitude, coordinate system, and projection. Datasets containing this kind of information can be combined using IntersectionDataset and UnionDataset.
+
+
+In most cases, we'll use `geopandas` to read vector files and analyze data:
+
+~~~
+import geopandas as gpd
+
+# Load the countries dataframe using geopandas
+countries = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+countries.head()
+~~~
+{: .python}
+
+We can use shapely attributes and operations to get geometries of interest
+
+~~~
+# Plot the union of all african countries
+countries[countries["continent"] == "Africa"].unary_union
+~~~
+{: .python}
