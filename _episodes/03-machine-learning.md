@@ -230,25 +230,6 @@ plt.show()
 ![](../fig/missing.png)
 
 
-
-#### Feature Scaling
-
-Feature scaling is a crucial data preprocessing step aimed at normalizing data values. By scaling features, we prevent certain data sets from dominating others, which could lead to biased model predictions. Normalization, a common scaling technique, scales data between 0 and 1. However, normalization may not be suitable for features with non-normal distributions.
-
-~~~
-# Get the data types of all columns
-column_data_types = data.dtypes
-
-# Separate columns into numerical and categorical
-numerical_columns = column_data_types[column_data_types != 'object'].index.tolist()
-categorical_columns = column_data_types[column_data_types == 'object'].index.tolist()
-
-# Print the lists of numerical and categorical columns
-print("Numerical columns:", numerical_columns)
-print("Categorical columns:", categorical_columns)
-~~~
-{: .python}
-
 #### Replace Missing Values
 
 To handle missing values, we employ the `SimpleImputer` class from the `sklearn` library. 
@@ -594,23 +575,24 @@ print(y)
 Name: RainTomorrow, Length: 145460, dtype: int32
 ~~~
 {: .output}
-#### Feature Scaling/ Data normalization
 
-Data normalization is a preprocessing technique used in data analysis and machine learning to scale and transform the features of a dataset. The goal is to bring the values of different features to a similar scale, preventing certain features from dominating the others due to their inherent magnitude. This process aids in improving the performance of algorithms, especially those sensitive to the scale of input features. Here are the key aspects of data normalization:
+### Feature Scaling
+
+Feature scaling is a vital data preprocessing step that aims to normalize data values. Scaling features helps prevent certain data sets from overpowering others, thus avoiding biased model predictions. A common technique used in feature scaling is normalization, which scales data between 0 and 1. However, normalization may not be suitable for features with non-normal distributions. Here are some key aspects of data normalization:
 
 1. **Scale Consistency:**
-   - Features in a dataset often have different units and ranges. Normalization ensures that all features are on a consistent scale, making it easier to compare and analyze them.
+   - Features in a dataset often have different units and ranges. Normalization ensures that all features are on a consistent scale, facilitating easier comparison and analysis.
 
 2. **Preventing Dominance:**
-   - In models that use distance-based metrics (e.g., k-nearest neighbors, clustering algorithms), features with larger scales may dominate the influence, leading to biased results. Normalization mitigates this issue.
+   - In models employing distance-based metrics (e.g., k-nearest neighbors, clustering algorithms), features with larger scales may dominate the influence, leading to biased results. Normalization helps mitigate this issue.
 
 3. **Algorithm Sensitivity:**
-   - Many machine learning algorithms, such as gradient-based optimization methods (e.g., gradient descent), are sensitive to the scale of input features. Normalizing the data helps algorithms converge faster and perform more reliably.
+   - Many machine learning algorithms, such as gradient-based optimization methods (e.g., gradient descent), are sensitive to the scale of input features. Normalizing the data aids algorithms in converging faster and performing more reliably.
 
 4. **Standardization vs. Min-Max Scaling:**
    - Two common normalization techniques are standardization and min-max scaling.
-      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is $z = \frac{(x - \mu)}{\sigma}$, where $x$ is the original value, $\mu$ is the mean, and $\sigma$ is the standard deviation.
-      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is $x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})}$.
+      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is \( z = \frac{(x - \mu)}{\sigma} \), where \( x \) is the original value, \( \mu \) is the mean, and \( \sigma \) is the standard deviation.
+      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is \( x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})} \).
 
 5. **Applicability:**
    - The choice between standardization and min-max scaling depends on the characteristics of the data and the requirements of the algorithm. Standardization is less affected by outliers, making it suitable for robustness against extreme values.
