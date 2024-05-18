@@ -870,10 +870,9 @@ plt.show();
 ~~~
 {: .python}
 
-~~~
+
 ![](../fig/ruc_logistic.png)
-~~~
-{: .output}
+
 
 # Random Forest
 
@@ -966,13 +965,7 @@ F1-Score: 0.5522373819292052
 ~~~
 {: .output}
 
-~~~
-~~~
-{: .python}
 
-~~~
-~~~
-{: .output}
 
 ### Comparison of different models
 ~~~
@@ -1024,6 +1017,7 @@ plt.show();
 ~~~
 {: .python}
 
+
 ~~~
 LogisticRegression
               precision    recall  f1-score   support
@@ -1061,101 +1055,6 @@ weighted avg       0.84      0.85      0.84     29092
 ~~~
 {: .output}
 
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
-
-~~~
-~~~
-{: .python}
-
-~~~
-~~~
-{: .output}
 
 
 ## Ensemble Learning Techniques
