@@ -219,4 +219,77 @@ plt.show()
 
 ![](../fig/kenya_crop_band_distribution.png)
 
+## ML Modeling
 
+In this section, we aim to train a `LightGBM` model to predict each farm's crop type by summarizing the historical band information. We will go over the following:
+
+- Establishing the validation metric of a frequency based model that always predicts crop type frequencies derived from y_train.
+- Feature engineering: we will calculate the following S2-based indidces:
+
+![](../fig/lighGDM_ml_modeling.png)
+
+
+$$
+\begin{align*}
+\text{NDVI} & = \frac{{B08 - B04}}{{B08 + B04}} \\
+\text{RDNDVI1} & = \frac{{B08 - B05}}{{B08 + B05}} \\
+\text{RDNDVI2} & = \frac{{B08 - B06}}{{B08 + B06}} \\
+\text{GCVI} & = \frac{{B08}}{{B03}} - 1 \\
+\text{RDGCVI1} & = \frac{{B08}}{{B05}} - 1 \\
+\text{RDGCVI2} & = \frac{{B08}}{{B06}} - 1 \\
+\text{MTCI} & = \frac{{B08 - B05}}{{B05 - B04}} \\
+\text{MTCI2} & = \frac{{B06 - B05}}{{B05 - B04}} \\
+\text{REIP} & = 700 + 40 \left( \frac{{(B04 + B07)/2 - B05}}{{B07 - B05}} \right) \\
+\text{NBR1} & = \frac{{B08 - B11}}{{B08 + B11}} \\
+\text{NBR2} & = \frac{{B08 - B12}}{{B08 + B12}} \\
+\text{NDTI} & = \frac{{B11 - B12}}{{B11 + B12}} \\
+\text{CRC} & = \frac{{B11 - B03}}{{B11 + B03}} \\
+\text{STI} & = \frac{{B11}}{{B12}}
+\end{align*}
+$$
+
+- Spatial median-aggregation by field ID and time.
+- Conduct period-based temporal aggregation and for each band and index, create period-based columns using the following temporal groups:
+
+- period 1
+    - 2019-06-06
+- period 2
+    - 2019-07-01
+    - 2019-07-06
+    - 2019-07-11
+    - 2019-07-21
+- period 3
+    - 2019-08-05
+    - 2019-08-15
+    - 2019-08-25
+- period 4
+    - 2019-09-09
+    - 2019-09-19
+    - 2019-09-24
+    - 2019-10-04
+- period 5
+    - 2019-11-03
+
+## Frequency-Based Baseline Model
+
+Establishing a baseline is crucial in machine learning to set a reference point for model performance. By using a basic approach, we can better gauge the effectiveness of more sophisticated models developed later.
+
+### The Frequency-Based Baseline Approach
+
+The frequency-based baseline model follows these steps:
+
+1. **Compute Class Frequencies**: Determine the proportion (or frequency) of each class (e.g., crop type) present in the training data (y targets).
+
+2. **Use Frequencies for Prediction**: For each validation sample, predict the probability of each class based on these frequencies, implying that the validation set would exhibit a similar class distribution as the training set.
+
+This method provides a rudimentary performance measure. Any advanced models developed should aim to surpass this baseline metric, ensuring that our modeling efforts add genuine value.
+
+### Benefits of a Frequency-Based Baseline
+
+1. **Sets a Reference Point**: The baseline model establishes a minimum performance threshold that more complex models should exceed.
+
+2. **Evaluates Model Improvements**: By comparing the performance of advanced models to the baseline, we can determine if the additional complexity and computational resources are justified.
+
+3. **Identifies Potential Data Issues**: If the baseline model performs surprisingly well, it may indicate that the problem is not challenging enough or that the data has inherent biases.
+
+4. **Simplifies Model Selection**: When multiple advanced models perform similarly, the baseline can help identify the most suitable model by providing a clear reference point.

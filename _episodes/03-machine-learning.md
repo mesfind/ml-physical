@@ -120,15 +120,11 @@ To illustrate classification in climate science, consider the task of classifyin
 ~~~
 import numpy as np
 import pandas as pd
-~~~
-{: .python}
-
-##### 2. Loading Dataset
-~~~
 data = pd.read_csv('weatherAUS.csv')
 data.head()
 ~~~
 {: .python}
+
 ~~~
 Date	Location	MinTemp	MaxTemp	Rainfall	Evaporation	Sunshine	WindGustDir	WindGustSpeed	WindDir9am	...	Humidity9am	Humidity3pm	Pressure9am	Pressure3pm	Cloud9am	Cloud3pm	Temp9am	Temp3pm	RainToday	RainTomorrow
 0	01-12-2008	Albury	13.4	22.9	0.6	NaN	NaN	W	44.0	W	...	71.0	22.0	1007.7	1007.1	8.0	NaN	16.9	21.8	No	No
@@ -318,9 +314,11 @@ plt.title('Missing Values Heatmap')
 plt.show()
 ~~~
 {: .python}
-~~~
+
+
 ![](../fig/missing.png)
-~~~
+
+
 {: .output}
 **Get the data types of all columns**
 ~~~
@@ -336,11 +334,14 @@ print("Numerical columns:", numerical_columns)
 print("Categorical columns:", categorical_columns)
 ~~~
 {: .python}
+
 ~~~
 Numerical columns: ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am', 'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm', 'Temp9am', 'Temp3pm']
 Categorical columns: ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
 ~~~
 {: .output}
+
+
 #### 5. Replace missing values
 ~~~
 from sklearn.impute import SimpleImputer
@@ -396,10 +397,14 @@ print(data.head())
 [5 rows x 23 columns]
 ~~~
 {: .output}
+
+
 ~~~
 data.isnull().sum()
 ~~~
 {: .python}
+
+
 ~~~
 Date             0
 Location         0
@@ -427,6 +432,8 @@ RainTomorrow     0
 dtype: int64
 ~~~
 {: .output}
+
+
 ###### Data Encoding
 Data encoding is a process of transforming categorical data into a numerical format suitable for analysis by machine learning algorithms. Categorical data consists of discrete labels, such as colors, types, or categories, which are not inherently numerical. Two common encoding techniques are Label Encoding and One-Hot Encoding.
 
@@ -467,6 +474,8 @@ for column in categorical_cols:
 print(data.head())
 ~~~
 {: .python}
+
+
 ~~~
  Date  Location  MinTemp  MaxTemp  Rainfall  Evaporation  Sunshine  \
 0   105         2     13.4     22.9       0.6     5.468232  7.611178   
@@ -502,6 +511,8 @@ print(data.head())
 
 **Correlation with Target**
 * Calculate the correlation of numerical features with RainTomorrow. For categorical features, we can use other methods like Chi-square test for independence or converting them to numerical and checking correlation.
+
+
 ~~~
 # Calculate correlation of each numerical feature with the target variable
 correlation_with_target = data.corr()['RainTomorrow'].sort_values(ascending=False)
@@ -510,6 +521,8 @@ correlation_with_target = data.corr()['RainTomorrow'].sort_values(ascending=Fals
 print(correlation_with_target)
 ~~~
 {: .python}
+
+
 ~~~
 RainTomorrow     1.000000
 Humidity3pm      0.433179
@@ -537,6 +550,8 @@ Sunshine        -0.321533
 Name: RainTomorrow, dtype: float64
 ~~~
 {: .output}
+
+
 ~~~
 correlation_matrix = data.corr()
 plt.figure(figsize=(12, 8))
@@ -545,10 +560,11 @@ plt.title('Correlation with Target Variable (RainTomorrow)')
 plt.show()
 ~~~
 {: .python}
-~~~
+
+
 ![](../fig/heatmap_tomo.png)
-~~~
-{: .output}
+
+
 ~~~
 data
 ~~~
@@ -646,6 +662,8 @@ print(X)
 [145460 rows x 17 columns]
 ~~~
 {: .output}
+
+
 ~~~
 print(y)
 ~~~
@@ -711,7 +729,9 @@ print(X)
   -1.14362992e-01 -5.29795450e-01]]
 ~~~
 {: .output}
-# Splitting Dataset into Training set and Test set
+
+
+## Splitting Dataset into Training set and Test set
 
 * Splitting a dataset into training and test sets is a fundamental step in machine learning to evaluate the performance of a model. The training set is used to train the model, while the test set is used to evaluate its performance on unseen data. Here's how you can split a dataset into training and test sets in Python:
 ~~~
@@ -737,8 +757,8 @@ print(X_train)
    1.78343797e+00 -5.29795450e-01]]
 ~~~
 {: .output}
-# Training Model
-# 1. Logistic Regression
+## Training Model
+## 1. Logistic Regression
 1. **Logistic Regression** is used to model the probability that a given input belongs to a particular class. It's commonly used when the dependent variable is binary (0/1, True/False, Yes/No), but it can also be extended to handle multiclass classification tasks.
 
 2. **How it Works**
@@ -778,11 +798,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 ~~~
 {: .python}
+
 ~~~
 model = LogisticRegression(solver='liblinear')
 model.fit(X_train, y_train)
 ~~~
 {: .python}
+
+
 ~~~
 y_pred = pd.Series(model.predict(X_test))
 
@@ -792,6 +815,7 @@ z.columns = ['True', 'Prediction']
 z.head(50)
 ~~~
 {: .python}
+
 
 ~~~
 	True	Prediction
@@ -882,10 +906,11 @@ plt.xlabel('Predicted')
 ~~~
 {: .python}
 
-~~~
+
 ![](../fig/confusion_logistic.png)
-~~~
-{: .output}
+
+
+
 ~~~
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, roc_curve, auc
 #Calculate and plot the ROC AUC curve of the model
@@ -1198,9 +1223,7 @@ weighted avg       0.84      0.85      0.84     29092
 
 ## Hyperparameter Tuning and Optimization
 
-## Machine learning modelling for spatial data
-### sklearn-xarray
-### Pyspatialml
+
 
 
 
