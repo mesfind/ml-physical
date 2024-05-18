@@ -33,47 +33,12 @@ There are three main categories of machine learning algorithms:
 - Unsupervised Learning: Algorithms find hidden patterns in unlabeled data. A common task is clustering, which groups similar examples together.
 - Reinforcement Learning: Algorithms learn by interacting with an environment and receiving rewards or penalties for actions to maximize performance
 
-## Preprocessing
-
-Data preprocessing describes the steps needed to encode data with the purpose of transforming it into a numerical state that machines can read. Data preprocessing techniques are part of data mining, which creates end products out of raw data which is standardized/normalized, contains no null values, and more.
-
-### Replacing Null Values 
-
-Replacing null values is usually the most common of data preprocessing techniques because it allows us to have a full dataset of values to work with. To execute replacing null values as part of data preprocessing, I suggest using Google Colab or opening a Jupyter notebook. For simplicity’s sake, I will be using Google Colab. Your first step will be to import `SimpleImputer` which is part of the `sklearn` library. The SimpleImputer class provides basic strategies for imputing, or representing missing values.
-
-~~~
-from sklearn.impute import SimpleImputer
-~~~
-{: .python}
-
-Next, you’re going to want to specify which missing values to replace. We will be replacing those missing values with the mean of that row of the dataset, which we can do by setting the strategy variable equal to the mean.
-
-~~~
-imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
-~~~
-{: .python}
-
-The imputer fills missing values with some statistics (e.g., mean, median) of the data. To avoid data leakage during cross-validation, it computes the statistic on the train data during the fit and then stores it. It then uses that data on the test portion, done during the transform. 
-
-~~~
-imputer.fit(X[:, 1:3]) #looks @ rows and columns X[:, 1:3] = imputer.transform(X[:, 1:3])
-~~~
-{: .python}
-
-### Feature Scaling
-
-Feature scaling is a data preprocessing technique used to normalize our set of data values. The reason we use feature scaling is that some sets of data might be overtaken by others in such a way that the machine learning model disregards the overtaken data. The sets of data, in this case, represent separate features.
-
-Normalization puts all values between 0 and 1. However, normalization is a recommended data preprocessing technique when most of your features exhibit a normal distribution – which may not always be the case.
 
 
 ## Evaluation Metrics and Model Selection
 
 ## Supervised Learning
 
-
-
-### Regression
 
 ### Classification
 
@@ -262,9 +227,14 @@ plt.show()
 
 ![](../fig/missing.png)
 
+### Data Preprocessing
 
-{: .output}
-**Get the data types of all columns**
+Data preprocessing involves transforming raw data into a standardized format suitable for machine learning algorithms. This process ensures that the data is free from inconsistencies, null values, and other irregularities.
+
+#### Feature Scaling
+
+Feature scaling is a crucial data preprocessing step aimed at normalizing data values. By scaling features, we prevent certain data sets from dominating others, which could lead to biased model predictions. Normalization, a common scaling technique, scales data between 0 and 1. However, normalization may not be suitable for features with non-normal distributions.
+
 ~~~
 # Get the data types of all columns
 column_data_types = data.dtypes
@@ -279,22 +249,15 @@ print("Categorical columns:", categorical_columns)
 ~~~
 {: .python}
 
-~~~
-Numerical columns: ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am', 'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm', 'Temp9am', 'Temp3pm']
-Categorical columns: ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
-~~~
-{: .output}
+#### Replace Missing Values
 
+To handle missing values, we employ the `SimpleImputer` class from the `sklearn` library. 
 
-#### 5. Replace missing values
 ~~~
 from sklearn.impute import SimpleImputer
-# Assuming df is your DataFrame
 
-# Numerical columns
+# Define numerical and categorical columns
 numerical_cols = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am', 'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm', 'Temp9am', 'Temp3pm']
-
-# Categorical columns
 categorical_cols = ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
 
 # Impute numerical columns with mean
@@ -308,6 +271,9 @@ data[categorical_cols] = cat_imputer.fit_transform(data[categorical_cols])
 print(data.head())
 ~~~
 {: .python}
+
+
+
 
 ~~~
          Date Location  MinTemp  MaxTemp  Rainfall  Evaporation  Sunshine  \
@@ -378,7 +344,7 @@ dtype: int64
 {: .output}
 
 
-###### Data Encoding
+#### Data Encoding
 Data encoding is a process of transforming categorical data into a numerical format suitable for analysis by machine learning algorithms. Categorical data consists of discrete labels, such as colors, types, or categories, which are not inherently numerical. Two common encoding techniques are Label Encoding and One-Hot Encoding.
 
 **Label Encoding**:
@@ -701,8 +667,8 @@ print(X_train)
    1.78343797e+00 -5.29795450e-01]]
 ~~~
 {: .output}
-## Training Model
-## 1. Logistic Regression
+### Training Model
+#### 1. Logistic Regression
 1. **Logistic Regression** is used to model the probability that a given input belongs to a particular class. It's commonly used when the dependent variable is binary (0/1, True/False, Yes/No), but it can also be extended to handle multiclass classification tasks.
 
 2. **How it Works**
@@ -877,7 +843,7 @@ plt.show();
 ![](../fig/ruc_logistic.png)
 
 
-# Random Forest
+### Random Forest
 
 
 ~~~
@@ -1059,12 +1025,13 @@ weighted avg       0.84      0.85      0.84     29092
 {: .output}
 
 
+### Regression
 
-## Ensemble Learning Techniques
+### Ensemble Learning Techniques
 
 ## Unsupervised Learning
 
-## Hyperparameter Tuning and Optimization
+
 
 
 
