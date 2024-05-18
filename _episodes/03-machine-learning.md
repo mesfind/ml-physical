@@ -216,34 +216,106 @@ max	NaN	NaN	33.900000	48.100000	371.000000	145.000000	14.500000	NaN	135.000000	N
 ~~~
 {: .output}
 
-###### 4. Pre-Processing
+### 4. Pre-Processing
 When applying any predictive algorithm, we can never use it immediately without having done any pre-processing of the data. This step is extremely important, and can never be overlooked. For this data set, we perform the following pre-processing steps:
 
 * Drop features that do not seem to add any value to our model
 To determine which columns are less important for predicting the target variable RainTomorrow, we need to consider several factors:
 
-a. Missing Values: Columns with a high proportion of missing values might be less useful unless they carry significant predictive power that justifies the effort to handle these missing values.
+a. **Missing Values**: Columns with a high proportion of missing values might be less useful unless they carry significant predictive power that justifies the effort to handle these missing values.
 
-b. Correlation with Target: Columns with little or no correlation to the target variable might be less important.
+b. **Correlation with Target**: Columns with little or no correlation to the target variable might be less important.
 
-c. Domain Knowledge: Certain features might be more relevant based on domain knowledge about weather prediction.
+c. **Domain Knowledge**: Certain features might be more relevant based on domain knowledge about weather prediction.
+
+**Calculate missing value percentages for all columns**
 
 ~~~
-
+data.isnull().sum()
 ~~~
 {: .python}
 
 ~~~
+Date                 0
+Location             0
+MinTemp           1485
+MaxTemp           1261
+Rainfall          3261
+Evaporation      62790
+Sunshine         69835
+WindGustDir      10326
+WindGustSpeed    10263
+WindDir9am       10566
+WindDir3pm        4228
+WindSpeed9am      1767
+WindSpeed3pm      3062
+Humidity9am       2654
+Humidity3pm       4507
+Pressure9am      15065
+Pressure3pm      15028
+Cloud9am         55888
+Cloud3pm         59358
+Temp9am           1767
+Temp3pm           3609
+RainToday         3261
+RainTomorrow      3267
+dtype: int64
 ~~~
 {: .output}
 ~~~
+# Calculate missing value percentages for all columns
+missing_percentages = (data.isnull().sum() / len(data)) * 100
+
+# Display missing value percentages for all columns
+print("Missing value percentages for all columns:")
+print(missing_percentages)
 ~~~
 {: .python}
 
 ~~~
+Missing value percentages for all columns:
+Date              0.000000
+Location          0.000000
+MinTemp           1.020899
+MaxTemp           0.866905
+Rainfall          2.241853
+Evaporation      43.166506
+Sunshine         48.009762
+WindGustDir       7.098859
+WindGustSpeed     7.055548
+WindDir9am        7.263853
+WindDir3pm        2.906641
+WindSpeed9am      1.214767
+WindSpeed3pm      2.105046
+Humidity9am       1.824557
+Humidity3pm       3.098446
+Pressure9am      10.356799
+Pressure3pm      10.331363
+Cloud9am         38.421559
+Cloud3pm         40.807095
+Temp9am           1.214767
+Temp3pm           2.481094
+RainToday         2.241853
+RainTomorrow      2.245978
+dtype: float64
 ~~~
 {: .output}
+
+Columns with a high percentage of missing values are likely to be less important unless they have a strong correlation with the target.
+
+- Evaporation (missing 42.82%): Likely less important.
+- Sunshine (missing 48.02%): Likely less important.
+- Cloud9am (missing 38.42%): Possibly less important.
+- Cloud3pm (missing 40.79%): Possibly less important.
 ~~~
+#Visualize missing values
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+plt.figure(figsize=(12, 6))
+sns.heatmap(data.isnull(), cbar=False, cmap='viridis')
+plt.title('Missing Values Heatmap')
+plt.show()
 ~~~
 {: .python}
 
