@@ -77,6 +77,15 @@ Normalization puts all values between 0 and 1. However, normalization is a recom
 
 ### Classification
 
+
+
+~~~
+### Importing libraries
+import numpy as np
+import pandas as pd
+~~~
+{: python}
+
 ## Ensemble Learning Techniques
 
 ## Unsupervised Learning
