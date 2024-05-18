@@ -76,7 +76,7 @@ Normalization puts all values between 0 and 1. However, normalization is a recom
 ### Regression
 
 ### Classification
-
+* To thoroughly explore classification algorithms, we will examine the following examples and predict whether it will rain tomorrow using various classification techniques.
 
 
 ###### Importing libraries
