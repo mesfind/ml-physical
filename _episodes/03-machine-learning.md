@@ -44,7 +44,7 @@ Replacing null values is usually the most common of data preprocessing technique
 ~~~
 from sklearn.impute import SimpleImputer
 ~~~
-{: python}
+{: .python}
 
 Next, you’re going to want to specify which missing values to replace. We will be replacing those missing values with the mean of that row of the dataset, which we can do by setting the strategy variable equal to the mean.
 
@@ -112,7 +112,7 @@ Date	Location	MinTemp	MaxTemp	Rainfall	Evaporation	Sunshine	WindGustDir	WindGust
 
 > ## Excercise: Data type info and non-null counts
 >  - write a code in Pandas to print the df info of the dataframe
-> > # Solution 
+> > ## Solution 
 > > ~~~
 > > df.info()
 > > ~~~
