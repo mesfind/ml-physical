@@ -121,17 +121,19 @@ Date	Location	MinTemp	MaxTemp	Rainfall	Evaporation	Sunshine	WindGustDir	WindGust
 {: .challenge}
 
 
-### 4. Pre-Processing
-When applying any predictive algorithm, we can never use it immediately without having done any pre-processing of the data. This step is extremely important, and can never be overlooked. For this data set, we perform the following pre-processing steps:
+### Data Preprocessing
 
-* Drop features that do not seem to add any value to our model
-To determine which columns are less important for predicting the target variable RainTomorrow, we need to consider several factors:
+Data preprocessing is a critical step in preparing raw data for machine learning algorithms. It ensures that the data is consistent, free of missing values, and ready for analysis.
 
-a. **Missing Values**: Columns with a high proportion of missing values might be less useful unless they carry significant predictive power that justifies the effort to handle these missing values.
+Before applying any predictive algorithm, it's essential to preprocess the data. This step is crucial and cannot be overlooked. For our dataset, we follow these preprocessing steps:
 
-b. **Correlation with Target**: Columns with little or no correlation to the target variable might be less important.
+1. **Feature Selection**: We drop features that don't contribute significantly to predicting the target variable, RainTomorrow. To decide which columns to drop, we consider:
 
-c. **Domain Knowledge**: Certain features might be more relevant based on domain knowledge about weather prediction.
+   a. **Missing Values**: Columns with a high proportion of missing values may be less useful unless they are highly predictive.
+
+   b. **Correlation with Target**: Features that have little or no correlation with the target variable may be less important.
+
+   c. **Domain Knowledge**: Certain features may be more relevant based on our knowledge of weather prediction.
 
 **Calculate missing value percentages for all columns**
 
@@ -227,9 +229,7 @@ plt.show()
 
 ![](../fig/missing.png)
 
-### Data Preprocessing
 
-Data preprocessing involves transforming raw data into a standardized format suitable for machine learning algorithms. This process ensures that the data is free from inconsistencies, null values, and other irregularities.
 
 #### Feature Scaling
 
