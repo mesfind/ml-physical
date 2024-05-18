@@ -107,7 +107,8 @@ _**Examples**_:
 To illustrate classification in climate science, consider the task of classifying weather patterns. This can help meteorologists predict and understand climate phenomena, leading to better preparation and response strategies.
 
 **Problem Statement**: Predict the type of weather (e.g., sunny, cloudy, rainy, snowy) for a given day based on historical weather data.
-**Dataset** : 
+
+**Dataset**  
     * Features: Temperature, humidity, wind speed, atmospheric pressure, previous day's weather.
     * Labels: Weather type (sunny, cloudy, rainy, snowy).
 
@@ -115,14 +116,14 @@ To illustrate classification in climate science, consider the task of classifyin
 * To thoroughly explore classification algorithms, we will examine the following examples and predict whether it will rain tomorrow using various classification techniques.
 
 
-###### Importing libraries
+###### 1. Importing libraries
 ~~~
 import numpy as np
 import pandas as pd
 ~~~
 {: .python}
 
-##### Loading Dataset
+##### 2. Loading Dataset
 ~~~
 data = pd.read_csv('weatherAUS.csv')
 data.head()
@@ -139,6 +140,214 @@ Date	Location	MinTemp	MaxTemp	Rainfall	Evaporation	Sunshine	WindGustDir	WindGust
 ~~~
 {: .output}
 
+###### 3. Understanding the Data Structure
+* Check the shape, data types, and basic statistics of the dataset.
+~~~
+# Shape of the dataset
+print("Shape of the dataset:", data.shape)
+~~~
+{: .python}
+
+~~~
+Shape of the dataset: (145460, 23)
+~~~
+{: .output}
+
+~~~
+# Data types and non-null counts
+data.info()
+~~~
+{: .python}
+
+~~~
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 145460 entries, 0 to 145459
+Data columns (total 23 columns):
+ #   Column         Non-Null Count   Dtype  
+---  ------         --------------   -----  
+ 0   Date           145460 non-null  object 
+ 1   Location       145460 non-null  object 
+ 2   MinTemp        143975 non-null  float64
+ 3   MaxTemp        144199 non-null  float64
+ 4   Rainfall       142199 non-null  float64
+ 5   Evaporation    82670 non-null   float64
+ 6   Sunshine       75625 non-null   float64
+ 7   WindGustDir    135134 non-null  object 
+ 8   WindGustSpeed  135197 non-null  float64
+ 9   WindDir9am     134894 non-null  object 
+ 10  WindDir3pm     141232 non-null  object 
+ 11  WindSpeed9am   143693 non-null  float64
+ 12  WindSpeed3pm   142398 non-null  float64
+ 13  Humidity9am    142806 non-null  float64
+ 14  Humidity3pm    140953 non-null  float64
+ 15  Pressure9am    130395 non-null  float64
+ 16  Pressure3pm    130432 non-null  float64
+ 17  Cloud9am       89572 non-null   float64
+ 18  Cloud3pm       86102 non-null   float64
+ 19  Temp9am        143693 non-null  float64
+ 20  Temp3pm        141851 non-null  float64
+ 21  RainToday      142199 non-null  object 
+ 22  RainTomorrow   142193 non-null  object 
+dtypes: float64(16), object(7)
+memory usage: 25.5+ MB
+~~~
+{: .output}
+
+~~~
+data.describe(include='all')
+~~~
+{: .python}
+
+~~~
+
+Date	Location	MinTemp	MaxTemp	Rainfall	Evaporation	Sunshine	WindGustDir	WindGustSpeed	WindDir9am	...	Humidity9am	Humidity3pm	Pressure9am	Pressure3pm	Cloud9am	Cloud3pm	Temp9am	Temp3pm	RainToday	RainTomorrow
+count	145460	145460	143975.000000	144199.000000	142199.000000	82670.000000	75625.000000	135134	135197.000000	134894	...	142806.000000	140953.000000	130395.00000	130432.000000	89572.000000	86102.000000	143693.000000	141851.00000	142199	142193
+unique	3436	49	NaN	NaN	NaN	NaN	NaN	16	NaN	16	...	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	2	2
+top	12-11-2013	Canberra	NaN	NaN	NaN	NaN	NaN	W	NaN	N	...	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	No	No
+freq	49	3436	NaN	NaN	NaN	NaN	NaN	9915	NaN	11758	...	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	110319	110316
+mean	NaN	NaN	12.194034	23.221348	2.360918	5.468232	7.611178	NaN	40.035230	NaN	...	68.880831	51.539116	1017.64994	1015.255889	4.447461	4.509930	16.990631	21.68339	NaN	NaN
+std	NaN	NaN	6.398495	7.119049	8.478060	4.193704	3.785483	NaN	13.607062	NaN	...	19.029164	20.795902	7.10653	7.037414	2.887159	2.720357	6.488753	6.93665	NaN	NaN
+min	NaN	NaN	-8.500000	-4.800000	0.000000	0.000000	0.000000	NaN	6.000000	NaN	...	0.000000	0.000000	980.50000	977.100000	0.000000	0.000000	-7.200000	-5.40000	NaN	NaN
+25%	NaN	NaN	7.600000	17.900000	0.000000	2.600000	4.800000	NaN	31.000000	NaN	...	57.000000	37.000000	1012.90000	1010.400000	1.000000	2.000000	12.300000	16.60000	NaN	NaN
+50%	NaN	NaN	12.000000	22.600000	0.000000	4.800000	8.400000	NaN	39.000000	NaN	...	70.000000	52.000000	1017.60000	1015.200000	5.000000	5.000000	16.700000	21.10000	NaN	NaN
+75%	NaN	NaN	16.900000	28.200000	0.800000	7.400000	10.600000	NaN	48.000000	NaN	...	83.000000	66.000000	1022.40000	1020.000000	7.000000	7.000000	21.600000	26.40000	NaN	NaN
+max	NaN	NaN	33.900000	48.100000	371.000000	145.000000	14.500000	NaN	135.000000	NaN	...	100.000000	100.000000	1041.00000	1039.600000	9.000000	9.000000	40.200000	46.70000	NaN	NaN
+11 rows × 23 columns
+~~~
+{: .output}
+
+###### 4. Pre-Processing
+When applying any predictive algorithm, we can never use it immediately without having done any pre-processing of the data. This step is extremely important, and can never be overlooked. For this data set, we perform the following pre-processing steps:
+
+* Drop features that do not seem to add any value to our model
+To determine which columns are less important for predicting the target variable RainTomorrow, we need to consider several factors:
+
+a. Missing Values: Columns with a high proportion of missing values might be less useful unless they carry significant predictive power that justifies the effort to handle these missing values.
+
+b. Correlation with Target: Columns with little or no correlation to the target variable might be less important.
+
+c. Domain Knowledge: Certain features might be more relevant based on domain knowledge about weather prediction.
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
+~~~
+~~~
+{: .python}
+
+~~~
+~~~
+{: .output}
 
 ## Ensemble Learning Techniques
 
