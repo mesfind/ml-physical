@@ -591,8 +591,8 @@ Feature scaling is a vital data preprocessing step that aims to normalize data v
 
 4. **Standardization vs. Min-Max Scaling:**
    - Two common normalization techniques are standardization and min-max scaling.
-      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is \( z = \frac{(x - \mu)}{\sigma} \), where \( x \) is the original value, \( \mu \) is the mean, and \( \sigma \) is the standard deviation.
-      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is \( x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})} \).
+      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is \\[ z = \frac{(x - \mu)}{\sigma} \\], where \\[ x \\] is the original value, \[[ \mu \]] is the mean, and \\[ \sigma \\] is the standard deviation.
+      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is \\[ x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})} \\].
 
 5. **Applicability:**
    - The choice between standardization and min-max scaling depends on the characteristics of the data and the requirements of the algorithm. Standardization is less affected by outliers, making it suitable for robustness against extreme values.
@@ -658,21 +658,21 @@ Model: Logistic Regression models the relationship between the independent varia
 Sigmoid Function: The sigmoid function maps any real-valued number to the range [0, 1], which makes it suitable for modeling probabilities.
 Hypothesis: The logistic regression hypothesis can be represented as:
 
-hθ(x) = g(θ^T x)
+\\[ h_\theta(x) = g(\theta^T x) \\]
 
-where: hθ(x) is the predicted probability that y = 1 given x. 
-g(z) is the sigmoid function, g(z) = \frac{1}{1 + e^{-z}}
+where: \\[ h_\theta(x) \\] is the predicted probability that \\[y = 1 \\] given x. 
+g(z) is the sigmoid function, \\[ g(z) = \frac{1}{1 + e^{-z}} \\]
 
-\theta^T   is the transpose of the parameter vector.
+\\[ \theta^T \\]  is the transpose of the parameter vector.
 𝑥  is the feature vector.
 
 **3. Training Process**
 
 * **Cost Function**: Logistic Regression uses the logistic loss (or cross-entropy loss) as the cost function to penalize incorrect predictions.
-* **Optimization**: The model parameters (θ) are learned by minimizing the cost function using optimization algorithms like gradient descent.
+* **Optimization**: The model parameters (\\[ \theta \\]) are learned by minimizing the cost function using optimization algorithms like gradient descent.
 
 **4. Model Interpretation**
-* **Coefficients**: The coefficients (θ) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
+* **Coefficients**: The coefficients (\\[ \theta \\]) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
 * **Interpretation**: Positive coefficients indicate that an increase in the corresponding feature value increases the probability of the positive class, while negative coefficients indicate the opposite.
 
 **5. Applications**
