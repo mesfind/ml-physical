@@ -70,6 +70,3 @@ exclude:
 # Turn off built-in syntax highlighting.
 highlighter: false
 
-markdown: kramdown
-kramdown:
-    math_engine: katex
