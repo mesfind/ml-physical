@@ -83,10 +83,10 @@ plt.show();
 ![](../fig/rolling_mean_co2.png)
 
 
-The increasing rolling mean of CO2 levels suggests a long-term upward trend in atmospheric \[ CO_2 \] concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
+The increasing rolling mean of CO2 levels suggests a long-term upward trend in atmospheric \\( CO_2 \\) concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
 
-> ## Exercise: Plot the mean of \[ CO_2 \] levels
-> - Get the month for each dates in the index of \[ CO_2 \]levels
+> ## Exercise: Plot the mean of \\(CO_2 \\) levels
+> - Get the month for each dates in the index of \\( CO_2 \\)levels
 > >  ## Solution
 > >~~~
 > >index_month = co2_levels.index.month
