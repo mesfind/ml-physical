@@ -202,7 +202,7 @@ In this exercise, you will perform time series decomposition on CO2 levels data,
 > > plt.show()
 > > ~~~
 > > {: .python}
-> ~[](../fig/co2_seasonal_trends.png)
+> ![](../fig/co2_seasonal_trends.png)
 > {: .solution}
 {: .challenge}
  
