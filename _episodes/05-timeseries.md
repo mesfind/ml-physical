@@ -99,8 +99,8 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 > > plt.legend(fontsize=10);
 > > ~~~
 > > {: .python}
-> {: .solution}
 > ![](../fig/mean_plot_co2.png)
+> {: .solution}
 {: .challenge}
 
 
