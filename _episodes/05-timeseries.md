@@ -98,17 +98,15 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 > > ~~~
 > > # Plot the time series in your dataframe
 > > ax = co2_levels.plot(color='blue', fontsize=12)
-> >
 > > # Add a red vertical line at the date 1960-01-01
 > > ax.axvline('1960-01-01', color='red', linestyle='--')
-> >
 > > # Specify the labels in your plot
 > > ax.set_xlabel('Date', fontsize=12)
 > > ax.set_title(r'Number of Monthly $CO_2$', fontsize=12)
 > > plt.show()
 > > ~~~
 > > {: .python}
-> ![](..fig/co2_tends.png)
+> ![](../fig/co2_tends.png)
 > {: .solution}
 > 
 {: .challenge}
@@ -136,7 +134,7 @@ plt.show()
 {: .python}
 
 
-![](..fig/co2_trends_component.png)
+![](../fig/co2_trends_component.png)
 
 
 > ## Exercise: Plot the seasonal components of CO2 time series
