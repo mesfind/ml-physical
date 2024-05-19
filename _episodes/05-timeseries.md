@@ -238,3 +238,105 @@ plt.show()
 > {: .solution}
 > 
 {: .challenge}
+
+## Time Series Modeling with deep learning
+
+In recent years, deep learning has emerged as a powerful tool for time series forecasting, offering significant advantages over traditional statistical methods. While classical approaches like ARIMA and exponential smoothing rely heavily on assumptions about the data's structure, deep learning models, particularly neural networks, can automatically capture complex patterns __without extensive manual feature engineering__.
+
+Among the various types of neural networks, Recurrent Neural Networks (RNNs) have shown exceptional promise for time series tasks due to their inherent ability to process sequences of data. RNNs, with their internal memory and feedback loops, excel at recognizing temporal dependencies, making them well-suited for forecasting tasks where past observations are crucial for predicting future values.
+
+However, standard RNNs face challenges such as vanishing gradients, which can hinder their performance on long sequences. To address these issues, advanced architectures like Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs) have been developed. These models incorporate mechanisms to maintain and update memory over longer periods, thereby improving the model's ability to learn from and retain long-term dependencies in the data.
+
+
+### RNN
+
+Recurrent Neural Networks (RNNs) are a type of neural network specifically designed to handle sequential data by incorporating feedback loops that allow information to persist. This architecture enables RNNs to capture temporal dependencies and patterns within time series data, making them particularly effective for tasks such as language modeling, speech recognition, and time series forecasting. Unlike traditional feedforward neural networks, RNNs maintain a hidden state that is updated at each time step, providing a dynamic memory that can process sequences of varying lengths. Advanced variants like Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs) further enhance this capability by mitigating issues like vanishing gradients, thus enabling the modeling of long-term dependencies more effectively.
+
+~~~
+def windows(data, n_in=1, n_out=1, dropnan=True):
+    """
+    Convert time series data into a supervised learning format for LSTM modeling.
+    Parameters:
+    - data: The input time series data (pandas DataFrame or list of arrays).
+    - n_in: Number of lag observations as input (default: 1).
+    - n_out: Number of future observations as output (default: 1).
+    - dropnan: Whether to drop rows with NaN values (default: True).
+
+    Returns:
+    - Pandas DataFrame with columns representing lag and future observations.
+    """
+    n_vars = 1 if type(data) is list else data.shape[1]
+    dff = pd.DataFrame(data)
+    cols, names = list(), list()
+    for i in range(n_in, 0, -1):
+        cols.append(dff.shift(i))
+        names += [('var%d(t-%d)' % (j+1, i)) for j in range(n_vars)]
+    for i in range(0, n_out):
+        cols.append(dff.shift(-i))
+        if i == 0:
+            names += [('var%d(t)' % (j+1)) for j in range(n_vars)]
+        else:
+            names += [('var%d(t+%d)' % (j+1, i)) for j in range(n_vars)]
+    agg = pd.concat(cols, axis=1)
+    agg.columns = names
+    if dropnan:
+        agg.dropna(inplace=True)
+
+    return agg
+~~~
+{: .python}
+
+The provided function, windows, converts time series data into a supervised learning format suitable for Long Short-Term Memory (LSTM) modeling. Below are detailed instructions on how to use this function.
+
+
+
+### LSTM
+
+Long Short-Term Memory (LSTM) networks are a specialized type of Recurrent Neural Network (RNN) designed to effectively capture long-term dependencies in sequential data by incorporating memory cells that can maintain and update information over extended time periods. The LSTM architecture addresses the vanishing gradient problem prevalent in standard RNNs, allowing for better training and performance on long sequences. In the provided LSTM model, the network consists of an LSTM layer followed by a fully connected layer, which processes the output of the last time step to produce the final prediction. This structure enables the model to learn complex temporal patterns and make accurate forecasts or classifications based on sequential inputs. Let's implement the LSTM model in pytorch
+
+~~~
+import torch.nn as nn
+class LSTM(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(LSTM, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        out, _ = self.lstm(x)
+        out = self.fc(out[:, -1, :])  # Extract the output of the last time step
+        return out
+~~~
+{: .python}
+
+### GRU
+
+Gated Recurrent Units (GRUs) are a variant of Recurrent Neural Networks (RNNs) that simplify the architecture of Long Short-Term Memory (LSTM) networks while retaining the ability to capture long-term dependencies in sequential data. GRUs combine the input and forget gates of LSTMs into a single update gate, making them computationally more efficient and easier to train. The provided GRU model includes a GRU layer followed by a fully connected layer, which processes the output of the last time step to generate the final prediction. This design allows the model to effectively learn and utilize temporal patterns in the data, making GRUs well-suited for tasks such as time series forecasting and sequence classification. Let's implement the GRU model in pytorch
+
+~~~
+# GRU model
+class GRU(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(GRU, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        # Initialize the hidden state with zeros
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+
+        # Pass the input sequence through the GRU
+        out, _ = self.gru(x, h0)
+
+        # Get the last time step's output and pass it through the fully connected layer
+        out = self.fc(out[:, -1, :])
+
+        return out
+~~~
+{: .python}
+
+
+
+

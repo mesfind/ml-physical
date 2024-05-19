@@ -17,9 +17,78 @@ keypoints:
 - "netCDF and GRIB data formats"
 ---
 
-# Copernicus Climate Data Store (CDS)
+# Climate and weather Data sources
 
-## Where to get Climate data?
+## Meteostat 
+
+Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
+
+### Installation
+
+The Meteostat Python package is available through PyPI
+
+~~~
+$ pip install meteostat
+~~~
+{: .bash}
+
+### Weather Stations
+
+In contrast to other meteorological data interfaces Meteostat does not use a global data model. Instead, Meteostat provides weather observations and long-term climate statistics for individual weather stations. Understandably, no one knows the identifiers of each and every weather station. Therefore, Meteostat provides the Stations class - a simple interface for querying weather stations using several filters.
+
+~~~
+# Import Meteostat library
+# pip install meteostat
+from meteostat import Stations
+# Get nearby weather stations
+stations = Stations()
+stations = stations.nearby(9.03, 38.74,)
+station = stations.fetch(1)
+# Print DataFrame
+print(station)
+~~~
+{: .python}
+
+~~~
+     name country region    wmo  icao  latitude  longitude  elevation            timezone hourly_start hourly_end daily_start  daily_end monthly_start monthly_end     distance
+id                                                                                                                                                                                      
+63450  Addis Ababa      ET     CN  63450  HAAB    8.9833       38.8     2355.0  Africa/Addis_Ababa   1957-01-01 2024-05-17  1957-02-13 2024-05-10    1898-01-01  2021-01-01  8389.627629
+~~~
+{: .output}
+
+Let's pretend you want to plot temperature data for Addis Ababa, Ethiopia from 2023:
+
+~~~
+# Import Meteostat library and dependencies
+from datetime import datetime
+import matplotlib.pyplot as plt
+from meteostat import Point, Daily
+
+# Set time period
+start = datetime(2023, 1, 1)
+end = datetime(2023, 12, 31)
+
+# Create Point for Addis Ababa, Ethiopia
+addis_ababa = Point(9.03, 38.74, 2355) # lat, lon ,  elevation
+
+# Get daily data for 2023
+data = Daily(addis_ababa, start, end)
+data = data.fetch()
+
+# Plot line chart including average, minimum and maximum temperature
+data.plot(y=['tavg', 'tmin', 'tmax'])
+plt.title('Daily Temperature in Addis Ababa for 2023')
+plt.xlabel('Date')
+plt.ylabel('Temperature (°C)')
+plt.legend(['Average Temperature', 'Minimum Temperature', 'Maximum Temperature'])
+plt.grid(True)
+plt.show()
+~~~
+
+![](../fig/daily_temp_addis_ababa_2013.png)
+
+
+## Copernicus Climate Data Store (CDS)
 
 There are many online services to get climate data, and it is often difficult to know which ones are up-to date and which resources to trust. Also different services provide different Application Programming Interfaces (API), use different terminologies, different file formats etc., which make it difficult for new users to master them all. Therefore in this lesson, we will be focusing on the [Copernicus Climate Change Service (C3S)](https://climate.copernicus.eu/).
 
