@@ -106,30 +106,6 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 {: .challenge}
 
 
-## Seasonality, Trend and Noise
-
-In time series analysis, data often comprises three main components: seasonality, trend, and noise. Seasonality refers to recurring patterns at regular intervals, trend indicates long-term direction, and noise represents random fluctuations. Understanding these components is essential for accurate analysis and forecasting. The code snippet below demonstrates time series decomposition using `seasonal_decompose` from `statsmodels` to extract and visualize the trend component of the \\(CO_2\\) time-series data.
-
-~~~
-# Import statsmodels.api as sm
-import statsmodels.api as sm
-# Perform time series decompositon
-decomposition = sm.tsa.seasonal_decompose(co2_levels)
-# Extract the trend component
-trend = decomposition.trend
-# Plot the values of the trend
-ax = trend.plot(figsize=(12, 6), fontsize=6)
-# Specify axis labels
-ax.set_xlabel('Date', fontsize=10)
-ax.set_title(r'Trend component of  $CO_2$ time-series', fontsize=10)
-plt.show()
-~~~
-{: .python}
-
-
-![](..fig/co2_trends_component.png)
-
-
 > ## Exercise: Plot the \\(CO_2\\) time series with a vertical line
 > 
 > - Plot the \\(CO_2\\) levels over time using the `plot()` method
@@ -154,4 +130,63 @@ plt.show()
 > {: .solution}
 > 
 {: .challenge}
+
+
+
+## Treand, Seasonality and Noise
+
+In time series analysis, data often comprises three main components: seasonality, trend, and noise. Seasonality refers to recurring patterns at regular intervals, trend indicates long-term direction, and noise represents random fluctuations. Understanding these components is essential for accurate analysis and forecasting. The code snippet below demonstrates time series decomposition using `seasonal_decompose` from `statsmodels` to extract and visualize the trend component of the \\(CO_2\\) time-series data.
+
+~~~
+# Import statsmodels.api as sm
+import statsmodels.api as sm
+# Perform time series decompositon
+decomposition = sm.tsa.seasonal_decompose(co2_levels)
+# Extract the trend component
+trend = decomposition.trend
+# Plot the values of the trend
+ax = trend.plot(figsize=(12, 6), fontsize=6)
+# Specify axis labels
+ax.set_xlabel('Date', fontsize=10)
+ax.set_title(r'Trend component of  $CO_2$ time-series', fontsize=10)
+plt.show()
+~~~
+{: .python}
+
+
+![](..fig/co2_trends_component.png)
+
+
+> ## Exercise: Plot the seasonal components of CO2 time series
+> 
+> - Import the `statsmodels.api` module as `sm`
+> - Perform time series decomposition using `seasonal_decompose` on the `co2_levels` DataFrame
+> - Extract the seasonal components from the decomposition
+> - Plot the seasonal component values using `plot()` 
+> - Set the x-axis label to 'Date' and the title to 'Seasonal component of CO2 time-series'
+> 
+> > ## Solution
+> >~~~
+> > import statsmodels.api as sm
+> > # Perform time series decomposition
+> > decomposition = sm.tsa.seasonal_decompose(co2_levels)
+> > # Extract the seasonal components
+> > seasonal = decomposition.seasonal
+> >
+> > # Plot the values of the seasonality 
+> > ax = seasonal.plot(figsize=(12, 6), fontsize=6)
+> > # Specify axis labels
+> > ax.set_xlabel('Date', fontsize=10)
+> > ax.set_title(r'Seasonal component of $CO_2$ time-series', fontsize=10)
+> > plt.show()
+> >~~~
+> > {: .python}
+> ![](../fig/co2_seasonal_component.png)
+> {: .solution}
+> 
+{: .challenge}
+
+
+
+
 
