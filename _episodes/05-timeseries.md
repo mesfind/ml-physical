@@ -199,11 +199,11 @@ plt.show()
 {: .challenge}
  
 
-> ## Exercise: Decompose and Plot CO2 Time Series Components
-> 1. Load CO2 levels data and set the 'Year' column as the index.
-> 2. Perform time series decomposition with an additive model and a period of 12.
-> 3. Plot the observed, trend, seasonal, and residual components on separate subplots.
-> 4. Adjust subplot spacing and display the plot.
+> ## Exercise 3: Decompose and Plot CO2 Time Series Components
+> - Load CO2 levels data and set the 'Year' column as the index.
+> -  Perform time series decomposition with an additive model and a period of 12.
+> -  Plot the observed, trend, seasonal, and residual components on separate subplots.
+> - Adjust subplot spacing and display the plot.
 > 
 > > ## Solution
 > > ~~~
@@ -237,4 +237,4 @@ plt.show()
 > ![](../fig/co2_seasonal_trends_noise.png)
 > {: .solution}
 > 
-{. challenge}
+{: .challenge}
