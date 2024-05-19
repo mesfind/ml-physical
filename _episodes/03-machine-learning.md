@@ -667,7 +667,7 @@ Hypothesis: The logistic regression hypothesis can be represented as:
 
 \\( h_\theta(x) = g(\theta^T x) \\)
 
-where: \\( h_\theta(x) \\) is the predicted probability that \\[y = 1 \\] given x. 
+where: \\( h_\theta(x) \\) is the predicted probability that \\(y = 1 \\) given x. 
 g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
 
 \\( \theta^T \\)  is the transpose of the parameter vector. \\( x \\)  is the feature vector.
@@ -683,7 +683,7 @@ g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
 
 **5. Applications**
 * **Binary Classification**: Predicting whether an email is spam or not, whether a patient has a disease or not.
-* Probability Estimation**: Estimating the probability of a customer buying a product or defaulting on a loan.
+* **Probability Estimation**: Estimating the probability of a customer buying a product or defaulting on a loan.
 
 ~~~
 import pandas as pd
