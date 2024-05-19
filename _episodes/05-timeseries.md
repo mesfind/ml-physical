@@ -102,6 +102,7 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 > > {: .python}
 > ![](../fig/mean_plot_co2.png)
 > {: .solution}
+>
 {: .challenge}
 
 
@@ -124,6 +125,7 @@ ax.set_title(r'Trend component of  $CO_2$ time-series', fontsize=10)
 plt.show()
 ~~~
 {: .python}
+
 
 ![](..fig/co2_trends_component.png)
 
@@ -148,7 +150,8 @@ plt.show()
 > > plt.show()
 > >~~~
 > > {: .python}
-> ![](..fig/co2_trends_component.png)
+> ![](..fig/co2_trends.png)
 > {: .solution}
+> 
 {: .challenge}
 
