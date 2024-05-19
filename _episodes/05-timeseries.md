@@ -127,3 +127,27 @@ plt.show()
 ![](..fig/co2_level_trends.png)
 
 
+> ## Exercise: Plot the \\(CO_2\\) time series with a vertical line
+> 
+> - Plot the \\(CO_2\\) levels over time using the `plot()` method
+> - Add a red vertical line at the date '1960-01-01' using `axvline()`
+> - Set the x-axis label to 'Date' and the title to 'Number of Monthly CO2'
+> 
+> > ## Solution
+> >```python
+> > # Plot the time series in your dataframe
+> > ax = co2_levels.plot(color='blue', fontsize=12)
+> >
+> > # Add a red vertical line at the date 1960-01-01
+> > ax.axvline('1960-01-01', color='red', linestyle='--')
+> >
+> > # Specify the labels in your plot
+> > ax.set_xlabel('Date', fontsize=12)
+> > ax.set_title(r'Number of Monthly $CO_2$', fontsize=12)
+> > plt.show()
+> >```
+> > {: .python}
+> ![](..fig/co2_level_trends.png)
+> {: .solution}
+{: .challenge}
+
