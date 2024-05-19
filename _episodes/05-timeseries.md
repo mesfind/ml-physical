@@ -148,7 +148,7 @@ plt.show()
 > > plt.show()
 > >~~~
 > > {: .python}
-> ![](..fig/co2_trends.png)
+> ![](..fig/co2_trends_component.png)
 > {: .solution}
 {: .challenge}
 
