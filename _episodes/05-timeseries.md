@@ -17,7 +17,7 @@ keypoints:
 - "LSTM, GRU and TFT models leverage advanced mechanisms for superior predictive performance in physical sciences applications."
 ---
 
-# Introduction to Time Series Modeling with RNNs 
+# Time Series Modeling 
 
 Time series data consists of observations recorded at regular intervals, and time series forecasting aims to predict future values based on historical patterns and trends. This type of forecasting is critical across various domains, making it highly pertinent for machine learning practitioners. Applications such as risk scoring, fraud detection, and weather forecasting all benefit significantly from accurate time series predictions.
 
