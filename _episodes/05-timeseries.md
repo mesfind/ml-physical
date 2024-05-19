@@ -124,7 +124,7 @@ plt.show()
 ~~~
 {: .python}
 
-![](..fig/co2_level_trends.png)
+![](..fig/co2_levels_trends.png)
 
 
 > ## Exercise: Plot the \\(CO_2\\) time series with a vertical line
@@ -147,7 +147,7 @@ plt.show()
 > > plt.show()
 > >```
 > > {: .python}
-> ![](..fig/co2_level_trends.png)
+> ![](..fig/co2_trends.png)
 > {: .solution}
 {: .challenge}
 
