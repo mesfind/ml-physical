@@ -1,5 +1,6 @@
 ---
 title: Time Series Analysis with Python
+mathjax: true
 teaching: 1
 exercises: 0
 questions:
