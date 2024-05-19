@@ -663,8 +663,7 @@ Hypothesis: The logistic regression hypothesis can be represented as:
 where: \\( h_\theta(x) \\) is the predicted probability that \\[y = 1 \\] given x. 
 g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
 
-\\( \theta^T \\)  is the transpose of the parameter vector.
-𝑥  is the feature vector.
+\\( \theta^T \\)  is the transpose of the parameter vector. \\( x \\)  is the feature vector.
 
 **3. Training Process**
 
