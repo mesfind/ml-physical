@@ -255,25 +255,18 @@ Recurrent Neural Networks (RNNs) are a type of neural network specifically desig
 ~~~
 import torch
 import torch.nn as nn
-
-class RNN(nn.Module):
+# Define the RNN model
+class RNNModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
-        super(RNN, self).__init__()
+        super(RNNModel, self).__init__()
         self.hidden_size = hidden_size
         self.rnn = nn.RNN(input_size, hidden_size, batch_first=True)
         self.fc = nn.Linear(hidden_size, output_size)
-
-    def forward(self, x, hidden):
-        # Forward pass through the RNN layer
-        out, hidden = self.rnn(x, hidden)
-        # Reshaping the output to fit into the fully connected layer
-        out = out[:, -1, :]  # Extract the output of the last time step
-        out = self.fc(out)
-        return out, hidden
-
-    def init_hidden(self, batch_size):
-        # Initialize hidden state with zeros
-        return torch.zeros(1, batch_size, self.hidden_size)
+    def forward(self, x):
+        h0 = torch.zeros(1, x.size(0), self.hidden_size).to(x.device)
+        out, _ = self.rnn(x, h0)
+        out = self.fc(out[:, -1, :])
+        return out
 ~~~
 {: .python}
 
