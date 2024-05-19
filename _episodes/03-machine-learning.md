@@ -665,7 +665,7 @@ Model: Logistic Regression models the relationship between the independent varia
 Sigmoid Function: The sigmoid function maps any real-valued number to the range [0, 1], which makes it suitable for modeling probabilities.
 Hypothesis: The logistic regression hypothesis can be represented as:
 
-\\( h_\theta(x) = g(\theta^T x) \\)
+\\[ h_\theta(x) = g(\theta^T\cdot x) \\]
 
 where: \\( h_\theta(x) \\) is the predicted probability that \\(y = 1 \\) given x. 
 g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
