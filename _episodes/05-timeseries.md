@@ -119,12 +119,12 @@ trend = decomposition.trend
 ax = trend.plot(figsize=(12, 6), fontsize=6)
 # Specify axis labels
 ax.set_xlabel('Date', fontsize=10)
-ax.set_title('Seasonal component the CO2 time-series', fontsize=10)
+ax.set_title(r'Trend component of  $CO_2$ time-series', fontsize=10)
 plt.show()
 ~~~
 {: .python}
 
-![](..fig/co2_levels_trends.png)
+![](..fig/co2_trends_component.png)
 
 
 > ## Exercise: Plot the \\(CO_2\\) time series with a vertical line
