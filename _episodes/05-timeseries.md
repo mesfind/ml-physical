@@ -103,6 +103,27 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 {: .challenge}
 
 
+Here's the corrected markdown code with the code block properly formatted:
+
+> ## Exercise: Plot the mean of \\(CO_2 \\) levels
+> - Get the month for each dates in the index of \\(CO_2 \\) levels
+> > ## Solution
+> >```python
+> > index_month = co2_levels.index.month
+> > # Compute the mean  for each month of the year
+> > mean_co2_levels_by_month = co2_levels.groupby(index_month).mean()
+> > # Plot the mean 
+> > mean_co2_levels_by_month.plot(fontsize=6)
+> > # Specify the fontsize on the legend
+> > plt.legend(fontsize=10);
+> >```
+> > {: .output}
+> {: .solution}
+> 
+{: .challenge}
+
+
+
 ```math
 \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
 ```
