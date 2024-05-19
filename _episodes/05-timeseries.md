@@ -173,7 +173,7 @@ plt.show()
 >
 > > ## Solution
 > > ~~~
-> > import statsmodels.api as sm
+> > from statsmodels.tsa.seasonal import seasonal_decompose
 > > import numpy as np
 > > import pandas as pd
 > > import matplotlib.pyplot as plt
@@ -185,15 +185,11 @@ plt.show()
 > > # Set the 'timestamp' column as the index
 > > co2_levels.set_index('datestamp', inplace=True)
 > > # Perform time series decomposition
-> > decomposition = sm.tsa.seasonal_decompose(co2_levels)
-> > # Extract the trend and seasonal components
-> > trend = decomposition.trend
-> > seasonal = decomposition.seasonal
-> > co2_decomposed = pd.DataFrame(np.c_[trend, seasonal], index=co2_levels.index, columns=['trend', 'seasonal'])
+> > result = seasonal_decompose(co2_levels, model='additive', period=12)
 > > # Plot the values of the df_decomposed DataFrame
-> > ax = co2_decomposed.plot(figsize=(12, 6), fontsize=15, logy=True)
+> > ax = result.plot(figsize=(12, 6), fontsize=15, logy=True)
 > > # Specify axis labels
-> > ax.set_xlabel('Date', fontsize=15)
+> > ax.set_xlabel('Year', fontsize=15)
 > > plt.legend(fontsize=15)
 > > plt.show()
 > > ~~~
@@ -203,5 +199,42 @@ plt.show()
 {: .challenge}
  
 
-
-
+> ## Exercise: Decompose and Plot CO2 Time Series Components
+> 1. Load CO2 levels data and set the 'Year' column as the index.
+> 2. Perform time series decomposition with an additive model and a period of 12.
+> 3. Plot the observed, trend, seasonal, and residual components on separate subplots.
+> 4. Adjust subplot spacing and display the plot.
+> 
+> > ## Solution
+> > ~~~
+> > from statsmodels.tsa.seasonal import seasonal_decompose
+> > import numpy as np
+> > import pandas as pd
+> > import matplotlib.pyplot as plt
+> > import seaborn as sns
+> > plt.style.use('ggplot')
+> > co2_levels = pd.read_csv('data/co2_levels.csv')
+> > # Convert the 'timestamp' column to datetime format
+> > co2_levels['Year'] = pd.to_datetime(co2_levels['datestamp'])
+> > # Set the 'Year' column as the index
+> > co2_levels.set_index('Year', inplace=True)
+> > # Perform time series decomposition
+> > result = seasonal_decompose(co2_levels['co2'], model='additive', period=12)
+> > # Plot the decomposed components on individual subplots
+> > fig, axes = plt.subplots(4, 1, figsize=(12, 8))
+> > result.observed.plot(ax=axes[0])
+> > axes[0].set_title('Observed')
+> > result.trend.plot(ax=axes[1])
+> > axes[1].set_title('Trend')
+> > result.seasonal.plot(ax=axes[2])
+> > axes[2].set_title('Seasonal')
+> > result.resid.plot(ax=axes[3])
+> > axes[3].set_title('Residual')
+> > plt.tight_layout()
+> > plt.show()
+> > ~~~
+> > {: .python}
+> ![](../fig/co2_seasonal_trends_noise.png)
+> {: .solution}
+> 
+{. challenge}
