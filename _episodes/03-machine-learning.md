@@ -1,5 +1,5 @@
 ---
-title: Machine Learning for Physical Sciences
+title: Machine Learning Fundamentals
 teaching: 1
 exercises: 0
 questions:
