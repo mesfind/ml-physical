@@ -591,8 +591,8 @@ Feature scaling is a vital data preprocessing step that aims to normalize data v
 
 4. **Standardization vs. Min-Max Scaling:**
    - Two common normalization techniques are standardization and min-max scaling.
-      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is \\[ z = \frac{(x - \mu)}{\sigma} \\], where \\[ x \\] is the original value, \[[ \mu \]] is the mean, and \\[ \sigma \\] is the standard deviation.
-      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is \\[ x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})} \\].
+      - **Standardization (Z-score normalization):** It transforms data to have a mean of 0 and a standard deviation of 1. The formula is \[ z = \frac{(x - \mu)}{\sigma} \], where \[ x \] is the original value, \[ \mu \] is the mean, and \[ \sigma \] is the standard deviation.
+      - **Min-Max Scaling:** It scales data to a specific range, often between 0 and 1. The formula is \[ x_{\text{scaled}} = \frac{(x - \text{min})}{(\text{max} - \text{min})} \].
 
 5. **Applicability:**
    - The choice between standardization and min-max scaling depends on the characteristics of the data and the requirements of the algorithm. Standardization is less affected by outliers, making it suitable for robustness against extreme values.

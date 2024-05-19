@@ -41,7 +41,7 @@ Recent advancements in RNN variants, such as the Temporal Fusion Transformer (TF
 
 ## Time Series EDA
 
-- Let's start with calculating the rolling mean and standard deviation, adds upper and lower bounds, and visualizes the \\[ CO_2 \\]levels data trends over time in a plot with enhanced aesthetics using seaborn:
+- Let's start with calculating the rolling mean and standard deviation, adds upper and lower bounds, and visualizes the \[ CO_2 \]levels data trends over time in a plot with enhanced aesthetics using seaborn:
 
 ~~~
 import pandas as pd
@@ -83,10 +83,10 @@ plt.show();
 ![](../fig/rolling_mean_co2.png)
 
 
-The increasing rolling mean of CO2 levels suggests a long-term upward trend in atmospheric \\[ CO_2 \\] concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
+The increasing rolling mean of CO2 levels suggests a long-term upward trend in atmospheric \[ CO_2 \] concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
 
-> ## Exercise: Plot the mean of \\[ CO_2 \\] levels
-> - Get the month for each dates in the index of \\[ CO_2 \\]levels
+> ## Exercise: Plot the mean of \[ CO_2 \] levels
+> - Get the month for each dates in the index of \[ CO_2 \]levels
 > >  ## Solution
 > >~~~
 > >index_month = co2_levels.index.month
@@ -103,5 +103,4 @@ The increasing rolling mean of CO2 levels suggests a long-term upward trend in a
 {: .challenge}
 
 
-\\[ \frac{1}{n^{2}} \\]
 
