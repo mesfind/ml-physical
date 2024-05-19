@@ -167,12 +167,8 @@ plt.show()
 {: .challenge}
 
 
-
-## Exercise: Decompose and Plot CO2 Time Series with Log Scale
-
-In this exercise, you will perform time series decomposition on CO2 levels data, extract the trend and seasonal components, and plot the decomposed time series using a log scale.
-
-> ## Exercise 2: 
+> ## Exercise 2: Decompose and Plot \\(CO2\\) Time Series with Log Scale
+> In this exercise, you will perform time series decomposition on CO2 levels data, extract the trend and seasonal components, and plot the decomposed time series using a log scale.
 > - Decompose \\(CO_2\\) time series, extract the trend and seasonal components, and plot the decomposed time series using a log scale on the y-axis.
 >
 > > ## Solution
