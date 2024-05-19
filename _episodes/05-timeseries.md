@@ -1,6 +1,5 @@
 ---
 title: Time Series Analysis with Python
-mathjax: true
 teaching: 1
 exercises: 0
 questions:
@@ -17,6 +16,15 @@ keypoints:
 - "LSTMs and GRUs possess mechanisms to remember important events over extended periods."
 - "LSTM, GRU and TFT models leverage advanced mechanisms for superior predictive performance in physical sciences applications."
 ---
+
+<!-- MathJax -->
+
+<script type="text/javascript"
+
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+
 
 # Time Series Modeling 
 
