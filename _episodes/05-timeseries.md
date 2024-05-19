@@ -250,44 +250,34 @@ However, standard RNNs face challenges such as vanishing gradients, which can hi
 
 ### RNN
 
-Recurrent Neural Networks (RNNs) are a type of neural network specifically designed to handle sequential data by incorporating feedback loops that allow information to persist. This architecture enables RNNs to capture temporal dependencies and patterns within time series data, making them particularly effective for tasks such as language modeling, speech recognition, and time series forecasting. Unlike traditional feedforward neural networks, RNNs maintain a hidden state that is updated at each time step, providing a dynamic memory that can process sequences of varying lengths. Advanced variants like Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs) further enhance this capability by mitigating issues like vanishing gradients, thus enabling the modeling of long-term dependencies more effectively.
+Recurrent Neural Networks (RNNs) are a type of neural network specifically designed to handle sequential data by incorporating feedback loops that allow information to persist. This architecture enables RNNs to capture temporal dependencies and patterns within time series data, making them particularly effective for tasks such as language modeling, speech recognition, and time series forecasting. Unlike traditional feedforward neural networks, RNNs maintain a hidden state that is updated at each time step, providing a dynamic memory that can process sequences of varying lengths. Advanced variants like Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs) further enhance this capability by mitigating issues like vanishing gradients, thus enabling the modeling of long-term dependencies more effectively. Let's implement the RNN model in pytorch
 
 ~~~
-def windows(data, n_in=1, n_out=1, dropnan=True):
-    """
-    Convert time series data into a supervised learning format for LSTM modeling.
-    Parameters:
-    - data: The input time series data (pandas DataFrame or list of arrays).
-    - n_in: Number of lag observations as input (default: 1).
-    - n_out: Number of future observations as output (default: 1).
-    - dropnan: Whether to drop rows with NaN values (default: True).
+import torch
+import torch.nn as nn
 
-    Returns:
-    - Pandas DataFrame with columns representing lag and future observations.
-    """
-    n_vars = 1 if type(data) is list else data.shape[1]
-    dff = pd.DataFrame(data)
-    cols, names = list(), list()
-    for i in range(n_in, 0, -1):
-        cols.append(dff.shift(i))
-        names += [('var%d(t-%d)' % (j+1, i)) for j in range(n_vars)]
-    for i in range(0, n_out):
-        cols.append(dff.shift(-i))
-        if i == 0:
-            names += [('var%d(t)' % (j+1)) for j in range(n_vars)]
-        else:
-            names += [('var%d(t+%d)' % (j+1, i)) for j in range(n_vars)]
-    agg = pd.concat(cols, axis=1)
-    agg.columns = names
-    if dropnan:
-        agg.dropna(inplace=True)
+class RNN(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(RNN, self).__init__()
+        self.hidden_size = hidden_size
+        self.rnn = nn.RNN(input_size, hidden_size, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
 
-    return agg
+    def forward(self, x, hidden):
+        # Forward pass through the RNN layer
+        out, hidden = self.rnn(x, hidden)
+        # Reshaping the output to fit into the fully connected layer
+        out = out[:, -1, :]  # Extract the output of the last time step
+        out = self.fc(out)
+        return out, hidden
+
+    def init_hidden(self, batch_size):
+        # Initialize hidden state with zeros
+        return torch.zeros(1, batch_size, self.hidden_size)
 ~~~
 {: .python}
 
-The provided function, windows, converts time series data into a supervised learning format suitable for Long Short-Term Memory (LSTM) modeling. Below are detailed instructions on how to use this function.
-
+The model consists of an RNN layer followed by a fully connected layer (nn.Linear). In the forward method, the input is passed through the RNN layer, and the output of the last time step is extracted and fed into the fully connected layer to produce the final prediction. The init_hidden method initializes the hidden state with zeros. 
 
 
 ### LSTM
@@ -338,5 +328,41 @@ class GRU(nn.Module):
 {: .python}
 
 
+### Windows and Horizons 
 
+~~~
+def windows(data, n_in=1, n_out=1, dropnan=True):
+    """
+    Convert time series data into a supervised learning format for LSTM modeling.
+    Parameters:
+    - data: The input time series data (pandas DataFrame or list of arrays).
+    - n_in: Number of lag observations as input (default: 1).
+    - n_out: Number of future observations as output (default: 1).
+    - dropnan: Whether to drop rows with NaN values (default: True).
+
+    Returns:
+    - Pandas DataFrame with columns representing lag and future observations.
+    """
+    n_vars = 1 if type(data) is list else data.shape[1]
+    dff = pd.DataFrame(data)
+    cols, names = list(), list()
+    for i in range(n_in, 0, -1):
+        cols.append(dff.shift(i))
+        names += [('var%d(t-%d)' % (j+1, i)) for j in range(n_vars)]
+    for i in range(0, n_out):
+        cols.append(dff.shift(-i))
+        if i == 0:
+            names += [('var%d(t)' % (j+1)) for j in range(n_vars)]
+        else:
+            names += [('var%d(t+%d)' % (j+1, i)) for j in range(n_vars)]
+    agg = pd.concat(cols, axis=1)
+    agg.columns = names
+    if dropnan:
+        agg.dropna(inplace=True)
+
+    return agg
+~~~
+{: .python}
+
+The provided function, windows, converts time series data into a supervised learning format suitable for Long Short-Term Memory (LSTM) modeling. Below are detailed instructions on how to use this function.
 
