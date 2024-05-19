@@ -1,5 +1,12 @@
 ---
 title: Time Series Analysis with Python
+header-includes: |
+    \usepackage{tikz,pgfplots}
+    \usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhead[CO,CE]{This is fancy}
+    \fancyfoot[CO,CE]{So is this}
+    \fancyfoot[LE,RO]{\thepage}
 teaching: 1
 exercises: 0
 questions:
@@ -38,7 +45,7 @@ Recent advancements in RNN variants, such as the Temporal Fusion Transformer (TF
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-sns.set()
+plt.style.use('ggplot')
 co2_levels = pd.read_csv('data/co2_levels.csv')
 
 # Convert the 'timestamp' column to datetime format
@@ -64,8 +71,8 @@ ax = ma.plot(linewidth=0.8, fontsize=6)
 
 # Specify labels, legend, and show the plot
 ax.set_xlabel('Date', fontsize=10)
-ax.set_ylabel('CO2 levels in Mauai Hawaii', fontsize=10)
-ax.set_title('Rolling mean and variance of CO2 levels\n from 1958 to 2001', fontsize=10)
+ax.set_ylabel(r'$CO_2$ levels', fontsize=10)
+ax.set_title(r'Rolling mean and variance of $CO_2$ levels\n from 1958 to 2001', fontsize=10)
 plt.show();
 
 ~~~
