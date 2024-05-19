@@ -17,6 +17,13 @@ keypoints:
 - "Fundamentals of data engineering are crucial for building robust ML pipelines, including data storage, processing, and serving"
 ---
 
+<!-- MathJax -->
+
+<script type="text/javascript"
+
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
 
 
 # Machine Learning Concepts
@@ -668,10 +675,10 @@ g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
 **3. Training Process**
 
 * **Cost Function**: Logistic Regression uses the logistic loss (or cross-entropy loss) as the cost function to penalize incorrect predictions.
-* **Optimization**: The model parameters (\\( \theta \\)) are learned by minimizing the cost function using optimization algorithms like gradient descent.
+* **Optimization**: The model parameters ( \\(\theta \\) ) are learned by minimizing the cost function using optimization algorithms like gradient descent.
 
 **4. Model Interpretation**
-* **Coefficients**: The coefficients (\\( \theta \\)) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
+* **Coefficients**: The coefficients ( \\(\theta \\) ) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
 * **Interpretation**: Positive coefficients indicate that an increase in the corresponding feature value increases the probability of the positive class, while negative coefficients indicate the opposite.
 
 **5. Applications**
