@@ -137,7 +137,7 @@ plt.show()
 ![](../fig/co2_trends_component.png)
 
 
-> ## Exercise: Plot the seasonal components of CO2 time series
+> ## Exercise 1: Plot the seasonal components of CO2 time series
 > 
 > - Import the `statsmodels.api` module as `sm`
 > - Perform time series decomposition using `seasonal_decompose` on the `co2_levels` DataFrame
@@ -167,6 +167,45 @@ plt.show()
 {: .challenge}
 
 
+
+## Exercise: Decompose and Plot CO2 Time Series with Log Scale
+
+In this exercise, you will perform time series decomposition on CO2 levels data, extract the trend and seasonal components, and plot the decomposed time series using a log scale.
+
+> ## Exercise 2: 
+> - Decompose \\(CO_2\\) time series, extract the trend and seasonal components, and plot the decomposed time series using a log scale on the y-axis.
+>
+> > ## Solution
+> > ~~~
+> > import statsmodels.api as sm
+> > import numpy as np
+> > import pandas as pd
+> > import matplotlib.pyplot as plt
+> > import seaborn as sns
+> > plt.style.use('ggplot')
+> > co2_levels = pd.read_csv('data/co2_levels.csv')
+> > # Convert the 'timestamp' column to datetime format
+> > co2_levels['datestamp'] = pd.to_datetime(co2_levels['datestamp'])
+> > # Set the 'timestamp' column as the index
+> > co2_levels.set_index('datestamp', inplace=True)
+> > # Perform time series decomposition
+> > decomposition = sm.tsa.seasonal_decompose(co2_levels)
+> > # Extract the trend and seasonal components
+> > trend = decomposition.trend
+> > seasonal = decomposition.seasonal
+> > co2_decomposed = pd.DataFrame(np.c_[trend, seasonal], index=co2_levels.index, columns=['trend', 'seasonal'])
+> > # Plot the values of the df_decomposed DataFrame
+> > ax = co2_decomposed.plot(figsize=(12, 6), fontsize=15, logy=True)
+> > # Specify axis labels
+> > ax.set_xlabel('Date', fontsize=15)
+> > plt.legend(fontsize=15)
+> > plt.show()
+> > ~~~
+> > {: .python}
+> ~[](../fig/co2_seasonal_trends.png)
+> {: .solution}
+{: .challenge}
+ 
 
 
 
