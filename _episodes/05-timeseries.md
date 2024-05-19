@@ -86,24 +86,6 @@ plt.show();
 
 The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward trend in atmospheric \\( CO_2 \\) concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
 
-> ## Exercise: Plot the mean of \\(CO_2 \\) levels
-> - Get the month for each dates in the index of \\( CO_2 \\)levels
-> 
-> > ## Solution
-> >~~~
-> > index_month = co2_levels.index.month
-> > # Compute the mean  for each month of the year
-> > mean_co2_levels_by_month = co2_levels.groupby(index_month).mean()
-> > # Plot the mean 
-> > mean_co2_levels_by_month.plot(fontsize=6)
-> > # Specify the fontsize on the legend
-> > plt.legend(fontsize=10);
-> > ~~~
-> > {: .python}
-> ![](../fig/mean_plot_co2.png)
-> {: .solution}
->
-{: .challenge}
 
 
 > ## Exercise: Plot the \\(CO_2\\) time series with a vertical line
@@ -124,9 +106,9 @@ The increasing rolling mean of \\( CO_2 \\)  levels suggests a long-term upward 
 > > ax.set_xlabel('Date', fontsize=12)
 > > ax.set_title(r'Number of Monthly $CO_2$', fontsize=12)
 > > plt.show()
-> >~~~
+> > ~~~
 > > {: .python}
-> ![](..fig/co2_trends.png)
+> ![](..fig/co2_tends.png)
 > {: .solution}
 > 
 {: .challenge}
@@ -166,7 +148,7 @@ plt.show()
 > - Set the x-axis label to 'Date' and the title to 'Seasonal component of CO2 time-series'
 > 
 > > ## Solution
-> >~~~
+> > ~~~
 > > import statsmodels.api as sm
 > > # Perform time series decomposition
 > > decomposition = sm.tsa.seasonal_decompose(co2_levels)
@@ -179,7 +161,7 @@ plt.show()
 > > ax.set_xlabel('Date', fontsize=10)
 > > ax.set_title(r'Seasonal component of $CO_2$ time-series', fontsize=10)
 > > plt.show()
-> >~~~
+> > ~~~
 > > {: .python}
 > ![](../fig/co2_seasonal_component.png)
 > {: .solution}
