@@ -124,6 +124,6 @@ plt.show()
 ~~~
 {: .python}
 
-![](..fig/co2_seasonal_trends.png)
+![](..fig/co2_level_trends.png)
 
 
