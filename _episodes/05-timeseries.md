@@ -94,4 +94,5 @@ The increasing rolling mean of CO2 levels suggests a long-term upward trend in a
 {: .challenge}
 
 
+\\[ \frac{1}{n^{2}} \\]
 
