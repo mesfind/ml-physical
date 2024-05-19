@@ -658,21 +658,21 @@ Model: Logistic Regression models the relationship between the independent varia
 Sigmoid Function: The sigmoid function maps any real-valued number to the range [0, 1], which makes it suitable for modeling probabilities.
 Hypothesis: The logistic regression hypothesis can be represented as:
 
-\\[ h_\theta(x) = g(\theta^T x) \\]
+\\( h_\theta(x) = g(\theta^T x) \\)
 
-where: \\[ h_\theta(x) \\] is the predicted probability that \\[y = 1 \\] given x. 
-g(z) is the sigmoid function, \\[ g(z) = \frac{1}{1 + e^{-z}} \\]
+where: \\( h_\theta(x) \\) is the predicted probability that \\[y = 1 \\] given x. 
+g(z) is the sigmoid function, \\( g(z) = \frac{1}{1 + e^{-z}} \\)
 
-\\[ \theta^T \\]  is the transpose of the parameter vector.
+\\( \theta^T \\)  is the transpose of the parameter vector.
 𝑥  is the feature vector.
 
 **3. Training Process**
 
 * **Cost Function**: Logistic Regression uses the logistic loss (or cross-entropy loss) as the cost function to penalize incorrect predictions.
-* **Optimization**: The model parameters (\\[ \theta \\]) are learned by minimizing the cost function using optimization algorithms like gradient descent.
+* **Optimization**: The model parameters (\\( \theta \\)) are learned by minimizing the cost function using optimization algorithms like gradient descent.
 
 **4. Model Interpretation**
-* **Coefficients**: The coefficients (\\[ \theta \\]) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
+* **Coefficients**: The coefficients (\\( \theta \\)) learned by Logistic Regression represent the impact of each feature on the predicted probability of the positive class.
 * **Interpretation**: Positive coefficients indicate that an increase in the corresponding feature value increases the probability of the positive class, while negative coefficients indicate the opposite.
 
 **5. Applications**
