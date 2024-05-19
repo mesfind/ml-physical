@@ -30,7 +30,9 @@ The distinguishing feature of sequence learning, compared to other regression an
 Recent advancements in RNN variants, such as the Temporal Fusion Transformer (TFT), have further enhanced the capabilities of time series forecasting in physical science applications. These state-of-the-art models leverage advanced attention mechanisms and complex architectural innovations to provide superior predictive performance.
 
 
-## Display rolling averages
+## Time Series EDA
+
+- Let's start with calculating the rolling mean and standard deviation, adds upper and lower bounds, and visualizes the $CO_2$ levels data trends over time in a plot with enhanced aesthetics using seaborn:
 
 ~~~
 import pandas as pd
@@ -70,6 +72,9 @@ plt.show();
 {: .python}
 
 ![](../fig/rolling_mean_co2.png)
+
+
+The increasing rolling mean of CO2 levels suggests a long-term upward trend in atmospheric $CO_2$ concentrations, which is a key indicator of climate change. This trend is likely driven by human activities and has important implications for the environment and global climate.
 
 > ## Exercise: Plot the mean of $CO_2$ levels
 > - Get the month for each dates in the index of $CO_2$ levels
