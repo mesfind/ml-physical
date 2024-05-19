@@ -1,12 +1,5 @@
 ---
 title: Time Series Analysis with Python
-header-includes: |
-    \usepackage{tikz,pgfplots}
-    \usepackage{fancyhdr}
-    \pagestyle{fancy}
-    \fancyhead[CO,CE]{This is fancy}
-    \fancyfoot[CO,CE]{So is this}
-    \fancyfoot[LE,RO]{\thepage}
 teaching: 1
 exercises: 0
 questions:
