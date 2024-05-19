@@ -17,6 +17,15 @@ keypoints:
 - "LSTM, GRU and TFT models leverage advanced mechanisms for superior predictive performance in physical sciences applications."
 ---
 
+<!-- MathJax -->
+
+<script type="text/javascript"
+
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+
+
 # Time Series Modeling 
 
 Time series data consists of observations recorded at regular intervals, and time series forecasting aims to predict future values based on historical patterns and trends. This type of forecasting is critical across various domains, making it highly pertinent for machine learning practitioners. Applications such as risk scoring, fraud detection, and weather forecasting all benefit significantly from accurate time series predictions.
