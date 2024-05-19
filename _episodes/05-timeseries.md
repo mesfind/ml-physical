@@ -29,4 +29,64 @@ The distinguishing feature of sequence learning, compared to other regression an
 
 Recent advancements in RNN variants, such as the Temporal Fusion Transformer (TFT), have further enhanced the capabilities of time series forecasting in physical science applications. These state-of-the-art models leverage advanced attention mechanisms and complex architectural innovations to provide superior predictive performance.
 
-In summary, the application of deep learning, particularly through RNNs and their variants like LSTM, GRU, and TFT, holds significant promise for time series forecasting in the physical sciences. By harnessing the memory and pattern recognition capabilities of these networks, researchers and practitioners can achieve more accurate and insightful predictions, driving advancements in fields reliant on time-dependent data.
+
+## Display rolling averages
+
+~~~
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+co2_levels = pd.read_csv('data/co2_levels.csv')
+
+# Convert the 'timestamp' column to datetime format
+co2_levels['datestamp'] = pd.to_datetime(co2_levels['datestamp'])
+
+# Set the 'timestamp' column as the index
+co2_levels.set_index('datestamp', inplace=True)
+
+# Compute the 52 weeks rolling mean of the co2_levels DataFrame
+ma = co2_levels.rolling(window=52).mean()
+
+# Compute the 52 weeks rolling standard deviation of the co2_levels DataFrame
+mstd = co2_levels.rolling(window=52).std()
+
+# Add the upper bound column to the ma DataFrame
+ma['upper'] = ma['co2'] + (mstd['co2'] * 2)
+
+# Add the lower bound column to the ma DataFrame
+ma['lower'] = ma['co2'] - (mstd['co2'] * 2)
+
+# Plot the content of the ma DataFrame
+ax = ma.plot(linewidth=0.8, fontsize=6)
+
+# Specify labels, legend, and show the plot
+ax.set_xlabel('Date', fontsize=10)
+ax.set_ylabel('CO2 levels in Mauai Hawaii', fontsize=10)
+ax.set_title('Rolling mean and variance of CO2 levels\n from 1958 to 2001', fontsize=10)
+plt.show();
+
+~~~
+{: .python}
+
+![](../fig/rolling_mean_co2.png)
+
+> ## Exercise: Plot the mean of $CO_2$ levels
+> - Get the month for each dates in the index of $CO_2$ levels
+> >  ## Solution
+> >~~~
+> >index_month = co2_levels.index.month
+> ># Compute the mean  for each month of the year
+> >mean_co2_levels_by_month = co2_levels.groupby(index_month).mean()
+> > # Plot the mean 
+> >mean_co2_levels_by_month.plot(fontsize=6)
+> > # Specify the fontsize on the legend
+> > plt.legend(fontsize=10);
+> > ~~~
+> > {: .python}
+> {: .solution}
+> ![](../fig/mean_plot_co2.png)
+{: .challenge}
+
+
+
