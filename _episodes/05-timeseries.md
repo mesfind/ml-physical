@@ -80,6 +80,7 @@ plt.show();
 ~~~
 {: .python}
 
+
 ![](../fig/co2_rolling_mean.png)
 
 
@@ -134,7 +135,7 @@ plt.show()
 > - Set the x-axis label to 'Date' and the title to 'Number of Monthly CO2'
 > 
 > > ## Solution
-> >```python
+> > ~~~
 > > # Plot the time series in your dataframe
 > > ax = co2_levels.plot(color='blue', fontsize=12)
 > >
@@ -145,7 +146,7 @@ plt.show()
 > > ax.set_xlabel('Date', fontsize=12)
 > > ax.set_title(r'Number of Monthly $CO_2$', fontsize=12)
 > > plt.show()
-> >```
+> >~~~
 > > {: .python}
 > ![](..fig/co2_trends.png)
 > {: .solution}
