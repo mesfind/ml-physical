@@ -362,15 +362,18 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > # Compute MSE and R²
 > > mse = mean_squared_error(dataY_plot, data_predict)
 > > r2 = r2_score(dataY_plot, data_predict)
+> > # Get the test datestamps
+> > test_dates = df.index[train_size + seq_length + 1:]
 > > # Plot observed and predicted values
-> > plt.axvline(x=test_size, c='r', linestyle='--', label='Train/Test Split')
-> > plt.plot(dataY_plot, label='Observed')
-> > plt.plot(data_predict, label='Predicted')
+> > plt.figure(figsize=(12, 6))
+> > plt.axvline(x=test_dates[0], c='r', linestyle='--', label='Train/Test Split')
+> > plt.plot(df.index[train_size + seq_length + 1:], dataY_plot, label='Observed')
+> > plt.plot(df.index[train_size + seq_length + 1:], data_predict, label='Predicted')
 > > plt.suptitle('Time-Series Prediction')
-> > plt.xlabel('Time')
-> > plt.ylabel('Passengers')
+> > plt.xlabel('Date')
+> > plt.ylabel(r'$CO_2$')
 > > plt.legend()
-> > # Add MSE and R² values as annotations
+> > # Add MSE and R2 values as annotations
 > > plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 > > plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 > > plt.show()
