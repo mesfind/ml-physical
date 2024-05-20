@@ -1,5 +1,5 @@
 ---
-title: Advanced Recurrent Neural Network Models
+title: Advanced RNN Models for Time Series Forecasting
 teaching: 1
 exercises: 0
 questions:
