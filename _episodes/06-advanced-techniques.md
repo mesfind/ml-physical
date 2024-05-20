@@ -1,5 +1,5 @@
 ---
-title: Advanced RNN Models for Time Series Forecasting
+title: Advanced RNN Models
 teaching: 1
 exercises: 0
 questions:
