@@ -39,7 +39,7 @@ df.head()
 ~~~
 {: .python}
 
-The dataset comprises two columns: 'datestamp' and '\\(CO_2\\)'. For our analysis, we will focus on the '\\(CO_2\\)' column as our variable of interest.
+The dataset comprises two columns: `datestamp` and \\(CO_2\\). For our analysis, we will focus on the \\(CO_2\\) column as our variable of interest.
 
 ~~~
     datestamp    co2
