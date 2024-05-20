@@ -38,8 +38,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
+import random
 import torch.nn as nn
+from torch.autograd import Variable
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, r2_score
 plt.style.use("ggplot")
+
+# Set seed for reproducibility
+seed = 42
+np.random.seed(seed)
+random.seed(seed)
+torch.manual_seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(seed)
+
+# Set seed for reproducibility
+seed = 42
+np.random.seed(seed)
+random.seed(seed)
+torch.manual_seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(seed)
+
+
 from torch.autograd import Variable
 from sklearn.preprocessing import MinMaxScaler
 # Load the dataset
@@ -124,7 +146,7 @@ def sliding_windows(data, seq_length):
 
     return np.array(x),np.array(y)
 
-seq_length = 5
+seq_length = 4
 X, y = sliding_windows(training_data, seq_length)
 X.shape, y.shape
 ~~~
@@ -241,18 +263,19 @@ for epoch in range(num_epochs):
 {: .python}
 
 ~~~
-Epoch: 0, loss: 0.18167
-Epoch: 100, loss: 0.00060
-Epoch: 200, loss: 0.00014
-Epoch: 300, loss: 0.00014
-Epoch: 400, loss: 0.00013
+Epoch: 0, loss: 0.44187
+Epoch: 100, loss: 0.01010
+Epoch: 200, loss: 0.00023
+Epoch: 300, loss: 0.00016
+Epoch: 400, loss: 0.00014
 Epoch: 500, loss: 0.00013
+Epoch: 600, loss: 0.00012
 ...
-Epoch: 1500, loss: 0.00011
-Epoch: 1600, loss: 0.00011
+Epoch: 1500, loss: 0.00010
+Epoch: 1600, loss: 0.00010
 Epoch: 1700, loss: 0.00010
 Epoch: 1800, loss: 0.00010
-Epoch: 1900, loss: 0.00010
+Epoch: 1900, loss: 0.00009
 ~~~
 {: .output}
 The training loop runs for 2000 epochs, and the loss is printed every 100 epochs to monitor the training process.
@@ -267,20 +290,27 @@ test_predict = lstm(X_test)
 data_predict = test_predict.data.numpy()
 dataY_plot = y_test.data.numpy()
 
+# Inverse transform the predictions and actual values
 data_predict = sc.inverse_transform(data_predict)
 dataY_plot = sc.inverse_transform(dataY_plot)
-# Compute MSE and R2
+
+# Compute MSE and R²
 mse = mean_squared_error(dataY_plot, data_predict)
 r2 = r2_score(dataY_plot, data_predict)
+
+# Get the test datestamps
+test_dates = df.index[train_size + seq_length + 1:]
+
 # Plot observed and predicted values
-plt.axvline(x=test_size, c='r', linestyle='--', label='Train/Test Split')
-plt.plot(dataY_plot, label='Observed')
-plt.plot(data_predict, label='Predicted')
+plt.figure(figsize=(12, 6))
+plt.axvline(x=test_dates[0], c='r', linestyle='--', label='Train/Test Split')
+plt.plot(df.index[train_size + seq_length + 1:], dataY_plot, label='Observed')
+plt.plot(df.index[train_size + seq_length + 1:], data_predict, label='Predicted')
 plt.suptitle('Time-Series Prediction')
-plt.xlabel('Time')
-plt.ylabel(r'$CO2$')
+plt.xlabel('Date')
+plt.ylabel(r'$CO_2$')
 plt.legend()
-# Add MSE and R2 values as annotations
+# Add MSE and R² values as annotations
 plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.show()
