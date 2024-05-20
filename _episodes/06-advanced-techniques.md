@@ -87,7 +87,7 @@ array([[0.05090312],
 ~~~
 {: .output}
 
-Through this section, you see  how to preprocess the data and proceed to construct the LSTM network, and evaluate its performance in forecasting future \\(CO_2 \)) levels. 
+Through this section, you see  how to preprocess the data and proceed to construct the LSTM network, and evaluate its performance in forecasting future \\(CO_2 \\)) levels. 
 
 To effectively train an LSTM, it is crucial to organize the time series data into sequences that the network can learn from. This involves creating sliding windows of a fixed length, where each window represents a sequence of past values that will be used to predict the next value in the series. Here is a Python function to achieve this:
 
@@ -121,8 +121,11 @@ The arrays `X` and `y` store these windows and targets, respectively, and are co
 
 By setting `seq_length = 4`, we generate sequences where each input sequence consists of four time steps, and the corresponding target is the value immediately following this sequence.
 
-This preprocessing step prepares the data for the LSTM network, enabling it to learn from the sequential patterns in the time series and predict future \\(CO_2 \)) levels based on past observations.
+This preprocessing step prepares the data for the LSTM network, enabling it to learn from the sequential patterns in the time series and predict future \\( CO_2 \\)) levels based on past observations.
 
 Next, we will proceed to construct the LSTM model and train it using this preprocessed data, ultimately evaluating its performance in forecasting future values.
 
+~~~
+~~~
+{: .python}
 
