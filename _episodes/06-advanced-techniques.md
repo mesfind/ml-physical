@@ -42,28 +42,39 @@ import torch.nn as nn
 plt.style.use("ggplot")
 from torch.autograd import Variable
 from sklearn.preprocessing import MinMaxScaler
+# Load the dataset
 df = pd.read_csv('data/co2_levels.csv')
-df.head()
+# Convert 'datestamp' column to datetime format
+df['datestamp'] = pd.to_datetime(df['datestamp'])
+# Reindex the DataFrame before splitting
+df = df.set_index('datestamp')
+# Display the first few rows of the DataFrame
+print(df.head())
 ~~~
 {: .python}
 
 The dataset comprises two columns: `datestamp` and \\(CO_2\\). For our analysis, we will focus on the \\(CO_2\\) column as our variable of interest.
 
 ~~~
-    datestamp    co2
-0  1958-03-29  316.1
-1  1958-04-05  317.3
-2  1958-04-12  317.6
-3  1958-04-19  317.5
-4  1958-04-26  316.4
+            co2
+datestamp        
+1958-03-29  316.1
+1958-04-05  317.3
+1958-04-12  317.6
+1958-04-19  317.5
+1958-04-26  316.4
 ~~~
 {: .output}
 
 Next, we extract the passenger data and visualize it to get an initial sense of the time series trend.
 
 ~~~
-training_set = df.iloc[:,1:2].values
-plt.plot(training_set, label = 'CO2 level')
+# Plot the CO2 levels over time
+plt.figure(figsize=(12, 6))
+plt.plot(df.index, df['co2'], label='CO2 Levels')
+plt.title('CO2 Levels Over Time')
+plt.xlabel('Date')
+plt.ylabel('CO2 Levels')
 plt.legend()
 plt.show()
 ~~~
@@ -79,6 +90,7 @@ To prepare the data for the LSTM, we need to normalize it. Normalization scales 
 ~~~
 # normalization
 sc = MinMaxScaler()
+training_set = df.iloc[:,:].values
 training_data = sc.fit_transform(training_set)
 training_data
 ~~~
@@ -138,7 +150,7 @@ First, we need to split the dataset into training and testing sets and convert t
 
 ~~~
 # train and test data loading in tensor format
-train_size = int(len(y) * 0.67)
+train_size = int(len(y) * 0.7)
 test_size = len(y) - train_size
 
 X_train = Variable(torch.Tensor(np.array(X)))
@@ -154,7 +166,7 @@ y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
 ~~~
 {: .python}
 
-Here, train_size is set to 67% of the dataset, while test_size is the remaining 33%. We convert the respective segments of X and y into PyTorch tensors using Variable.
+Here, train_size is set to 70% of the dataset, while test_size is the remaining 30%. We convert the respective segments of X and y into PyTorch tensors using Variable.
 
 Next, we define our LSTM model by creating a class that inherits from nn.Module. This class includes the initialization of the LSTM and a forward method to define the forward pass of the network.
 
@@ -201,7 +213,7 @@ num_epochs = 2000
 learning_rate = 0.01
 
 input_size = 1
-hidden_size = 5
+hidden_size = 3
 num_layers = 1
 
 num_classes = 1
@@ -229,18 +241,18 @@ for epoch in range(num_epochs):
 {: .python}
 
 ~~~
-Epoch: 0, loss: 0.16193
-Epoch: 100, loss: 0.02585
-Epoch: 200, loss: 0.00042
-Epoch: 300, loss: 0.00030
-Epoch: 400, loss: 0.00024
-Epoch: 500, loss: 0.00021
+Epoch: 0, loss: 0.18167
+Epoch: 100, loss: 0.00060
+Epoch: 200, loss: 0.00014
+Epoch: 300, loss: 0.00014
+Epoch: 400, loss: 0.00013
+Epoch: 500, loss: 0.00013
 ...
-Epoch: 1500, loss: 0.00009
-Epoch: 1600, loss: 0.00008
-Epoch: 1700, loss: 0.00008
-Epoch: 1800, loss: 0.00008
-Epoch: 1900, loss: 0.00007
+Epoch: 1500, loss: 0.00011
+Epoch: 1600, loss: 0.00011
+Epoch: 1700, loss: 0.00010
+Epoch: 1800, loss: 0.00010
+Epoch: 1900, loss: 0.00010
 ~~~
 {: .output}
 The training loop runs for 2000 epochs, and the loss is printed every 100 epochs to monitor the training process.
@@ -248,30 +260,30 @@ The training loop runs for 2000 epochs, and the loss is printed every 100 epochs
 After training, we evaluate the model's performance on the test data. We set the model to evaluation mode and generate predictions for the test set. These predictions and the actual values are then inverse-transformed to their original scale for visualization.
 
 ~~~
-#Testing the model performance
+# Testing the model performance
 lstm.eval()
-train_predict = lstm(X_test)
+test_predict = lstm(X_test)
 
-data_predict = train_predict.data.numpy()
+data_predict = test_predict.data.numpy()
 dataY_plot = y_test.data.numpy()
 
 data_predict = sc.inverse_transform(data_predict)
 dataY_plot = sc.inverse_transform(dataY_plot)
+# Compute MSE and R2
+mse = mean_squared_error(dataY_plot, data_predict)
+r2 = r2_score(dataY_plot, data_predict)
 # Plot observed and predicted values
 plt.axvline(x=test_size, c='r', linestyle='--', label='Train/Test Split')
 plt.plot(dataY_plot, label='Observed')
 plt.plot(data_predict, label='Predicted')
 plt.suptitle('Time-Series Prediction')
 plt.xlabel('Time')
-plt.ylabel('Passengers')
+plt.ylabel(r'$CO2$')
 plt.legend()
-
 # Add MSE and R2 values as annotations
 plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.show()
-
-
 ~~~
 
 ![](../fig/X_test_prediction.png)
@@ -291,7 +303,7 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > seq_length = 5
 > > X, y = sliding_windows(training_data, seq_length)
 > > # Train and test data loading in tensor format
-> > train_size = int(len(y) * 0.67)
+> > train_size = int(len(y) * 0.70)
 > > test_size = len(y) - train_size
 > > X_train = Variable(torch.Tensor(np.array(X[0:train_size])))
 > > y_train = Variable(torch.Tensor(np.array(y[0:train_size])))
@@ -364,7 +376,12 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > ![](../fig/X_test_prediction3.png)
+> > ![](../fig/X_test_prediction2.png)
 > {: .solution}
 >
 {: .challenge}
+
+
+
+
+
