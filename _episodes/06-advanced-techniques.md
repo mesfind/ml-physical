@@ -409,7 +409,7 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > ![](../fig/X_test_prediction3.png)
+> > ![](../fig/X_test_prediction2.png)
 > {: .solution}
 >
 {: .challenge}
