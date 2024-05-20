@@ -112,7 +112,7 @@ def sliding_windows(data, seq_length):
 
     return np.array(x),np.array(y)
 
-seq_length = 4
+seq_length = 5
 X, y = sliding_windows(training_data, seq_length)
 X.shape, y.shape
 ~~~
@@ -201,7 +201,7 @@ num_epochs = 2000
 learning_rate = 0.01
 
 input_size = 1
-hidden_size = 2
+hidden_size = 5
 num_layers = 1
 
 num_classes = 1
@@ -257,13 +257,21 @@ dataY_plot = y_test.data.numpy()
 
 data_predict = sc.inverse_transform(data_predict)
 dataY_plot = sc.inverse_transform(dataY_plot)
-
-plt.axvline(x=test_size, c='r', linestyle='--')
-
-plt.plot(dataY_plot)
-plt.plot(data_predict)
+# Plot observed and predicted values
+plt.axvline(x=test_size, c='r', linestyle='--', label='Train/Test Split')
+plt.plot(dataY_plot, label='Observed')
+plt.plot(data_predict, label='Predicted')
 plt.suptitle('Time-Series Prediction')
+plt.xlabel('Time')
+plt.ylabel('Passengers')
+plt.legend()
+
+# Add MSE and R2 values as annotations
+plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.show()
+
+
 ~~~
 
 ![](../fig/X_test_prediction.png)
@@ -272,3 +280,91 @@ plt.show()
 In the plot, the red vertical line separates the training data from the test data. The model's performance in predicting the time series is visualized by plotting the predicted values against the actual values.
 
 By following these steps, you will preprocess the data, construct an LSTM network, train it, and evaluate its performance in forecasting future \\(CO_2\\) levels.
+
+> ## Exercise: How to impove the model performance?
+>  - Modify the sequence length  to 5 used in the LSTM model and observe its impact on the model's performance.
+> - Modify the hidden layers of the LSTM model to 5 and retain the model and plot the observed vs prediction for `X_test`
+> 
+> > ## Solution
+> > ~~~
+> > # Modify the sequence length to 5
+> > seq_length = 5
+> > X, y = sliding_windows(training_data, seq_length)
+> > # Train and test data loading in tensor format
+> > train_size = int(len(y) * 0.67)
+> > test_size = len(y) - train_size
+> > X_train = Variable(torch.Tensor(np.array(X[0:train_size])))
+> > y_train = Variable(torch.Tensor(np.array(y[0:train_size])))
+> > X_test = Variable(torch.Tensor(np.array(X[train_size:len(X)])))
+> > y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
+> > # LSTM model building
+> > class LSTM(nn.Module):
+> >    def __init__(self, num_classes, input_size, hidden_size, num_layers):
+> >        super(LSTM, self).__init__()
+> >        
+> >        self.num_classes = num_classes
+> >        self.num_layers = num_layers
+> >        self.input_size = input_size
+> >        self.hidden_size = hidden_size
+> >        self.seq_length = seq_length
+> >        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
+> >                            num_layers=num_layers, batch_first=True)
+> >        self.fc = nn.Linear(hidden_size, num_classes)
+> >    def forward(self, x):
+> >        h_0 = Variable(torch.zeros(
+> >           self.num_layers, x.size(0), self.hidden_size))
+> >        c_0 = Variable(torch.zeros(
+> >            self.num_layers, x.size(0), self.hidden_size))
+> >        ula, (h_out, _) = self.lstm(x, (h_0, c_0))
+> >        h_out = h_out.view(-1, self.hidden_size)
+> >        out = self.fc(h_out)
+> >        return out
+> > # Training the model
+> > num_epochs = 2000
+> > learning_rate = 0.01
+> > input_size = 1
+> > hidden_size = 5
+> > num_layers = 1
+> > num_classes = 1
+> > lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
+> > criterion = torch.nn.MSELoss()    # Mean-squared error for regression
+> > optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
+> > # Train the model
+> > for epoch in range(num_epochs):
+> >    outputs = lstm(X_train)
+> >    optimizer.zero_grad()   
+> >    loss = criterion(outputs, y_train)
+> >    loss.backward()
+> >    optimizer.step()    
+> >    if epoch % 100 == 0:
+> >        print("Epoch: %d, loss: %1.5f" % (epoch, loss.item()))
+> > # Testing the model performance
+> > from sklearn.metrics import mean_squared_error, r2_score
+> > lstm.eval()
+> > train_predict = lstm(X_test)
+> > data_predict = train_predict.data.numpy()
+> > dataY_plot = y_test.data.numpy()
+> > # Inverse transform the predictions and actual values
+> > data_predict = sc.inverse_transform(data_predict)
+> > dataY_plot = sc.inverse_transform(dataY_plot)
+> > # Compute MSE and R²
+> > mse = mean_squared_error(dataY_plot, data_predict)
+> > r2 = r2_score(dataY_plot, data_predict)
+> > # Plot observed and predicted values
+> > plt.axvline(x=test_size, c='r', linestyle='--', label='Train/Test Split')
+> > plt.plot(dataY_plot, label='Observed')
+> > plt.plot(data_predict, label='Predicted')
+> > plt.suptitle('Time-Series Prediction')
+> > plt.xlabel('Time')
+> > plt.ylabel('Passengers')
+> > plt.legend()
+> > # Add MSE and R² values as annotations
+> > plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.show()
+> > ~~~
+> > {: .python}
+> > ![](../fig/X_test_prediction3.png)
+> {: .solution}
+>
+{: .python}
