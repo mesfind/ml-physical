@@ -133,6 +133,9 @@ This preprocessing step prepares the data for the LSTM network, enabling it to l
 
 Next, we will proceed to construct tensor format preprocessed data  and the LSTM model to train it, ultimately evaluating its performance in forecasting future values.
 
+
+First, we need to split the dataset into training and testing sets and convert them into tensors, which are the primary data structure used in PyTorch.
+
 ~~~
 # train and test data loading in tensor format
 train_size = int(len(y) * 0.67)
@@ -151,6 +154,9 @@ y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
 ~~~
 {: .python}
 
+Here, train_size is set to 67% of the dataset, while test_size is the remaining 33%. We convert the respective segments of X and y into PyTorch tensors using Variable.
+
+Next, we define our LSTM model by creating a class that inherits from nn.Module. This class includes the initialization of the LSTM and a forward method to define the forward pass of the network.
 
 ~~~
 # the LSTM model building
@@ -188,7 +194,7 @@ class LSTM(nn.Module):
 ~~~
 {: .python}
 
-
+Now, we train the LSTM model. We set the number of epochs, learning rate, and other hyperparameters. We use mean squared error (MSE) as the loss function and Adam optimizer for training.
 ~~~
 # training the model
 num_epochs = 2000
@@ -237,6 +243,9 @@ Epoch: 1800, loss: 0.00008
 Epoch: 1900, loss: 0.00007
 ~~~
 {: .output}
+The training loop runs for 2000 epochs, and the loss is printed every 100 epochs to monitor the training process.
+
+After training, we evaluate the model's performance on the test data. We set the model to evaluation mode and generate predictions for the test set. These predictions and the actual values are then inverse-transformed to their original scale for visualization.
 
 ~~~
 #Testing the model performance
@@ -258,3 +267,8 @@ plt.show()
 ~~~
 
 ![](../fig/X_test_prediction.png)
+
+
+In the plot, the red vertical line separates the training data from the test data. The model's performance in predicting the time series is visualized by plotting the predicted values against the actual values.
+
+By following these steps, you will preprocess the data, construct an LSTM network, train it, and evaluate its performance in forecasting future \((CO_2\\) levels.
