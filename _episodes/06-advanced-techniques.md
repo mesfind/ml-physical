@@ -367,4 +367,4 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > ![](../fig/X_test_prediction3.png)
 > {: .solution}
 >
-{: .python}
+{: .challenge}
