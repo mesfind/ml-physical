@@ -282,7 +282,7 @@ In the plot, the red vertical line separates the training data from the test dat
 By following these steps, you will preprocess the data, construct an LSTM network, train it, and evaluate its performance in forecasting future \\(CO_2\\) levels.
 
 > ## Exercise: How to impove the model performance?
->  - Modify the sequence length  to 5 used in the LSTM model and observe its impact on the model's performance.
+> - Modify the sequence length  to 5 used in the LSTM model and observe its impact on the model's performance.
 > - Modify the hidden layers of the LSTM model to 5 and retain the model and plot the observed vs prediction for `X_test`
 > 
 > > ## Solution
