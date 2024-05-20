@@ -316,7 +316,7 @@ plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca
 plt.show()
 ~~~
 
-![](../fig/X_test_prediction2.png)
+![](../fig/X_test_prediction.png)
 
 
 In the plot, the red vertical line separates the training data from the test data. The model's performance in predicting the time series is visualized by plotting the predicted values against the actual values.
