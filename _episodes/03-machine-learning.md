@@ -656,8 +656,8 @@ print(X_train)
    1.78343797e+00 -5.29795450e-01]]
 ~~~
 {: .output}
-### Training Model
-#### 1. Logistic Regression
+## Training Model
+### 1. Logistic Regression
 1. **Logistic Regression** is used to model the probability that a given input belongs to a particular class. It's commonly used when the dependent variable is binary (0/1, True/False, Yes/No), but it can also be extended to handle multiclass classification tasks.
 
 2. **How it Works**
@@ -825,6 +825,267 @@ plt.show();
 
 
 ![](../fig/ruc_logistic.png)
+
+
+### Decision Tree
+
+~~~
+# Define the model using the Decision Tree Classifier with the default hyperparameters
+from sklearn.tree import DecisionTreeClassifier
+model2 = DecisionTreeClassifier()
+# Try to optimize the model hyperparameters that best fit the training data
+model2.fit(X_train, y_train)
+~~~
+{: .python}
+
+~~~
+  DecisionTreeClassifier
+DecisionTreeClassifier()
+~~~
+{: .output}
+
+~~~
+# model prediction
+y_pred2 = model2.predict(X_test)
+pred_train = model2.predict(X_train)
+~~~
+{: .python}
+
+~~~
+Compare performance between test and train data
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+print("Accuracy:", accuracy_score(y_test, y_pred2))
+print("Precision:", precision_score(y_test, y_pred2))
+print("Recall:", recall_score(y_test, y_pred2))
+print("F1-Score:",f1_score(y_test, y_pred2))
+~~~
+{: .python}
+~~~
+Accuracy: 0.7795957651588066
+Precision: 0.5006045949214026
+Recall: 0.5158878504672897
+F1-Score: 0.5081313286284136
+~~~
+{: .output}
+
+~~~
+cnf_matrix = confusion_matrix(y_test, y_pred2)
+
+labels = [0, 1]
+fig, ax = plt.subplots()
+tick_marks = np.arange(len(labels))
+plt.xticks(tick_marks, labels)
+plt.yticks(tick_marks, labels)
+# create heatmap
+sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu", fmt='g')
+ax.xaxis.set_label_position("top")
+plt.title('Confusion matrix', y=1.1)
+plt.ylabel('True')
+plt.xlabel('Predicted')
+~~~
+{: .python}
+
+![](../fig/confusion_DT.png)
+
+~~~
+#Calculate and plot the ROC AUC curve of the model
+y_score = model.predict_proba(X_test)[:,1]
+fpr, tpr, _ = roc_curve(y_test, y_score)
+roc_auc = auc(fpr, tpr)
+plt.plot(fpr, tpr, label='{} (AUC = {:.4f})'.format(model.__class__.__name__, roc_auc))
+
+# Plot the ROC AUC curve for the logistic regression model
+plt.plot([0, 1], [0, 1], 'k--', label='Random Guessing')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC AUC Curve')
+plt.legend(loc='lower right')
+plt.show();
+~~~
+{: .python}
+
+![](../fig/ruc_DT.png)
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+
+
+
 
 
 ### Random Forest
