@@ -1195,23 +1195,23 @@ _Strong Learner_:
 
 **Common Ensemble Algorithms**
 
-1. Random Forests:
+-1. Random Forests:
 
 * An ensemble of decision trees using bagging.
 * Often used for both classification and regression tasks.
 * Reduces variance by averaging multiple trees.
 
-2. AdaBoost:
+-2. AdaBoost:
 
 * Sequentially builds an ensemble by training each new model to correct the errors of the previous models.
 * Works well with weak learners like decision stumps.
 
-3. Gradient Boosting Machines (GBM):
+-3. Gradient Boosting Machines (GBM):
 
 * An extension of boosting that optimizes a loss function by sequentially adding models to minimize errors.
 * Popular implementations include XGBoost, LightGBM, and CatBoost.
 
-4. XGBoost:
+-4. XGBoost:
 
 * XGBoost is a highly efficient and scalable implementation of gradient boosting.
 * It is specifically optimized for speed and performance, making it suitable for large datasets and complex problems.
@@ -1293,112 +1293,178 @@ F1-Score: 0.5718288810013077
 > {: .solution}
 {: .challenge}
 
-~~~
 
+#### Boosting classifier
+
+#### 1. AdaBoost
+
+~~~
+from sklearn.ensemble import AdaBoostClassifier
+
+ada_clf = AdaBoostClassifier(n_estimators=20)
+ada_clf.fit(X_train, y_train)
 ~~~
 {: .python}
 
 ~~~
+ada_clf_pred_test = ada_clf.predict(X_test)
+ada_clf_pred_train = ada_clf.predict(X_train)
 
+print(accuracy_score(y_test, ada_clf_pred_test))
+print(accuracy_score(y_train, ada_clf_pred_train))
+~~~
+{: .python}
+
+
+~~~
+0.8360717723085385
+0.8397067922452908
+~~~
+{: .output}
+
+~~~
+print("Accuracy:", accuracy_score(y_test, ada_clf_pred_test))
+print("Precision:", precision_score(y_test, ada_clf_pred_test))
+print("Recall:", recall_score(y_test, ada_clf_pred_test))
+print("F1-Score:",f1_score(y_test, ada_clf_pred_test))
+~~~
+{: .python}
+
+
+~~~
+Accuracy: 0.8360717723085385
+Precision: 0.7078821455552757
+Recall: 0.4378504672897196
+F1-Score: 0.5410451352131652
+~~~
+{: .output}
+
+#### 2. Gradient Boosting
+
+~~~
+from sklearn.ensemble import GradientBoostingClassifier
+
+gb_clf = GradientBoostingClassifier(n_estimators=20)
+gb_clf.fit(X_train, y_train)
+~~~
+{: .python}
+
+~~~
+gb_clf_pred_test = gb_clf.predict(X_test)
+gb_clf_pred_train = gb_clf.predict(X_train)
+print(accuracy_score(y_test, gb_clf_pred_test))
+print(accuracy_score(y_train, gb_clf_pred_train))
+~~~
+{: .python}
+
+~~~
+0.8349718135569916
+0.8398700673724735
+~~~
+{: .output}
+
+~~~
+print("Accuracy:", accuracy_score(y_test, gb_clf_pred_test))
+print("Precision:", precision_score(y_test, gb_clf_pred_test))
+print("Recall:", recall_score(y_test, gb_clf_pred_test))
+print("F1-Score:",f1_score(y_test, gb_clf_pred_test))
+~~~
+{: .python}
+
+~~~
+Accuracy: 0.8349718135569916
+Precision: 0.7557661927330174
+Recall: 0.37258566978193147
+F1-Score: 0.499113197704747
+~~~
+{: .output}
+
+#### 3. XGBoost
+
+~~~
+from xgboost import XGBClassifier
+
+xgb_clf = XGBClassifier(n_estimators=20)
+xgb_clf.fit(X_train, y_train)
+~~~
+{: .python}
+
+
+~~~
+xgb_clf_pred_test = xgb_clf.predict(X_test)
+xgb_clf_pred_train = xgb_clf.predict(X_train)
+print(accuracy_score(y_test, xgb_clf_pred_test))
+print(accuracy_score(y_train, xgb_clf_pred_train))
+~~~
+{: .python}
+
+~~~
+0.8483431871304826
+0.8596865117558091
 ~~~
 {: .output}
 
 
 ~~~
-
+print("Accuracy:", accuracy_score(y_test, xgb_clf_pred_test))
+print("Precision:", precision_score(y_test, xgb_clf_pred_test))
+print("Recall:", recall_score(y_test, xgb_clf_pred_test))
+print("F1-Score:",f1_score(y_test, xgb_clf_pred_test))
 ~~~
 {: .python}
 
 ~~~
-
+Accuracy: 0.8483431871304826
+Precision: 0.7397325692454633
+Recall: 0.48255451713395636
+F1-Score: 0.5840874811463047
 ~~~
 {: .output}
 
+#### Stacking
 
 ~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
+from sklearn.ensemble import StackingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 ~~~
 {: .python}
 
 ~~~
+# Define base models
+estimators = [
+    ('rf', RandomForestClassifier(n_estimators=10, random_state=42)),
+    ('gb', GradientBoostingClassifier(n_estimators=10, random_state=42)),
+    ('xgb', XGBClassifier(n_estimators=10, random_state=42))
+]
+# Create stacking classifier
+stack_clf = StackingClassifier(estimators=estimators, final_estimator=LogisticRegression())
+~~~
+{: .python}
+
 
 ~~~
-{: .output}
+# Train stacking classifier
+stack_clf.fit(X_train, y_train)
 
-
-~~~
-
+# Make predictions
+y_pred = stack_clf.predict(X_test)
 ~~~
 {: .python}
 
 ~~~
-
-~~~
-{: .output}
-
-
-~~~
-
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Precision:", precision_score(y_test, y_pred))
+print("Recall:", recall_score(y_test, y_pred))
+print("F1-Score:",f1_score(y_test, y_pred))
 ~~~
 {: .python}
 
 ~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
+Accuracy: 0.8449401897428847
+Precision: 0.7227537922987165
+Recall: 0.482398753894081
+F1-Score: 0.5786081270434377
 ~~~
 {: .output}
 
