@@ -393,7 +393,7 @@ plt.tight_layout()
 plt.show()
 ~~~
 
-![](../fig/X_test_predict.png)
+![](../fig/X_test2_predict.png)
 
 
 In the plot, the red vertical line separates the training data from the test data. The model's performance in predicting the time series is visualized by plotting the predicted values against the actual values.
@@ -486,7 +486,7 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > ![](../fig/X_test_predict2.png)
+> > ![](../fig/X_test3_predict.png)
 > {: .solution}
 >
 {: .challenge}
