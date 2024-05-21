@@ -1796,22 +1796,6 @@ plt.show()
 {: .pytthon}
 
 
-![](../fig/ruc_balanced.png)
-
-~~~
-
-~~~
-{: .output}
-
-~~~
-
-~~~
-{: .output}
-
-~~~
-
-~~~
-{: .python}
 
 ~~~
 LogisticRegression
@@ -1898,6 +1882,15 @@ weighted avg       0.83      0.83      0.83     29092
 
 ![](../fig/ruc_balanced.png)
 
+
+
+
+
+
+## Unsupervised Learning
+
+
+
 ~~~
 
 ~~~
@@ -1907,15 +1900,6 @@ weighted avg       0.83      0.83      0.83     29092
 
 ~~~
 {: .output}
-
-
-
-
-## Unsupervised Learning
-
-
-
-
 
 
 
