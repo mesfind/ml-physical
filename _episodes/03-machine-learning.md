@@ -1128,15 +1128,11 @@ F1-Score: 0.5875791662728046
 > > ~~~
 > > from sklearn.svm import SVC
 >> from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
->> #Model selection
 > > classifier2 = SVC(kernel="linear",probability=True) 
 >> classifier2.fit(X_train, y_train) 
 >> #Prediction 
 >> y_pred2 = classifier2.predict(X_test)
 >> pred_train = classifier2.predict(X_train)
-
->> #performance 
 >> print("Accuracy:", accuracy_score(y_test, y_pred2))
 >> print("Precision:", precision_score(y_test, y_pred2))
 >> print("Recall:", recall_score(y_test, y_pred2))
