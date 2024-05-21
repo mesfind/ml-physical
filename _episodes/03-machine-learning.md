@@ -1218,6 +1218,7 @@ _Strong Learner_:
 * XGBoost includes several enhancements over traditional gradient boosting, such as regularization techniques and parallelization.
 * It can handle a variety of data types and is commonly used for both classification and regression tasks.
 * XGBoost is known for its exceptional performance in machine learning competitions and real-world applications.
+
 #### Bagging Classifiers
 ~~~
 from sklearn.ensemble import BaggingClassifier
