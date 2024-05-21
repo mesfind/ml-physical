@@ -146,13 +146,13 @@ We will construct various models (Linear, DNN, CNN, RNN) for:
 
 Depending on the task and type of model you may want to generate a variety of data windows. For instance, to make a single prediction 24 hours into the future, given 24 hours of history you migh define a window like this:
 
-![](../fig/raw_window_24h)
+![](../fig/raw_window_24h.png)
 
 
 Forthermore, to make a prediction one hour into the future, given six hours of history would need a windos of input length six(6) with offset 1 as shown below:
 
 
-![](../fig/raw_window_24h)
+![](../fig/raw_window_1h.png)
 
 
 In the remainder of this section, we define a `sliding_windows` class. This class can:
