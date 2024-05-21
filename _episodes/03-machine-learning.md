@@ -1468,6 +1468,432 @@ F1-Score: 0.5786081270434377
 ~~~
 {: .output}
 
+ ### Comparison of different ML Algorithms
+~~~
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier, StackingClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, roc_curve, auc
+import matplotlib.pyplot as plt
+
+# Assuming X and y are defined previously
+# X = ...
+# y = ...
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a list of classification models to evaluate
+models = [
+    LogisticRegression(max_iter=8000),
+    DecisionTreeClassifier(),
+    RandomForestClassifier(),
+    XGBClassifier(n_estimators=10),
+    GradientBoostingClassifier(n_estimators=10),
+    AdaBoostClassifier(n_estimators=10),
+    StackingClassifier(
+        estimators=[
+            ('rf', RandomForestClassifier(n_estimators=10)),
+            ('gb', GradientBoostingClassifier(n_estimators=10)),
+            ('xgb', XGBClassifier(n_estimators=10))
+        ],
+        final_estimator=LogisticRegression()
+    )
+]
+
+# Train and evaluate each model
+for model in models:
+    # Train the model on the training set
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Calculate and print the classification report of the model
+    report = classification_report(y_test, y_pred)
+    print(model.__class__.__name__)
+    print(report)
+
+    # Check if the model has the predict_proba method
+    if hasattr(model, "predict_proba"):
+        # Calculate and plot the ROC AUC curve of the model
+        y_score = model.predict_proba(X_test)[:, 1]
+        fpr, tpr, _ = roc_curve(y_test, y_score)
+        roc_auc = auc(fpr, tpr)
+        plt.plot(fpr, tpr, label='{} (AUC = {:.4f})'.format(model.__class__.__name__, roc_auc))
+    
+    print('-----------------------------------')
+
+# Plot the ROC AUC curves for all models
+plt.plot([0, 1], [0, 1], 'k--', label='Random Guessing')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC AUC Curve')
+plt.legend(loc='lower right')
+plt.show()
+~~~
+{: .python}
+
+~~~
+LogisticRegression
+              precision    recall  f1-score   support
+
+           0       0.86      0.95      0.90     22672
+           1       0.71      0.45      0.55      6420
+
+    accuracy                           0.84     29092
+   macro avg       0.79      0.70      0.73     29092
+weighted avg       0.83      0.84      0.82     29092
+
+-----------------------------------
+DecisionTreeClassifier
+              precision    recall  f1-score   support
+
+           0       0.86      0.85      0.86     22672
+           1       0.50      0.52      0.51      6420
+
+    accuracy                           0.78     29092
+   macro avg       0.68      0.68      0.68     29092
+weighted avg       0.78      0.78      0.78     29092
+
+-----------------------------------
+RandomForestClassifier
+              precision    recall  f1-score   support
+
+           0       0.87      0.96      0.91     22672
+           1       0.75      0.48      0.59      6420
+
+    accuracy                           0.85     29092
+   macro avg       0.81      0.72      0.75     29092
+weighted avg       0.84      0.85      0.84     29092
+
+-----------------------------------
+XGBClassifier
+              precision    recall  f1-score   support
+
+           0       0.86      0.95      0.90     22672
+           1       0.73      0.45      0.56      6420
+
+    accuracy                           0.84     29092
+   macro avg       0.80      0.70      0.73     29092
+weighted avg       0.83      0.84      0.83     29092
+
+-----------------------------------
+GradientBoostingClassifier
+              precision    recall  f1-score   support
+
+           0       0.83      0.98      0.90     22672
+           1       0.81      0.28      0.41      6420
+
+    accuracy                           0.83     29092
+   macro avg       0.82      0.63      0.65     29092
+weighted avg       0.82      0.83      0.79     29092
+
+-----------------------------------
+C:\Users\Yadi Milki Wabi\anaconda3\Lib\site-packages\sklearn\ensemble\_weight_boosting.py:519: FutureWarning: The SAMME.R algorithm (the default) is deprecated and will be removed in 1.6. Use the SAMME algorithm to circumvent this warning.
+  warnings.warn(
+AdaBoostClassifier
+              precision    recall  f1-score   support
+
+           0       0.86      0.94      0.90     22672
+           1       0.68      0.44      0.53      6420
+
+    accuracy                           0.83     29092
+   macro avg       0.77      0.69      0.71     29092
+weighted avg       0.82      0.83      0.82     29092
+
+-----------------------------------
+StackingClassifier
+              precision    recall  f1-score   support
+
+           0       0.87      0.95      0.91     22672
+           1       0.73      0.48      0.58      6420
+
+    accuracy                           0.85     29092
+   macro avg       0.80      0.72      0.74     29092
+weighted avg       0.84      0.85      0.83     29092
+
+-----------------------------------
+
+~~~
+{: .output}
+
+![](../fig/ruc_comparison1.png)
+
+
+#### Check for Data imbalance
+
+~~~
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming y is a pandas Series or a numpy array
+# If y is a numpy array, convert it to pandas Series
+if isinstance(y, np.ndarray):
+    y = pd.Series(y)
+
+# Count the occurrences of each class in the target column
+class_counts = y.value_counts()
+
+# Plot the counts using a bar graph
+class_counts.plot(kind='bar', color=['blue', 'orange'])
+
+# Add titles and labels
+plt.title('Class Distribution in Target Column')
+plt.xlabel('Class')
+plt.ylabel('Count')
+
+# Show the plot
+plt.show()
+~~~
+{: .python}
+
+![](../fig/bar_imbalanced.png)
+
+
+~~~
+###### Or in pei chart
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming y is a pandas Series or a numpy array
+# If y is a numpy array, convert it to pandas Series
+if isinstance(y, np.ndarray):
+    y = pd.Series(y)
+
+# Count the occurrences of each class in the target column
+class_counts = y.value_counts()
+
+# Plot the counts using a pie chart
+class_counts.plot(kind='pie', autopct='%1.1f%%', colors=['blue', 'orange'], labels=['Class 0', 'Class 1'], startangle=90)
+
+# Add a title
+plt.title('Class Distribution in Target Column')
+
+# Equal aspect ratio ensures that pie is drawn as a circle.
+plt.axis('equal')
+
+# Show the plot
+plt.show()
+~~~
+{: .python}
+
+
+![](../fig/pie_imbalaced.png)
+
+
+##### Balanced distribution
+
+~~~
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import train_test_split
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Apply SMOTE to the training data to balance the classes
+smote = SMOTE(random_state=42)
+X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+# Count the occurrences of each class in the resampled target column
+class_counts = pd.Series(y_train_res).value_counts()
+
+# Plot the counts using a pie chart
+class_counts.plot(kind='pie', autopct='%1.1f%%', colors=['blue', 'orange'], labels=['Class 0', 'Class 1'], startangle=90)
+
+# Add a title
+plt.title('Balanced Class Distribution in Target Column After SMOTE')
+
+# Equal aspect ratio ensures that pie is drawn as a circle
+plt.axis('equal')
+
+# Show the plot
+plt.show()
+~~~
+{: .python}
+
+
+![](../fig/balanced.png)
+
+~~~
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier, StackingClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, roc_curve, auc
+
+# Assuming X and y are defined previously
+# X = ...
+# y = ...
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Apply SMOTE to the training data to balance the classes
+smote = SMOTE(random_state=42)
+X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+# Create a list of classification models to evaluate
+models = [
+    LogisticRegression(max_iter=8000),
+    DecisionTreeClassifier(),
+    RandomForestClassifier(),
+    XGBClassifier(n_estimators=10),
+    GradientBoostingClassifier(n_estimators=10),
+    AdaBoostClassifier(n_estimators=10),
+    StackingClassifier(
+        estimators=[
+            ('rf', RandomForestClassifier(n_estimators=10)),
+            ('gb', GradientBoostingClassifier(n_estimators=10)),
+            ('xgb', XGBClassifier(n_estimators=10))
+        ],
+        final_estimator=LogisticRegression()
+    )
+]
+
+# Train and evaluate each model
+for model in models:
+    # Train the model on the resampled training set
+    model.fit(X_train_res, y_train_res)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Calculate and print the classification report of the model
+    report = classification_report(y_test, y_pred)
+    print(model.__class__.__name__)
+    print(report)
+
+    # Check if the model has the predict_proba method
+    if hasattr(model, "predict_proba"):
+        # Calculate and plot the ROC AUC curve of the model
+        y_score = model.predict_proba(X_test)[:, 1]
+        fpr, tpr, _ = roc_curve(y_test, y_score)
+        roc_auc = auc(fpr, tpr)
+        plt.plot(fpr, tpr, label='{} (AUC = {:.4f})'.format(model.__class__.__name__, roc_auc))
+    
+    print('-----------------------------------')
+
+# Plot the ROC AUC curves for all models
+plt.plot([0, 1], [0, 1], 'k--', label='Random Guessing')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC AUC Curve')
+plt.legend(loc='lower right')
+plt.show()
+
+~~~
+{: .pytthon}
+
+
+![](../fig/ruc_balanced.png)
+
+~~~
+
+~~~
+{: .output}
+
+~~~
+
+~~~
+{: .output}
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+LogisticRegression
+              precision    recall  f1-score   support
+
+           0       0.92      0.79      0.85     22672
+           1       0.50      0.75      0.60      6420
+
+    accuracy                           0.78     29092
+   macro avg       0.71      0.77      0.72     29092
+weighted avg       0.82      0.78      0.79     29092
+
+-----------------------------------
+DecisionTreeClassifier
+              precision    recall  f1-score   support
+
+           0       0.87      0.83      0.85     22672
+           1       0.47      0.55      0.51      6420
+
+    accuracy                           0.76     29092
+   macro avg       0.67      0.69      0.68     29092
+weighted avg       0.78      0.76      0.77     29092
+
+-----------------------------------
+RandomForestClassifier
+              precision    recall  f1-score   support
+
+           0       0.89      0.90      0.90     22672
+           1       0.65      0.62      0.63      6420
+
+    accuracy                           0.84     29092
+   macro avg       0.77      0.76      0.77     29092
+weighted avg       0.84      0.84      0.84     29092
+
+-----------------------------------
+XGBClassifier
+              precision    recall  f1-score   support
+
+           0       0.91      0.84      0.87     22672
+           1       0.55      0.69      0.61      6420
+
+    accuracy                           0.81     29092
+   macro avg       0.73      0.77      0.74     29092
+weighted avg       0.83      0.81      0.81     29092
+
+-----------------------------------
+GradientBoostingClassifier
+              precision    recall  f1-score   support
+
+           0       0.90      0.80      0.85     22672
+           1       0.50      0.70      0.58      6420
+
+    accuracy                           0.78     29092
+   macro avg       0.70      0.75      0.72     29092
+weighted avg       0.81      0.78      0.79     29092
+
+-----------------------------------
+AdaBoostClassifier
+              precision    recall  f1-score   support
+
+           0       0.90      0.82      0.86     22672
+           1       0.52      0.68      0.59      6420
+
+    accuracy                           0.79     29092
+   macro avg       0.71      0.75      0.72     29092
+weighted avg       0.82      0.79      0.80     29092
+
+-----------------------------------
+StackingClassifier
+              precision    recall  f1-score   support
+
+           0       0.89      0.89      0.89     22672
+           1       0.60      0.61      0.61      6420
+
+    accuracy                           0.83     29092
+   macro avg       0.75      0.75      0.75     29092
+weighted avg       0.83      0.83      0.83     29092
+
+-----------------------------------
+
+~~~
+{: .output}
 
 ~~~
 
@@ -1480,26 +1906,6 @@ F1-Score: 0.5786081270434377
 {: .output}
 
 
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
 
 
 ## Unsupervised Learning
