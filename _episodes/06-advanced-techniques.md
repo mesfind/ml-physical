@@ -203,16 +203,16 @@ class SlidingWindowGenerator:
 
 The code initializes a sliding window generator with specified parameters, including input width, label width, and shift. Below is an example demonstrating how to create and use a sliding window generator with a DataFrame:
 ~~~
-windows = SlidingWindowGenerator(seq_length=6, label_width=1, shift=1, df=df, label_columns=['co2'])
+windows = SlidingWindowGenerator(seq_length=5, label_width=1, shift=1, df=df, label_columns=['co2'])
 windows
 ~~~
 {: .python}
 
 
 ~~~
-Total window size: 7
-Input indices: [0 1 2 3 4 5]
-Label indices: [6]
+Total window size: 6
+Input indices: [0 1 2 3 4]
+Label indices: [5]
 Label column name(s): ['co2']
 ~~~
 {: .output}
@@ -227,14 +227,14 @@ X.shape, y.shape
 
 
 ~~~
-((2277, 6, 1), (2277, 1))
+((2278, 5, 1), (2278, 1))
 ~~~
 {: .output}
 
 
 The arrays `X` and `y` store these windows and targets, respectively, and are converted to NumPy arrays for efficient computation.
 
-By setting `seq_length = 6`, we generate sequences length of 6 with offset 1 where each input sequence consists of six time steps, and the corresponding target is the value immediately following this sequence.
+By setting `seq_length = 5`, we generate sequences length of 5 with offset 1 where each input sequence consists of five time steps, and the corresponding target is the value immediately following this sequence.
 
 This preprocessing step prepares the data for the LSTM network, enabling it to learn from the sequential patterns in the time series and predict future \\(CO_2\\) levels based on past observations.
 
@@ -336,18 +336,18 @@ for epoch in range(num_epochs):
 {: .python}
 
 ~~~
-Epoch: 0, loss: 0.44187
-Epoch: 100, loss: 0.01010
-Epoch: 200, loss: 0.00023
-Epoch: 300, loss: 0.00016
-Epoch: 400, loss: 0.00014
-Epoch: 500, loss: 0.00013
-Epoch: 600, loss: 0.00012
-...
+Epoch: 0, loss: 0.50757
+Epoch: 100, loss: 0.01297
+Epoch: 200, loss: 0.00028
+Epoch: 300, loss: 0.00020
+Epoch: 400, loss: 0.00016
+Epoch: 500, loss: 0.00015
+Epoch: 600, loss: 0.00014
+....
 Epoch: 1500, loss: 0.00010
 Epoch: 1600, loss: 0.00010
-Epoch: 1700, loss: 0.00010
-Epoch: 1800, loss: 0.00010
+Epoch: 1700, loss: 0.00009
+Epoch: 1800, loss: 0.00009
 Epoch: 1900, loss: 0.00009
 ~~~
 {: .output}
@@ -393,7 +393,7 @@ plt.tight_layout()
 plt.show()
 ~~~
 
-![](../fig/X_test_prediction.png)
+![](../fig/X_test_predict.png)
 
 
 In the plot, the red vertical line separates the training data from the test data. The model's performance in predicting the time series is visualized by plotting the predicted values against the actual values.
@@ -407,8 +407,8 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > ## Solution
 > > ~~~
 > > # Modify the sequence length to 5
-> > seq_length = 5
-> > X, y = sliding_windows(training_data, seq_length)
+> > windows = SlidingWindowGenerator(seq_length=5, label_width=1, shift=1, df=df, label_columns=['co2'])
+> > X, y = windows.sliding_windows(training_data)
 > > # Train and test data loading in tensor format
 > > train_size = int(len(y) * 0.70)
 > > test_size = len(y) - train_size
