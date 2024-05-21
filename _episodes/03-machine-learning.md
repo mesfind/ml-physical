@@ -1895,6 +1895,9 @@ weighted avg       0.83      0.83      0.83     29092
 ~~~
 {: .output}
 
+
+![](../fig/ruc_balanced.png)
+
 ~~~
 
 ~~~
