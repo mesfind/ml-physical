@@ -239,6 +239,48 @@ plt.show()
 > 
 {: .challenge}
 
+
+~~~
+import os
+import datetime
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+mpl.rcParams['figure.figsize'] = (8, 6)
+mpl.rcParams['axes.grid'] = False
+
+# Load the dataset
+url = 'https://www.bgc-jena.mpg.de/wetter/mpi_roof_2009-2021_10min.csv'
+data = pd.read_csv(url, delimiter=';')
+
+# Preprocess the data
+data['datetime'] = pd.to_datetime(data[['YYYY', 'MM', 'DD', 'hh', 'mm']])
+data.set_index('datetime', inplace=True)
+data.drop(columns=['YYYY', 'MM', 'DD', 'hh', 'mm'], inplace=True)
+
+# Handle missing values
+data = data.interpolate()
+
+# Normalize the data
+data_mean = data.mean()
+data_std = data.std()
+data_normalized = (data - data_mean) / data_std
+
+~~~
+
+
+
+
+
+
+
 ## Time Series Modeling with deep learning
 
 In recent years, deep learning has emerged as a powerful tool for time series forecasting, offering significant advantages over traditional statistical methods. While classical approaches like ARIMA and exponential smoothing rely heavily on assumptions about the data's structure, deep learning models, particularly neural networks, can automatically capture complex patterns __without extensive manual feature engineering__.

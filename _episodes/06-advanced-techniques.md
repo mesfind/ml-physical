@@ -131,7 +131,37 @@ array([[0.05090312],
 
 Through this section, you see  how to preprocess the data and proceed to construct the LSTM network, and evaluate its performance in forecasting future \\(CO_2 \\) levels. 
 
-To effectively train an LSTM, it is crucial to organize the time series data into sequences that the network can learn from. This involves creating sliding windows of a fixed length, where each window represents a sequence of past values that will be used to predict the next value in the series. Here is a Python function to achieve this:
+
+### Data Windowing for Time Series
+
+To effectively train an LSTM, it is crucial to organize the time series data into sequences that the network can learn from. This involves creating sliding windows of a fixed length, where each window represents a sequence of past values that will be used to predict the next value in the series.  RNN models makes predictions based on this sliding window of consecutive data samples. key features of input sliding windows include:
+
+1. **Width**: Number of time steps in the input and label windows.
+2. **Offset**: Time gap between input and label windows.
+3. **Features**: Selection of features as inputs, labels, or both.
+
+We will construct various models (Linear, DNN, CNN, RNN) for:
+- Single-output and multi-output predictions.
+- Single-time-step and multi-time-step predictions.
+
+Depending on the task and type of model you may want to generate a variety of data windows. For instance, to make a single prediction 24 hours into the future, given 24 hours of history you migh define a window like this:
+
+![](../fig/raw_window_24h)
+
+
+Forthermore, to make a prediction one hour into the future, given six hours of history would need a windos of input length six(6) with offset 1 as shown below:
+
+
+![](../fig/raw_window_24h)
+
+
+In the remainder of this section, we define a `sliding_windows` class. This class can:
+
+- Manage indexes and offsets.
+- Split windows of features into feature (X) and label (y) pairs.
+- Efficiently generate batches of these windows from the training and test data.
+
+The implementation is shown in the code below.
 
 ~~~
 def sliding_windows(data, seq_length):
@@ -146,7 +176,7 @@ def sliding_windows(data, seq_length):
 
     return np.array(x),np.array(y)
 
-seq_length = 4
+seq_length = 6
 X, y = sliding_windows(training_data, seq_length)
 X.shape, y.shape
 ~~~
@@ -155,13 +185,13 @@ X.shape, y.shape
 
 
 ~~~
-((2279, 4, 1), (2279, 1))
+((2277, 6, 1), (2277, 1))
 ~~~
 {: .output}
 
 The arrays `X` and `y` store these windows and targets, respectively, and are converted to NumPy arrays for efficient computation.
 
-By setting `seq_length = 4`, we generate sequences where each input sequence consists of four time steps, and the corresponding target is the value immediately following this sequence.
+By setting `seq_length = 6`, we generate sequences length of 6 with offset 1 where each input sequence consists of six time steps, and the corresponding target is the value immediately following this sequence.
 
 This preprocessing step prepares the data for the LSTM network, enabling it to learn from the sequential patterns in the time series and predict future \\(CO_2\\) levels based on past observations.
 
@@ -169,6 +199,7 @@ Next, we will proceed to construct tensor format preprocessed data  and the LSTM
 
 
 First, we need to split the dataset into training and testing sets and convert them into tensors, which are the primary data structure used in PyTorch.
+
 
 ~~~
 # train and test data loading in tensor format
