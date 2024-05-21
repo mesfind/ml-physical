@@ -46,6 +46,184 @@ There are three main categories of machine learning algorithms:
 
 ## Supervised Learning
 
+### Regression
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
 
 ### Classification
 
@@ -907,186 +1085,6 @@ plt.show();
 
 ![](../fig/ruc_DT.png)
 
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-
-
-
-
 
 ### Random Forest
 
@@ -1099,180 +1097,208 @@ classifier.fit(X_train, y_train)
 {: .python}
 
 ~~~
-y_pred = pd.Series(model.predict(X_test))
-
-y_test = y_test.reset_index(drop=True)
-z = pd.concat([y_test, y_pred], axis=1)
-z.columns = ['True', 'Prediction']
-z.head(50)
-~~~
-{: .python}
-
-~~~
-	True	Prediction
-0	1	1
-1	0	0
-2	0	0
-3	0	0
-4	0	0
-5	0	0
-6	0	0
-7	1	0
-8	0	0
-9	1	1
-10	0	0
-11	0	0
-12	0	0
-13	0	0
-14	0	0
-15	1	0
-16	1	1
-17	0	0
-18	1	0
-19	0	0
-20	0	0
-21	0	0
-22	0	0
-23	1	1
-24	0	0
-25	0	0
-26	0	0
-27	1	1
-28	1	0
-29	0	0
-30	0	0
-31	0	0
-32	0	0
-33	0	0
-34	0	0
-35	1	0
-36	0	0
-37	1	1
-38	0	0
-39	0	0
-40	0	0
-41	1	1
-42	0	0
-43	0	0
-44	0	0
-45	0	0
-46	0	0
-47	1	1
-48	1	0
-49	0	0
-~~~
-{: .output}
-
-~~~
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("Precision:", precision_score(y_test, y_pred))
-print("Recall:", recall_score(y_test, y_pred))
-print("F1-Score:",f1_score(y_test, y_pred))
-~~~
-{: .python}
-
-~~~
-Accuracy: 0.8386841743434621
-Precision: 0.7126323565624231
-Recall: 0.45077881619937693
-F1-Score: 0.5522373819292052
-~~~
-{: .output}
-
-
-
-### Comparison of different models
-~~~
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, roc_curve, auc
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Create a list of classification models to evaluate
-models = [LogisticRegression(max_iter=8000), DecisionTreeClassifier(), RandomForestClassifier(), SVC(probability=True)]
-
-# Train and evaluate each model
-for model in models:
-    # Train the model on the training set
-    model.fit(X_train, y_train)
-
-    # Make predictions on the testing set
-    y_pred = model.predict(X_test)
-
-    # Calculate and print the classification report of the model
-    report = classification_report(y_test, y_pred)
-    print(model.__class__.__name__)
-    print(report)
-
- 
-    # Calculate and plot the ROC AUC curve of the model
-    y_score = model.predict_proba(X_test)[:,1]
-    fpr, tpr, _ = roc_curve(y_test, y_score)
-    roc_auc = auc(fpr, tpr)
-    plt.plot(fpr, tpr, label='{} (AUC = {:.4f})'.format(model.__class__.__name__, roc_auc))
-
-    print('-----------------------------------')
-
-# Plot the ROC AUC curves for all models
-plt.plot([0, 1], [0, 1], 'k--', label='Random Guessing')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC AUC Curve')
-plt.legend(loc='lower right')
-plt.show();
-
+# Compare performance between test and train data
+y_pred_rf = classifier.predict(X_test)
+pred_train = classifier.predict(X_train)
 ~~~
 {: .python}
 
 
 ~~~
-LogisticRegression
-              precision    recall  f1-score   support
+print("Accuracy:", accuracy_score(y_test, y_pred_rf))
+print("Precision:", precision_score(y_test, y_pred_rf))
+print("Recall:", recall_score(y_test, y_pred_rf))
+print("F1-Score:",f1_score(y_test, y_pred_rf))
+~~~
+{: .python}
 
-           0       0.86      0.95      0.90     22672
-           1       0.71      0.45      0.55      6420
-
-    accuracy                           0.84     29092
-   macro avg       0.79      0.70      0.73     29092
-weighted avg       0.83      0.84      0.82     29092
-
------------------------------------
-DecisionTreeClassifier
-              precision    recall  f1-score   support
-
-           0       0.86      0.85      0.86     22672
-           1       0.50      0.52      0.51      6420
-
-    accuracy                           0.78     29092
-   macro avg       0.68      0.69      0.68     29092
-weighted avg       0.78      0.78      0.78     29092
-
------------------------------------
-RandomForestClassifier
-              precision    recall  f1-score   support
-
-           0       0.87      0.95      0.91     22672
-           1       0.75      0.48      0.59      6420
-
-    accuracy                           0.85     29092
-   macro avg       0.81      0.72      0.75     29092
-weighted avg       0.84      0.85      0.84     29092
-
------------------------------------
+~~~
+Accuracy: 0.8500274989687887
+Precision: 0.7472950228420293
+Recall: 0.48411214953271026
+F1-Score: 0.5875791662728046
 ~~~
 {: .output}
 
 
-### Regression
 
 ### Ensemble Learning Techniques
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
+
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+
 
 ## Unsupervised Learning
 
