@@ -1218,38 +1218,78 @@ _Strong Learner_:
 * XGBoost includes several enhancements over traditional gradient boosting, such as regularization techniques and parallelization.
 * It can handle a variety of data types and is commonly used for both classification and regression tasks.
 * XGBoost is known for its exceptional performance in machine learning competitions and real-world applications.
+#### Bagging Classifiers
 ~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
+from sklearn.ensemble import BaggingClassifier
+bag_clf = BaggingClassifier(n_estimators=20)
+bag_clf.fit(X_train, y_train)
 ~~~
 {: .python}
 
 ~~~
-
-~~~
-{: .output}
-
-
-~~~
-
+bag_clf_pred_test = bag_clf.predict(X_test)
+bag_clf_pred_train = bag_clf.predict(X_train)
 ~~~
 {: .python}
 
 ~~~
+print(accuracy_score(y_test, bag_clf_pred_test))
+print(accuracy_score(y_train, bag_clf_pred_train))
+~~~
+{: .python}
 
+~~~
+0.8424309088409184
+0.9959267152481782
 ~~~
 {: .output}
 
+~~~
+print("Accuracy:", accuracy_score(y_test, bag_clf_pred_test))
+print("Precision:", precision_score(y_test, bag_clf_pred_test))
+print("Recall:", recall_score(y_test, bag_clf_pred_test))
+print("F1-Score:",f1_score(y_test, bag_clf_pred_test))
+~~~
+{: .python}
+
+~~~
+Accuracy: 0.8424309088409184
+Precision: 0.7141857209519366
+Recall: 0.47679127725856696
+F1-Score: 0.5718288810013077
+~~~
+{: .output}
+
+
+> ## Exercise: Bagging with SVC base estimator
+> - Write a code  to implement a Bagging with a Support Vector Classifier (SVC) base estimator in Python using scikit-learn.
+> 
+> > ## Solution
+> > ~~~
+> > from sklearn.svm import SVC
+>> from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+> > from sklearn.ensemble import BaggingClassifier
+> > bag_clf2 = BaggingClassifier(SVC(),random_state=42)
+> > bag_clf2.fit(X_train, y_train)
+> > bag_clf_pred_test2 = bag_clf2.predict(X_test)
+> > bag_clf_pred_train2 = bag_clf2.predict(X_train)
+> > print(accuracy_score(y_test, bag_clf_pred_test2))
+> > print(accuracy_score(y_train, bag_clf_pred_train2))
+> > print("Accuracy:", accuracy_score(y_test, bag_clf_pred_test2))
+> > print("Precision:", precision_score(y_test, bag_clf_pred_test2))
+> > print("Recall:", recall_score(y_test, bag_clf_pred_test2))
+> > print("F1-Score:",f1_score(y_test, bag_clf_pred_test2))
+> > ~~~
+> > {: .python}
+> > ~~~
+> > Accuracy: 0.7795957651588066
+>> Precision: 0.5006045949214026
+>> Recall: 0.5158878504672897
+>> F1-Score: 0.5081313286284136
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
 
 ~~~
 
