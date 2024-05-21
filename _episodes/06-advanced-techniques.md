@@ -53,17 +53,7 @@ torch.manual_seed(seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(seed)
 
-# Set seed for reproducibility
-seed = 42
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-if torch.cuda.is_available():
-    torch.cuda.manual_seed_all(seed)
 
-
-from torch.autograd import Variable
-from sklearn.preprocessing import MinMaxScaler
 # Load the dataset
 df = pd.read_csv('data/co2_levels.csv')
 # Convert 'datestamp' column to datetime format
@@ -106,14 +96,16 @@ plt.show()
 
 This visualization step helps us understand the overall trend and seasonality in the data, setting the stage for building our LSTM model. Through this tutorial, you will learn how to preprocess the data, construct the LSTM network, and evaluate its performance in forecasting future passenger numbers.
 
+### Normalization 
+
 
 To prepare the data for the LSTM, we need to normalize it. Normalization scales the data to a range between 0 and 1, which helps the neural network to train more efficiently and accurately.
 
 ~~~
 # normalization
 sc = MinMaxScaler()
-training_set = df.iloc[:,:].values
-training_data = sc.fit_transform(training_set)
+features = df.iloc[:,:].values
+training_data = sc.fit_transform(features)
 training_data
 ~~~
 {: .python}
@@ -161,33 +153,84 @@ In the remainder of this section, we define a `sliding_windows` class. This clas
 - Split windows of features into feature (X) and label (y) pairs.
 - Efficiently generate batches of these windows from the training and test data.
 
-The implementation is shown in the code below.
+
+The sliding window generator class is crucial for preparing data for time series forecasting. The code below demonstrates its implementation:
 
 ~~~
-def sliding_windows(data, seq_length):
-    x = []
-    y = []
+class SlidingWindowGenerator:
+    def __init__(self, seq_length, label_width, shift, df, label_columns=None):
+        # Store the raw data.
+        self.df = df
 
-    for i in range(len(data)-seq_length-1):
-        window = data[i:(i+seq_length)]
-        after_window = data[i+seq_length]
-        x.append(window)
-        y.append(after_window)
+        # Label column indices.
+        self.label_columns = label_columns
+        if label_columns is not None:
+            self.label_columns_indices = {name: i for i, name in enumerate(label_columns)}
+        self.column_indices = {name: i for i, name in enumerate(df.columns)}
 
-    return np.array(x),np.array(y)
+        # Window parameters.
+        self.seq_length = seq_length
+        self.label_width = label_width
+        self.shift = shift
+        self.total_window_size = seq_length + shift
 
-seq_length = 6
-X, y = sliding_windows(training_data, seq_length)
+        self.input_slice = slice(0, seq_length)
+        self.input_indices = np.arange(self.total_window_size)[self.input_slice]
+
+        self.label_start = self.total_window_size - label_width
+        self.labels_slice = slice(self.label_start, None)
+        self.label_indices = np.arange(self.total_window_size)[self.labels_slice]
+
+    def __repr__(self):
+        return '\n'.join([
+            f'Total window size: {self.total_window_size}',
+            f'Input indices: {self.input_indices}',
+            f'Label indices: {self.label_indices}',
+            f'Label column name(s): {self.label_columns}'])
+    def sliding_windows(self, data):
+        x = []
+        y = []
+
+        for i in range(len(data)-self.seq_length-1):
+            window = data[i:(i+self.seq_length)]
+            after_window = data[i+self.seq_length]
+            x.append(window)
+            y.append(after_window)
+
+        return np.array(x), np.array(y)
+~~~
+{: .python}
+
+The code initializes a sliding window generator with specified parameters, including input width, label width, and shift. Below is an example demonstrating how to create and use a sliding window generator with a DataFrame:
+~~~
+windows = SlidingWindowGenerator(seq_length=6, label_width=1, shift=1, df=df, label_columns=['co2'])
+windows
+~~~
+{: .python}
+
+
+~~~
+Total window size: 7
+Input indices: [0 1 2 3 4 5]
+Label indices: [6]
+Label column name(s): ['co2']
+~~~
+{: .output}
+
+
+
+~~~
+X, y = windows.sliding_windows(training_data)
 X.shape, y.shape
 ~~~
-{: .python} 
-
+{: .python}
 
 
 ~~~
 ((2277, 6, 1), (2277, 1))
 ~~~
 {: .output}
+
 
 The arrays `X` and `y` store these windows and targets, respectively, and are converted to NumPy arrays for efficient computation.
 
@@ -268,7 +311,6 @@ learning_rate = 0.01
 input_size = 1
 hidden_size = 3
 num_layers = 1
-
 num_classes = 1
 
 lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
@@ -318,8 +360,9 @@ After training, we evaluate the model's performance on the test data. We set the
 lstm.eval()
 test_predict = lstm(X_test)
 
-data_predict = test_predict.data.numpy()
-dataY_plot = y_test.data.numpy()
+# Convert predictions to numpy arrays and reshape
+data_predict = test_predict.data.numpy().reshape(-1, 1)
+dataY_plot = y_test.data.numpy().reshape(-1, 1)
 
 # Inverse transform the predictions and actual values
 data_predict = sc.inverse_transform(data_predict)
@@ -330,20 +373,23 @@ mse = mean_squared_error(dataY_plot, data_predict)
 r2 = r2_score(dataY_plot, data_predict)
 
 # Get the test datestamps
-test_dates = df.index[train_size + seq_length + 1:]
+test_size = len(dataY_plot)
+test_dates = df.index[-test_size:]
 
 # Plot observed and predicted values
 plt.figure(figsize=(12, 6))
 plt.axvline(x=test_dates[0], c='r', linestyle='--', label='Train/Test Split')
-plt.plot(df.index[train_size + seq_length + 1:], dataY_plot, label='Observed')
-plt.plot(df.index[train_size + seq_length + 1:], data_predict, label='Predicted')
+plt.plot(test_dates, dataY_plot, label='Observed')
+plt.plot(test_dates, data_predict, label='Predicted')
 plt.suptitle('Time-Series Prediction')
 plt.xlabel('Date')
 plt.ylabel(r'$CO_2$')
 plt.legend()
-# Add MSE and R² values as annotations
+
+# Add MSE and R2 values as annotations
 plt.text(0.5, 0.9, f'MSE: {mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+plt.tight_layout()
 plt.show()
 ~~~
 
