@@ -1220,6 +1220,7 @@ _Strong Learner_:
 * XGBoost is known for its exceptional performance in machine learning competitions and real-world applications.
 
 #### Bagging Classifiers
+
 ~~~
 from sklearn.ensemble import BaggingClassifier
 bag_clf = BaggingClassifier(n_estimators=20)
