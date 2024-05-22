@@ -335,8 +335,8 @@ data_predict = test_predict.data.numpy().reshape(-1, 1)
 dataY_plot = y_test.data.numpy().reshape(-1, 1)
 
 # Inverse transform the predictions and actual values
-data_predict = sc.inverse_transform(data_predict)
-dataY_plot = sc.inverse_transform(dataY_plot)
+data_predict = scaler_y.inverse_transform(data_predict)
+dataY_plot = scaler_y.inverse_transform(dataY_plot)
 
 # Compute MSE and R²
 mse = mean_squared_error(dataY_plot, data_predict)
