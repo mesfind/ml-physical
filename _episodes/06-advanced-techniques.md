@@ -201,7 +201,7 @@ X.shape, y.shape
 
 
 ~~~
-((2279, 4, 1), (2279, 1))
+((2280, 4, 1), (2280, 1))
 ~~~
 {: .output}
 
@@ -223,8 +223,14 @@ First, we need to split the dataset into training and testing sets and convert t
 scaler_X = MinMaxScaler()
 scaler_y = MinMaxScaler()
 
-X = scaler_X.fit_transform(X)
-y = scaler_y.fit_transform(y)
+X_shape = X.shape
+y_shape = y.shape
+
+X_flat = X.reshape(-1, X_shape[-1])
+y_flat = y.reshape(-1, y_shape[-1])
+
+X = scaler_X.fit_transform(X_flat).reshape(X_shape)
+y = scaler_y.fit_transform(y_flat).reshape(y_shape)
 
 # train and test data loading in tensor format
 train_size = int(len(y) * 0.7)
