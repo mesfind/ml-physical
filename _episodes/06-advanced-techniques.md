@@ -96,33 +96,6 @@ plt.show()
 
 This visualization step helps us understand the overall trend and seasonality in the data, setting the stage for building our LSTM model. Through this tutorial, you will learn how to preprocess the data, construct the LSTM network, and evaluate its performance in forecasting future passenger numbers.
 
-### Normalization 
-
-
-To prepare the data for the LSTM, we need to normalize it. Normalization scales the data to a range between 0 and 1, which helps the neural network to train more efficiently and accurately.
-
-~~~
-# normalization
-sc = MinMaxScaler()
-features = df.iloc[:,:].values
-training_data = sc.fit_transform(features)
-training_data
-~~~
-{: .python}
-
-~~~
-array([[0.05090312],
-       [0.07060755],
-       [0.07553366],
-       ...,
-       [0.95566502],
-       [0.95730706],
-       [0.96059113]])
-~~~
-{: .output}
-
-Through this section, you see  how to preprocess the data and proceed to construct the LSTM network, and evaluate its performance in forecasting future \\(CO_2 \\) levels. 
-
 
 ### Data Windowing for Time Series
 
@@ -157,62 +130,62 @@ In the remainder of this section, we define a `sliding_windows` class. This clas
 The sliding window generator class is crucial for preparing data for time series forecasting. The code below demonstrates its implementation:
 
 ~~~
+# Sliding window generation class
 class SlidingWindowGenerator:
-    def __init__(self, seq_length, label_width, shift, df, label_columns=None):
-        # Store the raw data.
+    def __init__(self, seq_length, label_width, shift, df, label_columns=None, dropnan=True):
         self.df = df
-
-        # Label column indices.
         self.label_columns = label_columns
+        self.dropnan = dropnan
         if label_columns is not None:
             self.label_columns_indices = {name: i for i, name in enumerate(label_columns)}
         self.column_indices = {name: i for i, name in enumerate(df.columns)}
-
-        # Window parameters.
         self.seq_length = seq_length
         self.label_width = label_width
         self.shift = shift
         self.total_window_size = seq_length + shift
-
         self.input_slice = slice(0, seq_length)
         self.input_indices = np.arange(self.total_window_size)[self.input_slice]
 
         self.label_start = self.total_window_size - label_width
         self.labels_slice = slice(self.label_start, None)
         self.label_indices = np.arange(self.total_window_size)[self.labels_slice]
-
     def __repr__(self):
         return '\n'.join([
             f'Total window size: {self.total_window_size}',
             f'Input indices: {self.input_indices}',
             f'Label indices: {self.label_indices}',
             f'Label column name(s): {self.label_columns}'])
-    def sliding_windows(self, data):
-        x = []
-        y = []
-
-        for i in range(len(data)-self.seq_length-1):
-            window = data[i:(i+self.seq_length)]
-            after_window = data[i+self.seq_length]
-            x.append(window)
-            y.append(after_window)
-
-        return np.array(x), np.array(y)
+    def sliding_windows(self):
+        data = self.df.values
+        X, y = [], []
+        for i in range(len(data) - self.total_window_size + 1):
+            input_window = data[i:i + self.seq_length]
+            label_window = data[i + self.seq_length:i + self.total_window_size]
+            X.append(input_window)
+            if self.label_columns is not None:
+                label_window = label_window[:, [self.column_indices[name] for name in self.label_columns]]
+            y.append(label_window)
+        X, y = np.array(X), np.array(y)
+        if self.dropnan:
+            X = X[~np.isnan(X).any(axis=(1, 2))]
+            y = y[~np.isnan(y).any(axis=(1, 2))]
+        return X, y.reshape(-1,1)
 ~~~
 {: .python}
 
 The code initializes a sliding window generator with specified parameters, including input width, label width, and shift. Below is an example demonstrating how to create and use a sliding window generator with a DataFrame:
 ~~~
-windows = SlidingWindowGenerator(seq_length=5, label_width=1, shift=1, df=df, label_columns=['co2'])
-windows
+# Initialize the generator
+swg = SlidingWindowGenerator(seq_length=4, label_width=5, shift=1, df=df, label_columns=['co2'])
+print(swg)
 ~~~
 {: .python}
 
 
 ~~~
-Total window size: 6
-Input indices: [0 1 2 3 4]
-Label indices: [5]
+Total window size: 5
+Input indices: [0 1 2 3]
+Label indices: [4]
 Label column name(s): ['co2']
 ~~~
 {: .output}
@@ -220,21 +193,22 @@ Label column name(s): ['co2']
 
 
 ~~~
-X, y = windows.sliding_windows(training_data)
+# Generate windows
+X, y = swg.sliding_windows()
 X.shape, y.shape
 ~~~
 {: .python}
 
 
 ~~~
-((2278, 5, 1), (2278, 1))
+((2279, 4, 1), (2279, 1))
 ~~~
 {: .output}
 
 
 The arrays `X` and `y` store these windows and targets, respectively, and are converted to NumPy arrays for efficient computation.
 
-By setting `seq_length = 5`, we generate sequences length of 5 with offset 1 where each input sequence consists of five time steps, and the corresponding target is the value immediately following this sequence.
+By setting `seq_length = 4`, we generate sequences length of 4 with offset 1 where each input sequence consists of four time steps, and the corresponding target is the value immediately following this sequence.
 
 This preprocessing step prepares the data for the LSTM network, enabling it to learn from the sequential patterns in the time series and predict future \\(CO_2\\) levels based on past observations.
 
@@ -245,6 +219,13 @@ First, we need to split the dataset into training and testing sets and convert t
 
 
 ~~~
+# Normalize the data
+scaler_X = MinMaxScaler()
+scaler_y = MinMaxScaler()
+
+X = scaler_X.fit_transform(X)
+y = scaler_y.fit_transform(y)
+
 # train and test data loading in tensor format
 train_size = int(len(y) * 0.7)
 test_size = len(y) - train_size
@@ -257,8 +238,6 @@ y_train = Variable(torch.Tensor(np.array(y[0:train_size])))
 
 X_test = Variable(torch.Tensor(np.array(X[train_size:len(X)])))
 y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
-
-
 ~~~
 {: .python}
 
@@ -268,36 +247,21 @@ Next, we define our LSTM model by creating a class that inherits from nn.Module.
 
 ~~~
 # the LSTM model building
+
 class LSTM(nn.Module):
-
-    def __init__(self, num_classes, input_size, hidden_size, num_layers):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
         super(LSTM, self).__init__()
-
-        self.num_classes = num_classes
-        self.num_layers = num_layers
-        self.input_size = input_size
         self.hidden_size = hidden_size
-        self.seq_length = seq_length
-
-        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
-                            num_layers=num_layers, batch_first=True)
-
-        self.fc = nn.Linear(hidden_size, num_classes)
+        self.num_layers = num_layers
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
-        h_0 = Variable(torch.zeros(
-            self.num_layers, x.size(0), self.hidden_size))
-
-        c_0 = Variable(torch.zeros(
-            self.num_layers, x.size(0), self.hidden_size))
-
-        # Propagate input through LSTM
-        ula, (h_out, _) = self.lstm(x, (h_0, c_0))
-
-        h_out = h_out.view(-1, self.hidden_size)
-
-        out = self.fc(h_out)
-
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+        
+        out, _ = self.lstm(x, (h0, c0))
+        out = self.fc(out[:, -1, :])
         return out
 ~~~
 {: .python}
@@ -311,9 +275,9 @@ learning_rate = 0.01
 input_size = 1
 hidden_size = 3
 num_layers = 1
-num_classes = 1
+output_size = 1
 
-lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
+lstm = LSTM(input_size, hidden_size, num_layers, output_size)
 
 criterion = torch.nn.MSELoss()    # mean-squared error for regression
 optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
@@ -336,19 +300,19 @@ for epoch in range(num_epochs):
 {: .python}
 
 ~~~
-Epoch: 0, loss: 0.50757
-Epoch: 100, loss: 0.01297
-Epoch: 200, loss: 0.00028
-Epoch: 300, loss: 0.00020
+Epoch: 0, loss: 0.06325
+Epoch: 100, loss: 0.00028
+Epoch: 200, loss: 0.00018
+Epoch: 300, loss: 0.00017
 Epoch: 400, loss: 0.00016
 Epoch: 500, loss: 0.00015
 Epoch: 600, loss: 0.00014
-....
-Epoch: 1500, loss: 0.00010
-Epoch: 1600, loss: 0.00010
-Epoch: 1700, loss: 0.00009
-Epoch: 1800, loss: 0.00009
-Epoch: 1900, loss: 0.00009
+...
+Epoch: 1500, loss: 0.00008
+Epoch: 1600, loss: 0.00007
+Epoch: 1700, loss: 0.00007
+Epoch: 1800, loss: 0.00007
+Epoch: 1900, loss: 0.00006
 ~~~
 {: .output}
 The training loop runs for 2000 epochs, and the loss is printed every 100 epochs to monitor the training process.
@@ -417,27 +381,6 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > X_test = Variable(torch.Tensor(np.array(X[train_size:len(X)])))
 > > y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
 > > # LSTM model building
-> > class LSTM(nn.Module):
-> >    def __init__(self, num_classes, input_size, hidden_size, num_layers):
-> >        super(LSTM, self).__init__()
-> >        
-> >        self.num_classes = num_classes
-> >        self.num_layers = num_layers
-> >        self.input_size = input_size
-> >        self.hidden_size = hidden_size
-> >        self.seq_length = seq_length
-> >        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
-> >                            num_layers=num_layers, batch_first=True)
-> >        self.fc = nn.Linear(hidden_size, num_classes)
-> >    def forward(self, x):
-> >        h_0 = Variable(torch.zeros(
-> >           self.num_layers, x.size(0), self.hidden_size))
-> >        c_0 = Variable(torch.zeros(
-> >            self.num_layers, x.size(0), self.hidden_size))
-> >        ula, (h_out, _) = self.lstm(x, (h_0, c_0))
-> >        h_out = h_out.view(-1, self.hidden_size)
-> >        out = self.fc(h_out)
-> >        return out
 > > # Training the model
 > > num_epochs = 2000
 > > learning_rate = 0.01
@@ -445,7 +388,7 @@ By following these steps, you will preprocess the data, construct an LSTM networ
 > > hidden_size = 5
 > > num_layers = 1
 > > num_classes = 1
-> > lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
+> > lstm = LSTM(input_size, hidden_size, num_layers, output_size)
 > > criterion = torch.nn.MSELoss()    # Mean-squared error for regression
 > > optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
 > > # Train the model
