@@ -955,7 +955,7 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > {: .solution}
+> {: .solution}
 >
 {: .challenge}
 
@@ -982,7 +982,6 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > >         out, _ = self.gru(x, h0)
 > >         out = self.fc(out[:, -1, :])
 > >         return out
-> > 
 > > input_size = X.shape[2]
 > > hidden_size = 8  # Modify hidden layers to 8
 > > num_layers = 2
@@ -1054,6 +1053,6 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > {: .solution}
+> {: .solution}
 > 
 {: .challenge}
