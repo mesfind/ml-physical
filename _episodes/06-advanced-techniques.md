@@ -1038,7 +1038,6 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.text(0.5, 0.8, f'Test MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 > > plt.text(0.5, 0.7, f'Train R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 > > plt.text(0.5,
-
  0.6, f'Test R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 > > plt.tight_layout()
 > > plt.show()
