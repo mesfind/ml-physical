@@ -756,8 +756,8 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
         
         out, _ = self.lstm(x, (h0, c0))
         out = self.fc(out[:, -1, :])
@@ -808,13 +808,8 @@ The training process involves iteratively optimizing the LSTM model's parameters
 ~~~
 
 # Check for GPU availability including CUDA and Apple's MPS GPU
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-if device.type == 'cuda':
-    if torch.cuda.is_mps_available():
-        device = torch.device('cuda:0')  # Use CUDA GPU 0 with MPS if available
-    else:
-        device = torch.device('cuda')  # Use regular CUDA GPU
 
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'mps:0' if torch.backends.mps.is_available() else 'cpu')
 # Initialize the model
 input_size = X.shape[2]  # feature fecture 
 hidden_size = 5
@@ -822,7 +817,7 @@ num_layers = 1
 output_size = 1
 seq_length = 30
 lstm = LSTM(input_size, hidden_size, num_layers, output_size).to(device)
-
+lstm.to(device)
 # Define loss function and optimizer
 criterion = torch.nn.MSELoss()    # Mean-squared error for regression
 optimizer = torch.optim.Adam(lstm.parameters(), lr=0.01)
