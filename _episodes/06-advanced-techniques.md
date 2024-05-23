@@ -957,3 +957,101 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > {: .solution}
 >
 {: .challenge}
+
+
+
+
+> ## Exercise: How to Improve the Model Performance?
+> - Modify the sequence length to 50 used in the LSTM model and observe its impact on the model's performance.
+> - Modify the hidden layers of the LSTM model to 10 and train the model again. Plot the observed vs prediction for the test dataset.
+> 
+> > ## Solution
+> > ```python
+> > # Define the GRU model
+> > class GRU(nn.Module):
+> >     def __init__(self, input_size, hidden_size, num_layers, output_size):
+> >         super(GRU, self).__init__()
+> >         self.hidden_size = hidden_size
+> >         self.num_layers = num_layers
+> >         self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
+> >         self.fc = nn.Linear(hidden_size, output_size)
+> > 
+> >     def forward(self, x):
+> >         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+> >         out, _ = self.gru(x, h0)
+> >         out = self.fc(out[:, -1, :])
+> >         return out
+> > 
+> > input_size = X.shape[2]
+> > hidden_size = 8  # Modify hidden layers to 8
+> > num_layers = 2
+> > output_size = 1
+> > gru = GRU(input_size, hidden_size, num_layers, output_size).to(device)
+> > 
+> > criterion = torch.nn.MSELoss()
+> > optimizer = torch.optim.Adam(gru.parameters(), lr=0.01)
+> > num_epochs = 2000
+> > train_losses = []
+> > test_losses = []
+> > for epoch in range(num_epochs):
+> >     gru.train()
+> >     for inputs, targets in train_loader:
+> >         inputs, targets = inputs.to(device), targets.to(device)
+> >         optimizer.zero_grad()
+> >         outputs = gru(inputs)
+> >         train_loss = criterion(outputs, targets)
+> >         train_loss.backward()
+> >         optimizer.step()
+> >         train_losses.append(train_loss.item())
+> >     
+> >     gru.eval()
+> >     with torch.no_grad():
+> >         for inputs, targets in test_loader:
+> >             inputs, targets = inputs.to(device), targets.to(device)
+> >             test_outputs = gru(inputs)
+> >             test_loss = criterion(test_outputs, targets)
+> >             test_losses.append(test_loss.item())
+> >     
+> >     if epoch % 100 == 0:
+> >         print(f"Epoch: {epoch}, Train Loss: {np.mean(train_losses[-len(train_loader):]):.5f}, Test Loss: {np.mean(test_losses[-len(test_loader):]): .5f}")
+> > 
+> > train_predict = gru(X_tensor[:train_size].to(device)).cpu().detach().numpy()
+> > test_predict = gru(X_tensor[train_size:].to(device)).cpu().detach().numpy()
+> > 
+> > train_predict = scaler_y.inverse_transform(train_predict.reshape(-1, 1))
+> > test_predict = scaler_y.inverse_transform(test_predict.reshape(-1, 1))
+> > 
+> > train_mse = mean_squared_error(y[:train_size], train_predict)
+> > test_mse = mean_squared_error(y[train_size:], test_predict)
+> > 
+> > train_r2 = r2_score(y[:train_size], train_predict)
+> > test_r2 = r2_score(y[train_size:], test_predict)
+> > 
+> > plt.figure(figsize=(10, 5))
+> > plt.plot(train_losses, label='Train Loss')
+> > plt.plot(test_losses, label='Test Loss')
+> > plt.xlabel('Epoch')
+> > plt.ylabel('Loss')
+> > plt.legend()
+> > plt.title('Training and Testing Loss Over Epochs')
+> > plt.text(0.5, 0.9, f'Train MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.8, f'Test MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.7, f'Train R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5,
+
+ 0.6, f'Test R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.tight_layout()
+> > plt.show()
+> > 
+> > plt.figure(figsize=(12, 6))
+> > plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
+> > plt.plot(df.index[train_size:], test_predict, label='Predicted')
+> > plt.xlabel('Date')
+> > plt.ylabel('T(degC)')
+> > plt.title('Observed vs Predicted Temperature')
+> > plt.legend()
+> > plt.show()
+> > ```
+> > {: .solution}
+> 
+{: .challenge}
