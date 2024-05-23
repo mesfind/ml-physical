@@ -11,10 +11,13 @@ objectives:
 - "Develop the skills to construct, train, and evaluate an RNN networks for time series forecasting."
 - "Gain insight into troubleshooting common issues that arise during the training of LSTM models."
 keypoints:
+- "Key steps include selecting relevant features, converting date-time columns, reindexing the DataFrame, and normalizing the data."
 - "LSTMs and GRUs are advanced RNN architectures designed to handle long-term dependencies in sequential data."
 - "Constructing an LSTM model involves defining the network architecture, selecting appropriate loss functions, and optimizing the model parameters."
 -  "Evaluating the performance of an LSTM model includes using metrics such as Mean Squared Error (MSE) and visualizing the model's predictions against actual data."
+- "The performance of the trained on both training and testing datasets measured with metrics such as Mean Squared Error (MSE) and R2 score are key for predictive accuracy assessment"
 - "Common challenges in training LSTM models include overfitting, vanishing/exploding gradients, and ensuring sufficient computational resources, which can be addressed through regularization techniques, gradient clipping, and model tuning."
+
 ---
 
 <!-- MathJax -->
@@ -877,3 +880,80 @@ plt.show()
 
 These sections and corresponding code snippets provide a comprehensive guide to implementing and evaluating a multi-variable time series prediction model using LSTM networks. Each step is essential for understanding and applying LSTM-based forecasting techniques effectively.
 
+
+> ## Exercise: How to Improve the Model Performance?
+> - Modify the sequence length to 50 used in the LSTM model and observe its impact on the model's performance.
+> - Modify the hidden layers of the LSTM model to 10 and train the model again. Plot the observed vs prediction for the test dataset.
+> 
+> > ## Solution
+> > ```python
+> > input_size = X.shape[2]
+> > hidden_size = 10  # Modify hidden layers to 10
+> > num_layers = 2
+> > output_size = 1
+> > lstm = LSTM(input_size, hidden_size, num_layers, output_size).to(device)
+> > criterion = torch.nn.MSELoss()
+> > optimizer = torch.optim.Adam(lstm.parameters(), lr=0.01)
+> > num_epochs = 2000
+> > train_losses = []
+> > test_losses = []
+> >for epoch in range(num_epochs):
+> >    lstm.train()
+> >    for inputs, targets in train_loader:
+> >        inputs, targets = inputs.to(device), targets.to(device)
+> >        optimizer.zero_grad()
+> >        outputs = lstm(inputs)
+> >        train_loss = criterion(outputs, targets)
+> >        train_loss.backward()
+> >        optimizer.step()
+> >        train_losses.append(train_loss.item())
+> >    
+> >    lstm.eval()
+> >    with torch.no_grad():
+> >        for inputs, targets in test_loader:
+> >            inputs, targets = inputs.to(device), targets.to(device)
+> >            test_outputs = lstm(inputs)
+> >            test_loss = criterion(test_outputs, targets)
+> >            test_losses.append(test_loss.item())
+> >    
+> >    if epoch % 100 == 0:
+> >        print(f"Epoch: {epoch}, Train Loss: {np.mean(train_losses[-len(train_loader):]):.5f}, Test Loss: {np.mean(test_losses[-len(test_loader):]): .5f}")
+> >
+> > train_predict = lstm(X_tensor[:train_size].to(device)).cpu().detach().numpy()
+> > test_predict = lstm(X_tensor[train_size:].to(device)).cpu().detach().numpy()
+> > 
+> > train_predict = scaler_y.inverse_transform(train_predict.reshape(-1, 1))
+> > test_predict = scaler_y.inverse_transform(test_predict.reshape(-1, 1))
+
+> > train_mse = mean_squared_error(y[:train_size], train_predict)
+> > test_mse = mean_squared_error(y[train_size:], test_predict)
+> >
+> > train_r2 = r2_score(y[:train_size], train_predict)
+> > test_r2 = r2_score(y[train_size:], test_predict)
+> >
+> > plt.figure(figsize=(10, 5))
+> > plt.plot(train_losses, label='Train Loss')
+> > plt.plot(test_losses, label='Test Loss')
+> > plt.xlabel('Epoch')
+> > plt.ylabel('Loss')
+> > plt.legend()
+> > plt.title('Training and Testing Loss Over Epochs')
+> > plt.text(0.5, 0.9, f'Train MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.8, f'Test MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.7, f'Train R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.text(0.5, 0.6, f'Test R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+> > plt.tight_layout()
+> > plt.show()
+
+> > plt.figure(figsize=(12, 6))
+> > plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
+> > plt.plot(df.index[train_size:], test_predict, label='Predicted')
+> > plt.xlabel('Date')
+> > plt.ylabel('T(degC)')
+> > plt.title('Observed vs Predicted Temperature')
+> > plt.legend()
+> > plt.show()
+> > ```
+> > {: .solution}
+>
+{: .challenge}
