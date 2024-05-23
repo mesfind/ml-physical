@@ -769,6 +769,31 @@ This architecture allows the LSTM to learn and remember long-term dependencies i
 The LSTM  model also consists of layers followed by a fully connected (linear) layer. The  layer processes input sequences, maintaining hidden and cell states to capture long-term dependencies. Initialized with zero states, the LSTM layer produces an output for each time step. The fully connected layer then takes the output from the last time step of the LSTM and maps it to the final prediction. This structure enables the model to effectively handle sequential data, making it ideal for tasks like time series forecasting.
 
 
+
+### GRU Model Architecture
+
+The GRU (Gated Recurrent Unit) model comprises a GRU layer followed by a fully connected (linear) layer. The GRU layer is designed to capture sequential dependencies while addressing the vanishing gradient problem. It operates similarly to an LSTM but with fewer parameters, making it computationally efficient. In the provided architecture, the GRU layer takes input sequences and produces output at each time step, maintaining hidden states to retain information across time. The fully connected layer then maps the final hidden state to the output prediction. This streamlined architecture enables effective modeling of sequential data, making the GRU model suitable for tasks such as time series forecasting. The model structure of GRU is as given below:
+
+~~~
+# Define the GRU model
+class GRU(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(GRU, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        out, _ = self.gru(x, h0)
+        out = self.fc(out[:, -1, :])
+        return out
+~~~
+{: .python}
+
+
+
 ### Training Process
 
 The training process involves iteratively optimizing the LSTM model's parameters to minimize a predefined loss function. We utilize the Mean Squared Error (MSE) loss and the Adam optimizer for training. During each epoch, the model is trained on mini-batches of the training dataset, and the gradients are computed and updated using backpropagation. We monitor the training and testing losses to assess the model's performance and convergence.
