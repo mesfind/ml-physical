@@ -386,6 +386,7 @@ plt.text(0.5, 0.8, f'R²: {r2:.5f}', ha='center', va='center', transform=plt.gca
 plt.tight_layout()
 plt.show()
 ~~~
+{: .python}
 
 ![](../fig/X_test2_predict.png)
 
@@ -556,7 +557,6 @@ We can see from the correlation heatmap, few parameters like Relative Humidity a
 In this section, we begin by loading the dataset and performing initial preprocessing steps. The dataset, stored in a CSV file, contains various meteorological measurements such as pressure, temperature, and wind direction. We extract relevant features and reformat the data to facilitate further processing. Additionally, we normalize the data to ensure that all features are on a similar scale, which is crucial for training neural networks effectively.
 
 ~~~
-
 import numpy as np
 import random
 import matplotlib.pyplot as plt
@@ -593,7 +593,6 @@ features = ['p(mbar)','T(degC)', 'VPmax(mbar)','VPdef(mbar)', 'sh(g/kg)', 'rho(g
 df = df[features]
 df.head()
 ~~~
-
 {: .python}
 
 
@@ -687,11 +686,12 @@ Label column name(s): ['T(degC
 
 
 
+
 ### Normalize the data
 
+To prepare the data for training the neural network, we first normalize it using MinMaxScaler to ensure that all features have a common scale. This step helps in accelerating the training process and improving the model's performance. The normalized data is then converted into PyTorch tensors and moved to the GPU if available. Finally, we create TensorDataset instances and split them into training and testing sets, which are loaded into DataLoader objects for efficient batch processing.
+
 ~~~
-
-
 # Normalize the data
 scaler_X = MinMaxScaler()
 scaler_y = MinMaxScaler()
@@ -757,6 +757,16 @@ class LSTM(nn.Module):
         return out
 ~~~
 {: .python}
+
+
+This architecture allows the LSTM to learn and remember long-term dependencies in the input sequences, making it particularly effective for time series forecasting and sequential data analysis. The constructor initializes the LSTM model.
+
+- input_size: The number of features in the input data.
+- hidden_size: The number  hidden state in the model.
+- num_layers: The number of stacked LSTM layers.
+- output_size: The size of the output.
+
+The LSTM  model also consists of layers followed by a fully connected (linear) layer. The  layer processes input sequences, maintaining hidden and cell states to capture long-term dependencies. Initialized with zero states, the LSTM layer produces an output for each time step. The fully connected layer then takes the output from the last time step of the LSTM and maps it to the final prediction. This structure enables the model to effectively handle sequential data, making it ideal for tasks like time series forecasting.
 
 
 ### Training Process
