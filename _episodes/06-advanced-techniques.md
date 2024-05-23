@@ -886,7 +886,7 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > - Modify the hidden layers of the LSTM model to 10 and train the model again. Plot the observed vs prediction for the test dataset.
 > 
 > > ## Solution
-> > ```python
+> > ~~~
 > > input_size = X.shape[2]
 > > hidden_size = 10  # Modify hidden layers to 10
 > > num_layers = 2
@@ -953,7 +953,8 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.title('Observed vs Predicted Temperature')
 > > plt.legend()
 > > plt.show()
-> > ```
+> > ~~~
+> > {: .python}
 > > {: .solution}
 >
 {: .challenge}
@@ -966,7 +967,7 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > - Modify the hidden layers of the LSTM model to 10 and train the model again. Plot the observed vs prediction for the test dataset.
 > 
 > > ## Solution
-> > ```python
+> > ~~~
 > > # Define the GRU model
 > > class GRU(nn.Module):
 > >     def __init__(self, input_size, hidden_size, num_layers, output_size):
@@ -1051,7 +1052,8 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.title('Observed vs Predicted Temperature')
 > > plt.legend()
 > > plt.show()
-> > ```
+> > ~~~
+> > {: .python}
 > > {: .solution}
 > 
 {: .challenge}
