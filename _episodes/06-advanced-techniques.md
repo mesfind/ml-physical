@@ -527,7 +527,6 @@ plt.style.use("ggplot")
 
 # Load the dataset
 df = pd.read_csv('data/weather_forecast.csv')
-
 # Titles and feature keys
 titles = [
     "Pressure", "Temperature", "Temperature in Kelvin", "Temperature (dew point)",
@@ -537,16 +536,16 @@ titles = [
 ]
 
 feature_keys = [
-    "p (mbar)", "T (degC)", "Tpot (K)", "Tdew (degC)", "rh (%)", "VPmax (mbar)",
-    "VPact (mbar)", "VPdef (mbar)", "sh (g/kg)", "H2OC (mmol/mol)", "rho (g/m**3)",
-    "wv (m/s)", "max. wv (m/s)", "wd (deg)"
+    "p(mbar)", "T(degC)", "Tpot(K)", "Tdew(degC)", "rh(%)", "VPmax(mbar)",
+    "VPact(mbar)", "VPdef(mbar)", "sh(g/kg)", "H2OC(mmol/mol)", "rho(g/m**3)",
+    "wv(m/s)", "max.wv(m/s)", "wd(deg)"
 ]
 
 colors = [
     "blue", "orange", "green", "red", "purple", "brown", "pink", "gray", "olive", "cyan"
 ]
 
-date_time_key = "Date Time"
+date_time_key = "DateTime"
 
 def show_raw_visualization(data):
     time_data = data[date_time_key]
@@ -563,7 +562,6 @@ def show_raw_visualization(data):
     # Hide any unused subplots
     for j in range(i + 1, len(axes)):
         fig.delaxes(axes[j])
-    
     plt.tight_layout()
     plt.show()
 
