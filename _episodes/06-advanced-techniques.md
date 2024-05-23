@@ -501,7 +501,32 @@ This dataset is ideal for various time series analysis applications, including f
 To understand the dataset, each feature is plotted below, showing patterns from 2009 to 2016. These plots reveal distinct trends and highlight anomalies, which we will address during normalization.
 
 ~~~
+import numpy as np
+import random
 import matplotlib.pyplot as plt
+import pandas as pd
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, r2_score
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
+
+# Set seed for reproducibility
+seed = 42
+np.random.seed(seed)
+random.seed(seed)
+torch.manual_seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(seed)
+
+plt.style.use("ggplot")
+
+# Load the dataset
+df = pd.read_csv('data/weather_forecast.csv')
 
 # Titles and feature keys
 titles = [
@@ -557,32 +582,6 @@ We can see from the correlation heatmap, few parameters like Relative Humidity a
 In this section, we begin by loading the dataset and performing initial preprocessing steps. The dataset, stored in a CSV file, contains various meteorological measurements such as pressure, temperature, and wind direction. We extract relevant features and reformat the data to facilitate further processing. Additionally, we normalize the data to ensure that all features are on a similar scale, which is crucial for training neural networks effectively.
 
 ~~~
-import numpy as np
-import random
-import matplotlib.pyplot as plt
-import pandas as pd
-import torch
-import torch.nn as nn
-from torch.autograd import Variable
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error, r2_score
-import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-
-# Set seed for reproducibility
-seed = 42
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-if torch.cuda.is_available():
-    torch.cuda.manual_seed_all(seed)
-
-plt.style.use("ggplot")
-
-# Load the dataset
-df = pd.read_csv('data/weather_forecast.csv')
 # Convert '"DateTime' column to datetime format
 df["DateTime"] = pd.to_datetime(df["DateTime"])
 # Reindex the DataFrame before splitting
