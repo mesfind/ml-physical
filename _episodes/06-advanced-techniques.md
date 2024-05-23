@@ -610,6 +610,8 @@ DateTime
 The sliding window generator is a crucial component for preparing time series data for training predictive models. It segments the time series into input-output pairs, where the input consists of past observations (window) and the output is the next observation(s) to be predicted. This approach enables the LSTM model to learn from sequential patterns in the data. The generator's parameters, such as sequence length and label width, dictate the temporal context and prediction horizon, respectively.
 
 ~~~
+import numpy as np
+
 class SlidingWindowGenerator:
     def __init__(self, seq_length, label_width, shift, df, label_columns=None, dropnan=True):
         self.df = df
@@ -631,6 +633,13 @@ class SlidingWindowGenerator:
         self.label_start = self.total_window_size - label_width
         self.labels_slice = slice(self.label_start, None)
         self.label_indices = np.arange(self.total_window_size)[self.labels_slice]
+
+    def __repr__(self):
+        return '\n'.join([
+            f'Total window size: {self.total_window_size}',
+            f'Input indices: {self.input_indices}',
+            f'Label indices: {self.label_indices}',
+            f'Label column name(s): {self.label_columns}'])
 
     def sliding_windows(self):
         data = self.df.values
@@ -663,6 +672,7 @@ X, y = swg.sliding_windows()
 print("-----------------------------")
 print(X.shape)
 print(y.shape)
+
 
 ~~~
 {: .python}
