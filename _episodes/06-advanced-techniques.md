@@ -722,7 +722,7 @@ if torch.cuda.is_available():
     y_tensor = y_tensor.cuda()
 
 # Define batch size
-batch_size = 256
+batch_size = 64
 
 # Create TensorDataset instances for training and testing data
 dataset = TensorDataset(X_tensor, y_tensor)
@@ -818,9 +818,9 @@ if device.type == 'cuda':
 # Initialize the model
 input_size = X.shape[2]  # feature fecture 
 hidden_size = 5
-num_layers = 2
+num_layers = 1
 output_size = 1
-seq_length = 20
+seq_length = 30
 lstm = LSTM(input_size, hidden_size, num_layers, output_size).to(device)
 
 # Define loss function and optimizer
@@ -853,14 +853,14 @@ for epoch in range(num_epochs):
             test_loss = criterion(test_outputs, targets)
             test_losses.append(test_loss.item())
     
-    if epoch % 100 == 0:
+    if epoch % 10 == 0:
         print(f"Epoch: {epoch}, Train Loss: {np.mean(train_losses[-len(train_loader):]):.5f}, Test Loss: {np.mean(test_losses[-len(test_loader):]):.5f}")
 
 ~~~
 {: .python}
 
 ~~~
-Epoch: 0, Train Loss: 0.00376, Test Loss: 0.00004
+Epoch: 0, Train Loss: 0.00062, Test Loss: 0.00003
 Epoch: 100, Train Loss: 0.00001, Test Loss: 0.00001
 ~~~
 {: .output}
