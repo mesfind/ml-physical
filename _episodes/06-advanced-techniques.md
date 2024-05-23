@@ -961,7 +961,7 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 
 
 
-> ## Exercise: How to Improve the Model Performance?
+> ## Exercise: Use GRU Model forecasting
 > - Modify the sequence length to 50 used in the LSTM model and observe its impact on the model's performance.
 > - Modify the hidden layers of the LSTM model to 10 and train the model again. Plot the observed vs prediction for the test dataset.
 > 
