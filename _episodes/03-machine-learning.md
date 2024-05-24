@@ -43,8 +43,6 @@ There are three main categories of machine learning algorithms:
 ![](../fig/ML_type.png)
 
 
-## Evaluation Metrics and Model Selection
-
 ## Supervised Learning
 
 ### Regression
@@ -471,7 +469,9 @@ sns.heatmap(corr, annot=True)
 * nitrogen dioxide
 
 
- #### Data training 
+
+ ### Data training 
+
 
 ~~~
 # Import train_test_split from sklearn.model_selection
@@ -706,55 +706,6 @@ R-squared (R²): 0.8638303993498619
 > > {: .output}
 > {: .solution}
 {: .challenge}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
 
 
 ### Classification
