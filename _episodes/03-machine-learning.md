@@ -48,6 +48,60 @@ There are three main categories of machine learning algorithms:
 
 ### Regression
 
+Regression is a statistical method used to examine the relationship between one or more independent variables (predictors) and a dependent variable (response). It aims to predict continuous numerical outcomes. In regression analysis, the goal is to find the best-fitting line or curve that describes the relationship between the independent and dependent variables. Examples of regression techniques include Linear Regression, Polynomial Regression, Ridge Regression, Lasso Regression, Decision Tree Regression and etc.
+
+**Linear regression** is a fundamental statistical method used to model the relationship between a dependent variable  Y and one or more independent variables 𝑋. The goal is to find the **best-fitting linear equation** that can predict the dependent variable based on the values of the independent variables.
+
+**The Linear Regression Model**
+The linear regression model can be represented as:
+
+* $(y = mx + b)$, 
+where \(y\) is the predicted output, \(m\) is the slope (coefficients associated with features), \(x\) is the input feature, and \(b\) is the intercept.
+
+
+* $Y = \Theta + \Theta_1*X_1 + \Theta_2*X_2 + ... \Theta_p*X_p + 𝜖$,  where: $\Theta_0$ is the intercept, ($\Theta_1, \Theta_2, …,\Theta_𝑝$) are the coefficients (weights), ($X_1, X_2, …,X_𝑝$) are the independent variables, \(ϵ\) is the error term.
+
+**Cost Function**
+The cost function, also known as the loss function, measures the performance of the linear regression model. The most commonly used cost function for linear regression is the Mean Squared Error (MSE), which is defined as:
+
+$J(\Theta) = \frac{1}{2m} \sum_{i=1}^m (h_\Theta(x^{(i)}) - y^{(i)} )^2$
+
+
+*  where $h_\Theta(x^{(i)})$ represents the predicted output value for the ith training example, $y^{(i)}$ represents the actual output value for the ith training example, and m is the total number of training examples.
+* The goal of training a linear regression model is to minimize the cost function J(Θ) by finding the optimal values of the model parameters Θ.
+* The process of minimizing the cost function J(Θ) is usually done using gradient descent, a popular optimization algorithm that iteratively adjusts the model parameters in the direction of steepest descent of the cost function until convergence is reached.
+* The value of the cost function J(Θ) can be used to evaluate the performance of the trained model on a test set or on new, unseen data. A lower value of J(Θ) indicates a better fit of the model to the data.
+
+  #### Gradient Descent
+* Gradient descent is an optimization algorithm used to minimize the cost function by iteratively adjusting the model parameters (coefficients). The update rule for gradient descent in the context of linear regression is:
+
+Minimize the cost function $J(\Theta)$ 
+
+By updating Equation and repeat unitil convergence
+        
+$\Theta_j := \Theta_j - \alpha \frac{1}{m} \sum_{i=1}^m (h_{\Theta}(x^{(i)}) - y^{(i)})x_j^{(i)}$ (simultaneously update $\Theta_j$ for all $j$)
+
+
+- **Regularization:** Linear Regression does not inherently include regularization, making it susceptible to overfitting if the number of features is large compared to the number of samples.
+
+**Lasso Regression (L1 Regularization):**
+- **Objective:** Lasso Regression extends linear regression by introducing **L1 regularization**, which adds a penalty term based on the **absolute values of the coefficients**.
+- **Equation:** The Lasso regression objective function includes the sum of squared differences and a penalty term proportional to the absolute values of the coefficients.
+- **Benefits:** Lasso tends to produce sparse models, i.e., it can force some coefficients to be exactly zero, effectively performing feature selection.
+- **Use Case:** It is particularly useful when dealing with high-dimensional datasets with many features.
+
+**Ridge Regression (L2 Regularization):**
+- **Objective:** Ridge Regression is another extension of linear regression, but it introduces **L2 regularization**, adding a penalty term based on the **squared values of the coefficients**.
+- **Equation:** The Ridge regression objective function includes the sum of squared differences and a penalty term proportional to the squared values of the coefficients.
+- **Benefits:** Ridge helps prevent multicollinearity by shrinking the coefficients, and it is effective when there are many correlated features.
+- **Use Case:** It is commonly used in situations where multicollinearity is a concern, as it can stabilize the model and produce more reliable coefficients.
+
+**Comparison:**
+- **Regularization Types:** Linear Regression has no regularization, Lasso uses L1 regularization, and Ridge uses L2 regularization.
+- **Effect on Coefficients:** Lasso can lead to sparse models with some coefficients exactly zero, effectively performing feature selection. Ridge tends to shrink coefficients toward zero without making them exactly zero.
+- **Use Cases:** Lasso is beneficial when feature selection is crucial, while Ridge is useful for preventing multicollinearity and stabilizing the model.
+
+
 ~~~
 
 ~~~
