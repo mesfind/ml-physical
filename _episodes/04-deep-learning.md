@@ -670,11 +670,18 @@ Below is the updated code with the necessary definitions and fixed indentation:
 > >         x = self.layer4(x)
 > >         return x
 > > 
-> > # Define loss function and optimizer
+> > # Define loss function and optimizers
 > > loss_fn = nn.MSELoss()  # Mean Squared Error loss
 > > optimizers = [optim.Adam, optim.SGD, optim.RMSprop]  # Different optimizers to try
 > > n_epochs = 100  # Number of epochs to run
+> > batch_size = 64  # Size of each batch
 > > 
+> > # Create DataLoader
+> > train_dataset = TensorDataset(X_train, y_train)
+> > test_dataset = TensorDataset(X_test, y_test)
+> > train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+> > test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+> >
 > > device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
 > > for optimizer_class in optimizers:
 > >     # Instantiate the model and move it to the device
