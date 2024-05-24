@@ -239,104 +239,219 @@ Ridge Regression MSE: 0.647613237305426
 
 ![](../fig/Rigde1.png)
 
-~~~
 
+### Example- Air Quality Prediction
+
+An air quality index (AQI) is used by government agencies to communicate to the public how polluted the air currently is or how polluted it is forecast to become. Public health risks increase as the AQI rises. Different countries have their own air quality indices, corresponding to different national air quality standards.
+
+For Air quality prediction we will use 4 algorithms:
+
+1.Linear Regression
+
+2.Lasso Regression
+
+3.Ridge Regression
+
+4.Decision Tree Regressor
+
+By using the above algorithms, we will train our model by providing training data and once the model will be trained, we will perform prediction. After prediction, we will evaluate the performance of these algorithmns by error check and accuracy check.
+
+~~~
+# Data Exploration
+data=pd.read_csv('city_day.csv')
+data
 ~~~
 {: .python}
 
 ~~~
 
+City	Date	PM2.5	PM10	NO	NO2	NOx	NH3	CO	SO2	O3	Benzene	Toluene	Xylene	AQI	AQI_Bucket
+0	Ahmedabad	2015-01-01	NaN	NaN	0.92	18.22	17.15	NaN	0.92	27.64	133.36	0.00	0.02	0.00	NaN	NaN
+1	Ahmedabad	2015-01-02	NaN	NaN	0.97	15.69	16.46	NaN	0.97	24.55	34.06	3.68	5.50	3.77	NaN	NaN
+2	Ahmedabad	2015-01-03	NaN	NaN	17.40	19.30	29.70	NaN	17.40	29.07	30.70	6.80	16.40	2.25	NaN	NaN
+3	Ahmedabad	2015-01-04	NaN	NaN	1.70	18.48	17.97	NaN	1.70	18.59	36.08	4.43	10.14	1.00	NaN	NaN
+4	Ahmedabad	2015-01-05	NaN	NaN	22.10	21.42	37.76	NaN	22.10	39.33	39.31	7.01	18.89	2.78	NaN	NaN
+...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...
+29526	Visakhapatnam	2020-06-27	15.02	50.94	7.68	25.06	19.54	12.47	0.47	8.55	23.30	2.24	12.07	0.73	41.0	Good
+29527	Visakhapatnam	2020-06-28	24.38	74.09	3.42	26.06	16.53	11.99	0.52	12.72	30.14	0.74	2.21	0.38	70.0	Satisfactory
+29528	Visakhapatnam	2020-06-29	22.91	65.73	3.45	29.53	18.33	10.71	0.48	8.42	30.96	0.01	0.01	0.00	68.0	Satisfactory
+29529	Visakhapatnam	2020-06-30	16.64	49.97	4.05	29.26	18.80	10.03	0.52	9.84	28.30	0.00	0.00	0.00	54.0	Satisfactory
+29530	Visakhapatnam	2020-07-01	15.00	66.00	0.40	26.85	14.05	5.20	0.59	2.10	17.05	NaN	NaN	NaN	50.0	Good
+29531 rows × 16 columns
+~~~
+{: .output}
+
+
+~~~
+data.columns
+~~~
+{: .python}
+
+~~~
+Index(['City', 'Date', 'PM2.5', 'PM10', 'NO', 'NO2', 'NOx', 'NH3', 'CO', 'SO2',
+       'O3', 'Benzene', 'Toluene', 'Xylene', 'AQI', 'AQI_Bucket'],
+      dtype='object')
+~~~
+{: .output}
+
+
+~~~
+# Data cleaning
+data.isnull().sum()
+~~~
+{: .python}
+
+~~~
+City              0
+Date              0
+PM2.5          4598
+PM10          11140
+NO             3582
+NO2            3585
+NOx            4185
+NH3           10328
+CO             2059
+SO2            3854
+O3             4022
+Benzene        5623
+Toluene        8041
+Xylene        18109
+AQI            4681
+AQI_Bucket     4681
+dtype: int64
+~~~
+{: .output}
+
+
+~~~
+# Get the data types of all columns
+column_data_types = data.dtypes
+
+# Separate columns into numerical and categorical
+numerical_columns = column_data_types[column_data_types != 'object'].index.tolist()
+categorical_columns = column_data_types[column_data_types == 'object'].index.tolist()
+
+# Print the lists of numerical and categorical columns
+print("Numerical columns:", numerical_columns)
+print("Categorical columns:", categorical_columns)
+~~~
+{: .python}
+
+~~~
+Numerical columns: ['PM2.5', 'PM10', 'NO', 'NO2', 'NOx', 'NH3', 'CO', 'SO2', 'O3', 'Benzene', 'Toluene', 'Xylene', 'AQI']
+Categorical columns: ['City', 'Date', 'AQI_Bucket']
+~~~
+{: .output}
+
+
+~~~
+# Create a SimpleImputer object to impute missing values with the mean
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(strategy='most_frequent') # mean
+
+# Impute missing values in the 'age' and 'blood_pressure' columns
+data[['PM2.5', 'PM10','NO','NO2', 'NOx', 'NH3','CO','SO2', 'O3', 'Benzene','Toluene','Xylene', 'AQI']] = imputer.fit_transform(data[['PM2.5', 'PM10','NO','NO2', 'NOx', 'NH3','CO','SO2', 'O3', 'Benzene','Toluene','Xylene', 'AQI']])
+~~~
+{: .python}
+
+~~~
+data.isnull().sum()
+~~~
+{: .python}
+
+~~~
+City             0
+Date             0
+PM2.5            0
+PM10             0
+NO               0
+NO2              0
+NOx              0
+NH3              0
+CO               0
+SO2              0
+O3               0
+Benzene          0
+Toluene          0
+Xylene           0
+AQI              0
+AQI_Bucket    4681
+dtype: int64
 ~~~
 {: .output}
 
 
 ~~~
 
+#Drop unwanted columns.
+newdata=data.drop(['City', 'Date','NOx', 'NH3','Benzene', 'Toluene', 'Xylene', 'AQI_Bucket'],axis=1)
+newdata.columns
 ~~~
 {: .python}
 
 ~~~
-
+Index(['PM2.5', 'PM10', 'NO', 'NO2', 'CO', 'SO2', 'O3', 'AQI'], dtype='object')
 ~~~
 {: .output}
 
 
 ~~~
-
+#converting data into int datatype to avoid errors below.
+prepareddata=newdata.astype(int)
+prepareddata.head()
 ~~~
 {: .python}
 
 ~~~
-
+	PM2.5	PM10	NO	NO2	CO	SO2	O3	AQI
+0	11	94	0	18	0	27	133	102
+1	11	94	0	15	0	24	34	102
+2	11	94	17	19	17	29	30	102
+3	11	94	1	18	1	18	36	102
+4	11	94	22	21	22	39	39	102
 ~~~
 {: .output}
 
 
 ~~~
-
+#Data visualization
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+x=prepareddata['AQI']
+y1=prepareddata['PM2.5']
+y2=prepareddata['PM10']
+y3=prepareddata['NO']
+y4=prepareddata['NO2']
+y5=prepareddata['CO']
+y6=prepareddata['SO2']
+y7=prepareddata['O3']
+plt.figure(figsize=(15,8))
+plt.scatter(x,y1,label='PM 2.5',color='salmon')
+plt.scatter(x,y2,label='PM 10',color='palegreen')
+plt.scatter(x,y3,label='NO',color='yellow')
+plt.scatter(x,y4,label='NO2',color='steelblue')
+plt.scatter(x,y5,label='CO',color='lime')
+plt.scatter(x,y6,label='SO2',color='violet')
+plt.scatter(x,y7,label='O3',color='springgreen')
+plt.title('AQI and its Pollutents',fontsize=18)
+plt.xlabel('AQI',fontsize=14)
+plt.ylabel('Value',fontsize=14)
+plt.legend()
+plt.show()
 ~~~
 {: .python}
 
-~~~
+![](../fig/visualization.png)
 
 ~~~
-{: .output}
-
-
-~~~
-
+#to find correlation between different columns.
+corr = prepareddata.corr() 
+sns.heatmap(corr, annot=True)
 ~~~
 {: .python}
 
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
+![](../fig/corr_airpollution.png)
 
 ~~~
 
