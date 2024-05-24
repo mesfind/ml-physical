@@ -59,7 +59,7 @@ The linear regression model can be represented as:
 where \(y\) is the predicted output, \\(m\\) is the slope (coefficients associated with features), \(x\) is the input feature, and \(b\) is the intercept.
 
 
-* \\[Y = \Theta + \Theta_1*X_1 + \Theta_2*X_2 + ... \Theta_p*X_p + 𝜖\\],  where: \\(\Theta_0\\) is the intercept, (\\(\Theta_1, \Theta_2, …,\Theta_𝑝\\)) are the coefficients (weights), (\\(X_1, X_2, …,X_𝑝\\)) are the independent variables, \\(ϵ\\) is the error term.
+* \\[Y = \Theta + \Theta_1\cdot X_1 + \Theta_2\cdot X_2 + ... \Theta_p\cdot X_p + 𝜖\\],  where: \\(\Theta_0\\) is the intercept, (\\(\Theta_1, \Theta_2, …,\Theta_𝑝\\)) are the coefficients (weights), (\\(X_1, X_2, …,X_𝑝\\)) are the independent variables, \\(ϵ\\) is the error term.
 
 **Cost Function**
 The cost function, also known as the loss function, measures the performance of the linear regression model. The most commonly used cost function for linear regression is the Mean Squared Error (MSE), which is defined as:
