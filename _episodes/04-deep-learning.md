@@ -31,17 +31,72 @@ Ultimately, machine learning represents a valuable addition to the climate scien
 
 
 
-## ANN
+##  Neural Networks
+
+* Deep Learning algorithms are often represented as graph computation.
+* Some of the activities to build high level neural network are as follows:
+     * Building a data pipeline
+     * Building a network architecture
+     * Evaluating the architecture using a lost function
+     * Optimizing the network architurcture weights using an optimization algorithm
+
+### Layer
+Layers are the building block of neural network. **Linear layers** are called by different names, such as **dense or fully connected** layers across different frameworks. This model in nn has the form:
+
+\\[ y = w\cdot x+ b \\]
+
+where 
+
+1.   y is the predict variable
+2.   x is the predictor variable
+3.   b is the bias and
+3.   w is the weights on the neural network
 
 
 ANNs consists of multiple nodes (the circles) and layers that are all connected and using basic math gives out a result. These are called feed forward networks. 
 
 <img src="../fig/ANN_forward.png" width="500">
 
- In each individual node the values coming in are weighted and summed together and bias term is added and activation. Hence, the linear regression mapping by an activation function to produce non-linear model as shown below:
 
- \\[ Z = \sigma( W^T \cdot X) \\]
+In each individual node the values coming in are weighted and summed together and bias term is added
 
+~~~
+import torch
+from torch.autograd import Variable
+
+inp = Variable(torch.randn(1,10)) # input data
+model = nn.Linear(in_features=10,out_features=5,bias=True) ## linear model layer
+model(inp)
+model.weight
+~~~
+{: .python}
+ 
+~~~
+Parameter containing:
+tensor([[ 0.3034,  0.2425, -0.1914, -0.2280, -0.3050,  0.0394,  0.0196,  0.2530,
+          0.1539,  0.1212],
+        [ 0.2260,  0.2431,  0.0817, -0.0612,  0.1539, -0.1220, -0.2194,  0.1102,
+          0.2031, -0.1362],
+        [-0.2060,  0.0617, -0.2007, -0.2809, -0.2511, -0.2009,  0.1967,  0.0988,
+          0.0728, -0.0911],
+        [ 0.0710,  0.2536, -0.1963,  0.2167,  0.2653, -0.1034, -0.1948,  0.2978,
+          0.0614, -0.0122],
+        [ 0.2486,  0.0924, -0.1496, -0.2745,  0.1828, -0.0443, -0.1161,  0.2778,
+          0.1709, -0.1165]], requires_grad=True)
+~~~
+{: .python}
+
+~~~
+# Bias of the model
+myLinear.bias
+~~~
+{: .python}
+
+~~~
+Parameter containing:
+tensor([-0.1909,  0.2449,  0.1723,  0.0486,  0.2384], requires_grad=True)
+~~~
+{: .output}
 
 <img src="../fig/ANN_activation.png" width="500">
 
@@ -57,15 +112,69 @@ This is the step that allows for nonlinearity in these algorithms, without activ
 <img src="../fig/ANN_activation2.png" width="500">
 
 
+We have different **non-linear activation functions** that help in learning different relationships to solve handle non-linearity in nn problems. There are many different non-linear activation functions available in deep learning.These are:
+
+1. Sigmoid
+2. Tanh
+3. ReLU
+4. Leaky ReLU
+
+
 So training of the network is merely determining the weights "w" and bias/offset "b"  with the addition of nonlinear activation function. Goal is to determine the best function so that the output is as  correct as possible; typically involves choosing "weights". 
 
 
-### Loss Function
+
+### Sigmod function
+
+When the output of the sigmoid function is close to zero or one, the gradients for the layers before the sigmoid function are close to zero and, hence, the learnable parameters of the previous layer get gradients close to zero and the weights do not get adjusted often, resulting in dead neurons. The mathematical form of sigmoid activation function is:
+
+\\[ \delta(x) = \frac{1}{1 + e^{-x}} \\]
+
+~~~
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+x = np.linspace(-10,10)
+y = 1/(1+np.exp(x))
+plt.plot(x,y)
+plt.show()
+~~~
+{: .python}
+
+
+#### Tanh
+
+The tanh non-linearity function squashes a real-valued number in the range of -1 and 1. The tanh also faces the same issue of saturating gradients when tanh outputs extreme values close to -1 and 1.
+
+~~~
+x = np.linspace(-10,10)
+y = np.tanh(x)
+plt.plot(x,y)
+plt.show()
+~~~
+{: .python}
+
+
+#### ReLU 
+
+ReLU has become more popular in the recent years; we can find either its usage or one of its
+variants' usages in almost any modern architecture. It has a simple mathematical
+formulation:
+ \\[ f(x) = max(x,0)\\]
+
+#### Leaky ReLU
+
+Leaky ReLU is an attempt to solve a dying problem where, instead of saturating to zero, we saturate to a very small number such as 0.001.
+
+\\[ f(x) = max(x,0.001)\\]
+
+
+#### Loss Function
 
 You know the data and the goal you're working towards, so you know the best, which loss function to use. Basic MSE or MAE works well for regression tasks. The basic MSE and MAE works well for regression task is given by:
 
 
-\\[\text{Loss} = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_i)^2\\]
+\\[\text{Loss} = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_{i})^2\\]
 
 
 The quantinty you want ot determine("loss") help to determine the best weights and bias terms in the model. Gradient descent is a technique to find the weight that minimizes the loss function.  This is done by starting with a random point, the gradient (the black lines) is calculated at that point. Then the negative of that gradient is followed to the next point and so on. This is repeated until the minimum is reached.
@@ -638,15 +747,6 @@ Below is the updated code with the necessary definitions and fixed indentation:
 > > from tqdm import tqdm
 > > import matplotlib.pyplot as plt
 > > from torch.utils.data import DataLoader, TensorDataset
-> > 
-> > # Assume X_train, y_train, X_test, y_test are already defined as torch tensors
-> > 
-> > # Create DataLoader instances
-> > batch_size = 10
-> > train_dataset = TensorDataset(X_train, y_train)
-> > test_dataset = TensorDataset(X_test, y_test)
-> > train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-> > test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 > > 
 > > # Define the neural network architecture
 > > class NeuralNetwork(nn.Module):
