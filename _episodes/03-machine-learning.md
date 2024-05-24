@@ -672,10 +672,6 @@ R-squared (R²): 0.8638303993498619
 {: .output}
 ~~~
 
-
-
-
-
 > ## Exercise: RandomForestRegressor
 > - Apply the same procedure for RandomForestRegressor.
 > 
@@ -710,12 +706,9 @@ R-squared (R²): 0.8638303993498619
 > > {: .output}
 > {: .solution}
 {: .challenge}
-
-
-
-
 ~~~
 {: .python}
+
 
 ~~~
 
