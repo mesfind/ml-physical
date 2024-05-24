@@ -470,6 +470,7 @@ sns.heatmap(corr, annot=True)
 
 * nitrogen dioxide
 
+
  #### Data training 
 
 ~~~
@@ -671,6 +672,10 @@ R-squared (R²): 0.8638303993498619
 {: .output}
 ~~~
 
+
+
+
+
 > ## Exercise: RandomForestRegressor
 > - Apply the same procedure for RandomForestRegressor.
 > 
@@ -702,6 +707,7 @@ R-squared (R²): 0.8638303993498619
 > > print(f"R-squared (R²): {r2}")
 > > ~~~
 > > {: .python}
+
 > > ~~~
 > > Mean Squared Error (MSE): 0.10985359506420236
 > > Mean Absolute Error (MAE): 0.15927167807287307
