@@ -453,6 +453,310 @@ sns.heatmap(corr, annot=True)
 
 ![](../fig/corr_airpollution.png)
 
+**Insights** :
+
+1.When the value of pollutents is less, Air Quality Index (AQI) is less.
+
+2.AQI highly depends on 
+
+* ground-level ozone
+
+* particle pollution (also known as particulate matter, including PM2.5 and PM10)
+
+* carbon monoxide
+
+* sulfur dioxide
+
+* nitrogen dioxide
+
+ ##### **Data training** 
+
+~~~
+# Import train_test_split from sklearn.model_selection
+from sklearn.model_selection import train_test_split
+# Here, X is the data which will have features and y will have our target i.e. Air Quality Index(AQI).
+x=prepareddata[['PM2.5', 'PM10', 'NO', 'NO2','CO', 'SO2','O3']]  
+y=prepareddata['AQI']
+~~~
+{: .python}
+
+~~~
+# Split data into training data and testing data
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2) 
+#Ratio used for splitting training and testing data is 8:2 respectively
+~~~
+{: .python}
+
+### **Model Creation**
+
+#### 1. Linear Regression
+
+~~~
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import numpy as np
+
+# Importing linear regression model
+reg1 = LinearRegression()
+# Fitting data into the model.
+reg1.fit(x_train, y_train)
+# Making predictions 
+pred1 = reg1.predict(x_test)
+
+# Evaluation metrics
+mse = mean_squared_error(y_test, pred1)
+mae = mean_absolute_error(y_test, pred1)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, pred1)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+print(f"R-squared (R²): {r2}")
+~~~
+{: .python}
+
+~~~
+Mean Squared Error (MSE): 3895.522779525787
+Mean Absolute Error (MAE): 34.1526735890227
+Root Mean Squared Error (RMSE): 62.414123237659815
+R-squared (R²): 0.787273226848741
+~~~
+{: .output}
+
+#### Normalizing Data
+To minimize errors, let's normalize the target variable and see how it affects the results.
+
+~~~
+from sklearn.preprocessing import StandardScaler
+
+# Normalize only the target variable y
+scaler = StandardScaler()
+y_normalized = scaler.fit_transform(y.values.reshape(-1, 1))
+~~~
+{: .python}
+
+~~~
+x_train, x_test, y_train, y_test = train_test_split(x, y_normalized, test_size=0.2) 
+~~~
+{: .python}
+
+
+~~~
+reg11 = LinearRegression()
+# Fitting data into the model.
+reg11.fit(x_train, y_train)
+# Making predictions 
+pred11 = reg11.predict(x_test)
+
+# Evaluation metrics
+mse = mean_squared_error(y_test, pred11)
+mae = mean_absolute_error(y_test, pred11)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, pred11)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+print(f"R-squared (R²): {r2}")
+~~~
+{: .python}
+
+~~~
+Mean Squared Error (MSE): 0.19359671932407133
+Mean Absolute Error (MAE): 0.25973107295720904
+Root Mean Squared Error (RMSE): 0.4399962719433783
+R-squared (R²): 0.8056477921764784
+~~~
+{: .output}
+
+#### 2.  Lasso
+
+~~~
+from sklearn.linear_model import Lasso
+
+# Importing Lasso regression model
+reg2 = Lasso()
+# Fitting data into the model.
+reg2.fit(x_train, y_train)
+# Making predictions 
+pred2 = reg2.predict(x_test)
+
+# Evaluation metrics
+mse = mean_squared_error(y_test, pred2)
+mae = mean_absolute_error(y_test, pred2)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, pred2)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+print(f"R-squared (R²): {r2}")
+~~~
+{: .python}
+
+~~~
+Mean Squared Error (MSE): 0.2259483677459704
+Mean Absolute Error (MAE): 0.27506376480375005
+Root Mean Squared Error (RMSE): 0.47534026522689027
+R-squared (R²): 0.7731698952395925
+~~~
+{: .output}
+
+#### 3.  Ridge
+~~~
+from sklearn.linear_model import Ridge
+
+# Importing Ridge regression model
+reg3 = Ridge()
+# Fitting data into the model.
+reg3.fit(x_train, y_train)
+# Making predictions 
+pred3 = reg3.predict(x_test)
+
+# Evaluation metrics
+mse = mean_squared_error(y_test, pred3)
+mae = mean_absolute_error(y_test, pred3)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, pred3)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+print(f"R-squared (R²): {r2}")
+
+~~~
+{: .python}
+
+~~~
+Mean Squared Error (MSE): 0.19359676998518713
+Mean Absolute Error (MAE): 0.25973112535973847
+Root Mean Squared Error (RMSE): 0.43999632951331213
+R-squared (R²): 0.8056477413176636
+~~~
+{: .output}
+
+#### 4.  Decision Tree
+
+~~~
+from sklearn.tree import DecisionTreeRegressor
+
+# Importing Decision Tree Regressor model
+reg4 = DecisionTreeRegressor(max_depth=10, min_samples_leaf=10)
+# Fitting data into the model.
+reg4.fit(x_train, y_train)
+# Making predictions 
+pred4 = reg4.predict(x_test)
+
+# Evaluation metrics
+mse = mean_squared_error(y_test, pred4)
+mae = mean_absolute_error(y_test, pred4)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, pred4)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+print(f"R-squared (R²): {r2}")
+~~~
+{: .python}
+
+~~~
+Mean Squared Error (MSE): 0.13564028035880735
+Mean Absolute Error (MAE): 0.17782375739941364
+Root Mean Squared Error (RMSE): 0.3682937419490146
+R-squared (R²): 0.8638303993498619
+~~~
+{: .output}
+~~~
+
+> ## Exercise: RandomForestRegressor
+> - Apply the same procedure for RandomForestRegressor.
+> 
+> > ## Solution
+> > ~~~
+> > from sklearn.ensemble import RandomForestRegressor
+> > from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+> > from sklearn.preprocessing import StandardScaler
+> > # Normalize only the target variable y_train and y_test
+> > scaler = StandardScaler()
+> > y_train_normalized = scaler.fit_transform(y_train.reshape(-1, 1))
+> > y_test_normalized = scaler.transform(y_test.reshape(-1, 1))
+> > # Importing Random Forest Regressor model
+> > reg5 = RandomForestRegressor(n_estimators=100, random_state=42)
+> > # Fitting data into the model.
+> > reg5.fit(x_train, y_train_normalized)
+> > # Making predictions 
+> > pred5 = reg5.predict(x_test)
+> > # Undo normalization for evaluation metrics
+> > pred5_unnormalized = scaler.inverse_transform(pred5.reshape(-1, 1))
+> > # Evaluation metrics
+> > mse = mean_squared_error(y_test, pred5_unnormalized)
+> > mae = mean_absolute_error(y_test, pred5_unnormalized)
+> > rmse = np.sqrt(mse)
+> > r2 = r2_score(y_test, pred5_unnormalized)
+> > print(f"Mean Squared Error (MSE): {mse}")
+> > print(f"Mean Absolute Error (MAE): {mae}")
+> > print(f"Root Mean Squared Error (RMSE): {rmse}")
+> > print(f"R-squared (R²): {r2}")
+> > ~~~
+> > {: .python}
+> > ~~~
+> > Mean Squared Error (MSE): 0.10985359506420236
+> > Mean Absolute Error (MAE): 0.15927167807287307
+> > Root Mean Squared Error (RMSE): 0.33144169180144245
+> > R-squared (R²): 0.8897177141605406
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+
+
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
+~~~
+
+~~~
+{: .python}
+
+~~~
+
+~~~
+{: .output}
 ~~~
 
 ~~~
@@ -463,38 +767,6 @@ sns.heatmap(corr, annot=True)
 ~~~
 {: .output}
 
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
 
 
 
