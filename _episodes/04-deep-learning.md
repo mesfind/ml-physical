@@ -46,6 +46,7 @@ ANNs consists of multiple nodes (the circles) and layers that are all connected 
 <img src="../fig/ANN_activation.png" width="500">
 
 
+
 ### Activation functions
 
 Activation function determines, if information is moving forward from that specific node.
@@ -55,7 +56,8 @@ This is the step that allows for nonlinearity in these algorithms, without activ
 
 <img src="../fig/ANN_activation2.png" width="500">
 
-So training of the network is merely determining the weights “w” and bias/offset “b"  with the addition of nonlinear activation function. Goal is to determine the best function so that the output is as  correct as possible; typically involves choosing “weights”. 
+
+So training of the network is merely determining the weights "w" and bias/offset "b"  with the addition of nonlinear activation function. Goal is to determine the best function so that the output is as  correct as possible; typically involves choosing "weights". 
 
 
 ### Loss Function
