@@ -706,8 +706,6 @@ R-squared (R²): 0.8638303993498619
 > > {: .output}
 > {: .solution}
 {: .challenge}
-~~~
-{: .python}
 
 
 ~~~
