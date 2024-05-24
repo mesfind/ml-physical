@@ -469,7 +469,7 @@ sns.heatmap(corr, annot=True)
 
 * nitrogen dioxide
 
- ##### **Data training** 
+ #### Data training 
 
 ~~~
 # Import train_test_split from sklearn.model_selection
