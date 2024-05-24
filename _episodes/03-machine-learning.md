@@ -684,19 +684,13 @@ R-squared (R²): 0.8638303993498619
 > > from sklearn.ensemble import RandomForestRegressor
 > > from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 > > from sklearn.preprocessing import StandardScaler
-> > # Normalize only the target variable y_train and y_test
 > > scaler = StandardScaler()
 > > y_train_normalized = scaler.fit_transform(y_train.reshape(-1, 1))
 > > y_test_normalized = scaler.transform(y_test.reshape(-1, 1))
-> > # Importing Random Forest Regressor model
 > > reg5 = RandomForestRegressor(n_estimators=100, random_state=42)
-> > # Fitting data into the model.
 > > reg5.fit(x_train, y_train_normalized)
-> > # Making predictions 
 > > pred5 = reg5.predict(x_test)
-> > # Undo normalization for evaluation metrics
 > > pred5_unnormalized = scaler.inverse_transform(pred5.reshape(-1, 1))
-> > # Evaluation metrics
 > > mse = mean_squared_error(y_test, pred5_unnormalized)
 > > mae = mean_absolute_error(y_test, pred5_unnormalized)
 > > rmse = np.sqrt(mse)
@@ -707,7 +701,6 @@ R-squared (R²): 0.8638303993498619
 > > print(f"R-squared (R²): {r2}")
 > > ~~~
 > > {: .python}
-
 > > ~~~
 > > Mean Squared Error (MSE): 0.10985359506420236
 > > Mean Absolute Error (MAE): 0.15927167807287307
