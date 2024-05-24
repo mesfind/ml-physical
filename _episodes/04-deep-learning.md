@@ -71,9 +71,9 @@ The quantinty you want ot determine("loss") help to determine the best weights a
 
 <img src="../fig/loss_function.png" width="500">
 
-The gradeint descent formula tells us that the next location depends on the negative gradient of J multiplied by the learning rate \(\lambda\).
+The gradeint descent formula tells us that the next location depends on the negative gradient of J multiplied by the learning rate \\(\lambda\\).
 
-\[ J_{i+1} = J_{i} - \lambda \nabla J_{t} \]
+\\[ J_{i+1} = J_{i} - \lambda \nabla J_{t} \\]
 
 
 As the loss function depends on the linear function and its weights \(w_0\) and \(w_1\), the gradient is calculated as parital derviatives with relation to the weights.
@@ -82,14 +82,14 @@ As the loss function depends on the linear function and its weights \(w_0\) and 
 <img src="../fig/loss_function2.png" width="500">
 
 
-The only other thing one must pay attention to is the learning rate \(lambda\) (how big of a step to take). Too small and finding the right weights takes forever, too big and you might miss the minimum.
+The only other thing one must pay attention to is the learning rate \\(lambda\\) (how big of a step to take). Too small and finding the right weights takes forever, too big and you might miss the minimum.
 
-\[ w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i}\]
+\\[ w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i} \\]
 
 
 Backpropagation is a technique used to compute the gradient of the loss function when its functional form is unknown. This method calculates the gradient with respect to the neural network's weights, allowing for the optimization of these weights to minimize the loss. A critical requirement for the activation functions in this process is that they must be differentiable, as this property is essential for the gradient computation necessary in backpropagation.
 
-\[ \frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\begin{pmatrix} \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i-y_i)^2\end{pmatrix} = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i-y_i)\frac{\partial \hat{y}}{\partial w_{k}}\]
+\\[ \frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\begin{pmatrix} \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i-y_i)^2\end{pmatrix} = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i-y_i)\frac{\partial \hat{y}}{\partial w_{k}} \\]
 
 
 
