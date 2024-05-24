@@ -615,6 +615,10 @@ plt.show()
 
 ![](../fig/house_train_loss.png)
 
+The error indicates that the `train_loader` variable is not defined. This variable is typically an instance of `torch.utils.data.DataLoader`, which provides an iterable over the dataset for training. Let's define `train_loader` and `test_loader` properly. Additionally, let's ensure that the data is correctly prepared and loaded into these DataLoader instances.
+
+Below is the updated code with the necessary definitions and fixed indentation:
+
 > ## Exercise: Training a Neural Network with PyTorch
 > In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
 > 
@@ -633,6 +637,16 @@ plt.show()
 > > import copy
 > > from tqdm import tqdm
 > > import matplotlib.pyplot as plt
+> > from torch.utils.data import DataLoader, TensorDataset
+> > 
+> > # Assume X_train, y_train, X_test, y_test are already defined as torch tensors
+> > 
+> > # Create DataLoader instances
+> > batch_size = 10
+> > train_dataset = TensorDataset(X_train, y_train)
+> > test_dataset = TensorDataset(X_test, y_test)
+> > train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+> > test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 > > 
 > > # Define the neural network architecture
 > > class NeuralNetwork(nn.Module):
@@ -660,7 +674,6 @@ plt.show()
 > > loss_fn = nn.MSELoss()  # Mean Squared Error loss
 > > optimizers = [optim.Adam, optim.SGD, optim.RMSprop]  # Different optimizers to try
 > > n_epochs = 100  # Number of epochs to run
-> > batch_size = 10  # Size of each batch
 > > 
 > > device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
 > > for optimizer_class in optimizers:
