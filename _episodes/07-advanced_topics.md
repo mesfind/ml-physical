@@ -10,6 +10,14 @@ keypoints:
 - ""
 ---
 
+<script type="text/javascript"
+
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+
+
+
 ## Crop Type Classification in Africa 
 
 In this section, we aim to classify farm-level crop types in Kenya by leveraging Geospatial machine learning techniques with Sentinel-2 satellite imagery. This endeavor involves a supervised multiclass classification problem where we utilize pixel-level Sentinel-2 satellite imagery as the primary input for our model. The imagery comprises 12 bands of observations from Sentinel-2 L2A, encompassing various spectra such as ultra-blue, blue, green, red, visible and near-infrared (VNIR), and short wave infrared (SWIR), along with a cloud probability layer. Each pixel contains measurements for 13 dates spanning the entire farming season.
