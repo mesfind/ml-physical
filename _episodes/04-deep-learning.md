@@ -64,8 +64,8 @@ So training of the network is merely determining the weights "w" and bias/offset
 
 You know the data and the goal you're working towards, so you know the best, which loss function to use. Basic MSE or MAE works well for regression tasks. The basic MSE and MAE works well for regression task is given by:
 
-\\[loss = \frac{1}{2m}\sum_{i=1}^{m}\left( \hat{y}_{i} - y_{i}\right)^2 \\]
 
+\\[\text{Loss} = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_i)^2\\]
 
 
 The quantinty you want ot determine("loss") help to determine the best weights and bias terms in the model. Gradient descent is a technique to find the weight that minimizes the loss function.  This is done by starting with a random point, the gradient (the black lines) is calculated at that point. Then the negative of that gradient is followed to the next point and so on. This is repeated until the minimum is reached.
