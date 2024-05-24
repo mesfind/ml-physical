@@ -500,6 +500,10 @@ MLP(
 ~~~
 {: .output}
 
+The above output describes the architecture of a Multi-Layer Perceptron (MLP) model defined using PyTorch. This model is intended for use on an Apple device with a Metal Performance Shaders (MPS) backend, as indicated by "Selected device: mps". 
+
+
+The following code snippet demonstrates how to read data into a pandas DataFrame and display the first few rows of the dataset. This is a common practice in data preprocessing and exploration. Let's break down each part of the code:
 
 ~~~
 # Read data
@@ -518,3 +522,172 @@ df.head()
 4  3.8462     52.0  6.281853  1.081081      565.0  2.181467    37.85   -122.25
 ~~~
 {: .output}
+
+
+~~~
+df["y"] = dataset.target
+X = df.drop('y',axis=1)
+y = df['y'].values
+y = y.reshape(-1,1)
+
+
+# train-test split for model evaluation
+X_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, train_size=0.7, shuffle=True)
+
+# Standardizing data
+scaler = StandardScaler()
+scaler.fit(X_train_raw)
+X_train = scaler.transform(X_train_raw)
+X_test = scaler.transform(X_test_raw)
+# Convert to 2D PyTorch tensors
+X_train = torch.tensor(X_train, dtype=torch.float32)
+y_train = torch.tensor(y_train, dtype=torch.float32).reshape(-1, 1)
+X_test = torch.tensor(X_test, dtype=torch.float32)
+y_test = torch.tensor(y_test, dtype=torch.float32).reshape(-1, 1)
+~~~
+{: .python}
+
+
+Let's  demonstrates how to train a neural network in PyTorch using a Mean Squared Error (MSE) loss function and the Adam optimizer. The key steps involve initializing the model, defining the loss function and optimizer, iterating over multiple epochs, and processing data in batches. The code also tracks the best model based on the validation loss and restores the best weights after training. Additionally, it plots the training loss over epochs for visualization.
+
+1. **Setup:** Define the model, loss function, and optimizer.
+2. **Training Loop:** Iterate over multiple epochs, processing data in batches, and updating model weights.
+3. **Evaluation:** Calculate the validation loss at the end of each epoch to track the model's performance.
+4. **Best Model Tracking:** Save and restore the best model weights based on validation loss.
+5. **Plotting:** Visualize the training loss over epochs.
+
+~~~
+# Loss function and optimizer
+loss_fn = nn.MSELoss()  # Mean Squared Error loss
+optimizer = optim.Adam(model.parameters(), lr=0.0001)
+
+n_epochs = 100  # Number of epochs to run
+batch_size = 10  # Size of each batch
+batch_start = torch.arange(0, len(X_train), batch_size)
+# Hold the best model
+best_mse = np.inf  # Initialize to infinity
+best_weights = None
+history = []
+
+for epoch in range(n_epochs):
+    model.train()
+    with tqdm(batch_start, unit="batch", mininterval=0, disable=True) as bar:
+        bar.set_description(f"Epoch {epoch}")
+        for start in bar:
+            # Take a batch
+            X_batch = X_train[start:start+batch_size].to(device)
+            y_batch = y_train[start:start+batch_size].to(device)
+            # Forward pass
+            y_pred = model(X_batch)
+            loss = loss_fn(y_pred, y_batch)
+            # Backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            # Update weights
+            optimizer.step()
+            # Print progress
+            bar.set_postfix(mse=float(loss.item()))
+    # Evaluate accuracy at end of each epoch
+    model.eval()
+    with torch.no_grad():
+        y_pred = model(X_test.to(device))
+        mse = loss_fn(y_pred, y_test.to(device))
+        mse = float(mse)
+        history.append(mse)
+        if mse < best_mse:
+            best_mse = mse
+            best_weights = copy.deepcopy(model.state_dict())
+
+# Restore model to best weights and print final accuracy
+model.load_state_dict(best_weights)
+print("MSE: %.2f" % best_mse)
+print("RMSE: %.2f" % np.sqrt(best_mse))
+
+# Plot training history
+plt.plot(history)
+plt.xlabel('Epoch')
+plt.ylabel('MSE')
+plt.title('Training Loss')
+plt.savefig("fig/house_train_loss.png")
+plt.show()
+~~~
+{: .python}
+
+![](../fig/house_train_loss.png)
+
+
+> ## Exercise: Training a Neural Network with PyTorch
+> In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
+> 
+> 1. Apply LeakyReLU and tanh activation functions and compare the results with the previous implementation.
+> 2. Introduce a dropout rate of 0.2 between the layers to improve model generalization.
+> 3. Experiment with different optimizers listed at the end of the slide (MLP).
+> 4. Implement torch DataLoader techniques to handle batch processing for large datasets.
+> 
+> > ### Solution
+> > 
+> > ```python
+> > import torch
+> > import torch.nn as nn
+> > import torch.optim as optim
+> > import numpy as np
+> > import copy
+> > from tqdm import tqdm
+> > import matplotlib.pyplot as plt
+> > 
+> > # Define the neural network architecture
+> > class NeuralNetwork(nn.Module):
+> >     def __init__(self):
+> >         super(NeuralNetwork, self).__init__()
+> >         self.layer1 = nn.Linear(8, 24)
+> >         self.leakyrelu1 = nn.LeakyReLU()
+> >         self.dropout1 = nn.Dropout(0.2)
+> >         self.layer2 = nn.Linear(24, 12)
+> >         self.leakyrelu2 = nn.LeakyReLU()
+> >         self.dropout2 = nn.Dropout(0.2)
+> >         self.layer3 = nn.Linear(12, 6)
+> >         self.leakyrelu3 = nn.LeakyReLU()
+> >         self.dropout3 = nn.Dropout(0.2)
+> >         self.layer4 = nn.Linear(6, 1)
+> > 
+> >     def forward(self, x):
+> >         x = self.dropout1(self.leakyrelu1(self.layer1(x)))
+> >         x = self.dropout2(self.leakyrelu2(self.layer2(x)))
+> >         x = self.dropout3(self.leakyrelu3(self.layer3(x)))
+> >         x = self.layer4(x)
+> >         return x
+> > 
+> > # Define loss function and optimizer
+> > loss_fn = nn.MSELoss()  # Mean Squared Error loss
+> > optimizers = [optim.Adam, optim.SGD, optim.RMSprop]  # Different optimizers to try
+> > n_epochs = 100  # Number of epochs to run
+> > batch_size = 10  # Size of each batch
+> > 
+> > for optimizer_class in optimizers:
+> >     # Instantiate the model and optimizer
+> >     model = NeuralNetwork()
+> >     optimizer = optimizer_class(model.parameters(), lr=0.0001)
+> > 
+> >     # Training loop
+> >     for epoch in range(n_epochs):
+> >         model.train()
+> >         for start in range(0, len(X_train), batch_size):
+> >             X_batch = X_train[start:start+batch_size].to(device)
+> >             y_batch = y_train[start:start+batch_size].to(device)
+> >             optimizer.zero_grad()
+> >             y_pred = model(X_batch)
+> >             loss = loss_fn(y_pred, y_batch)
+> >             loss.backward()
+> >             optimizer.step()
+> > 
+> >     # Evaluation
+> >     model.eval()
+> >     with torch.no_grad():
+> >         y_pred = model(X_test.to(device))
+> >         mse = loss_fn(y_pred, y_test.to(device))
+> >         mse = float(mse)
+> >         print(f"Optimizer: {optimizer_class.__name__}, MSE: {mse:.2f}")
+> ~~~
+> > {: .python}
+> {: .solution}
+{: .challenge}
