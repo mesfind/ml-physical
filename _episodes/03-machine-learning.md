@@ -469,8 +469,7 @@ sns.heatmap(corr, annot=True)
 * nitrogen dioxide
 
 
-
- ### Data training 
+ **Data training** 
 
 
 ~~~
@@ -1951,7 +1950,9 @@ F1-Score: 0.5786081270434377
 ~~~
 {: .output}
 
+
  ### Comparison of different ML Algorithms
+ 
 ~~~
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
