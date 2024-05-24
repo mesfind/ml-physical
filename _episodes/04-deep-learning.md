@@ -730,9 +730,6 @@ plt.show()
 
 ![](../fig/house_train_loss.png)
 
-The error indicates that the `train_loader` variable is not defined. This variable is typically an instance of `torch.utils.data.DataLoader`, which provides an iterable over the dataset for training. Let's define `train_loader` and `test_loader` properly. Additionally, let's ensure that the data is correctly prepared and loaded into these DataLoader instances.
-
-Below is the updated code with the necessary definitions and fixed indentation:
 
 > ## Exercise: Training a Neural Network with PyTorch
 > In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
