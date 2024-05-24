@@ -670,14 +670,6 @@ Root Mean Squared Error (RMSE): 0.3682937419490146
 R-squared (R²): 0.8638303993498619
 ~~~
 {: .output}
-~~~
-
-
-
-
-
-
-
 
 
 > ## Exercise: RandomForestRegressor
@@ -714,10 +706,6 @@ R-squared (R²): 0.8638303993498619
 > > {: .output}
 > {: .solution}
 {: .challenge}
-
-
-
-
 
 
 ~~~
