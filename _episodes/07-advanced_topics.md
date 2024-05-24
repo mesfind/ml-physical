@@ -237,7 +237,7 @@ In this section, we aim to train a `LightGBM` model to predict each farm's crop 
 ![](../fig/lighGDM_ml_modeling.png)
 
 
-$$
+\\[
 \begin{align*}
 \text{NDVI} & = \frac{{B08 - B04}}{{B08 + B04}} \\
 \text{RDNDVI1} & = \frac{{B08 - B05}}{{B08 + B05}} \\
@@ -254,7 +254,7 @@ $$
 \text{CRC} & = \frac{{B11 - B03}}{{B11 + B03}} \\
 \text{STI} & = \frac{{B11}}{{B12}}
 \end{align*}
-$$
+\\]
 
 - Spatial median-aggregation by field ID and time.
 - Conduct period-based temporal aggregation and for each band and index, create period-based columns using the following temporal groups:
