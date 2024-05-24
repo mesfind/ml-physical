@@ -615,7 +615,6 @@ plt.show()
 
 ![](../fig/house_train_loss.png)
 
-
 > ## Exercise: Training a Neural Network with PyTorch
 > In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
 > 
@@ -664,54 +663,54 @@ plt.show()
 > > batch_size = 10  # Size of each batch
 > > 
 > > device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
-> >for optimizer_class in optimizers:
-> >    # Instantiate the model and move it to the device
-> >   model = NeuralNetwork().to(device)
-> >   optimizer = optimizer_class(model.parameters(), lr=0.0001)
-> >    best_mse = np.inf  # Initialize to infinity
-> >    best_weights = None
-> >    history = []
+> > for optimizer_class in optimizers:
+> >     # Instantiate the model and move it to the device
+> >     model = NeuralNetwork().to(device)
+> >     optimizer = optimizer_class(model.parameters(), lr=0.0001)
+> >     best_mse = np.inf  # Initialize to infinity
+> >     best_weights = None
+> >     history = []
 > >
-> >    # Training loop
-> >    for epoch in range(n_epochs):
-> >        model.train()
-> >        for X_batch, y_batch in tqdm(train_loader, unit="batch", mininterval=0, disable=True, desc=f"Epoch {epoch}"):
-> >            # Move batch data to device
-> >            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-> >            optimizer.zero_grad()
-> >            y_pred = model(X_batch)
-> >            loss = loss_fn(y_pred, y_batch)
-> >            loss.backward()
-> >            optimizer.step()
+> >     # Training loop
+> >     for epoch in range(n_epochs):
+> >         model.train()
+> >         for X_batch, y_batch in tqdm(train_loader, unit="batch", mininterval=0, disable=True, desc=f"Epoch {epoch}"):
+> >             # Move batch data to device
+> >             X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+> >             optimizer.zero_grad()
+> >             y_pred = model(X_batch)
+> >             loss = loss_fn(y_pred, y_batch)
+> >             loss.backward()
+> >             optimizer.step()
 > >
-> >        # Evaluate accuracy at the end of each epoch
-> >        model.eval()
-> >        with torch.no_grad():
-> >            mse = 0
-> >            for X_batch, y_batch in test_loader:
-> >                X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-> >                y_pred = model(X_batch)
-> >                mse += loss_fn(y_pred, y_batch).item()
-> >            mse /= len(test_loader)
+> >         # Evaluate accuracy at the end of each epoch
+> >         model.eval()
+> >         with torch.no_grad():
+> >             mse = 0
+> >             for X_batch, y_batch in test_loader:
+> >                 X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+> >                 y_pred = model(X_batch)
+> >                 mse += loss_fn(y_pred, y_batch).item()
+> >             mse /= len(test_loader)
 > >
-> >        history.append(mse)
-> >        if mse < best_mse:
-> >            best_mse = mse
-> >            best_weights = copy.deepcopy(model.state_dict())
+> >         history.append(mse)
+> >         if mse < best_mse:
+> >             best_mse = mse
+> >             best_weights = copy.deepcopy(model.state_dict())
 > >
-> >    # Restore model and return best accuracy
-> >    model.load_state_dict(best_weights)
-> >    print(f"Optimizer: {optimizer_class.__name__}, Best MSE: {best_mse:.2f}, RMSE: {np.sqrt(best_mse):.2f}")
+> >     # Restore model and return best accuracy
+> >     model.load_state_dict(best_weights)
+> >     print(f"Optimizer: {optimizer_class.__name__}, Best MSE: {best_mse:.2f}, RMSE: {np.sqrt(best_mse):.2f}")
 > >
-> >    # Plot training history
-> >    plt.plot(history, label=optimizer_class.__name__)
+> >     # Plot training history
+> >     plt.plot(history, label=optimizer_class.__name__)
 > >
-> >plt.xlabel("Epochs")
-> >plt.ylabel("MSE")
-> >plt.legend()
-> >plt.savefig("fig/house_train_loss.png")
-> >plt.show()
-> ~~~
+> > plt.xlabel("Epochs")
+> > plt.ylabel("MSE")
+> > plt.legend()
+> > plt.savefig("fig/house_train_loss.png")
+> > plt.show()
+> > ~~~
 > > {: .python}
 > {: .solution}
 {: .challenge}
