@@ -84,7 +84,7 @@ tensor([[ 0.3034,  0.2425, -0.1914, -0.2280, -0.3050,  0.0394,  0.0196,  0.2530,
         [ 0.2486,  0.0924, -0.1496, -0.2745,  0.1828, -0.0443, -0.1161,  0.2778,
           0.1709, -0.1165]], requires_grad=True)
 ~~~
-{: .python}
+{: .output}
 
 ~~~
 # Bias of the model
@@ -160,13 +160,13 @@ plt.show()
 ReLU has become more popular in the recent years; we can find either its usage or one of its
 variants' usages in almost any modern architecture. It has a simple mathematical
 formulation:
- \\[ f(x) = max(x,0)\\]
+ \\[f(x) = max(x,0)\\]
 
 #### Leaky ReLU
 
 Leaky ReLU is an attempt to solve a dying problem where, instead of saturating to zero, we saturate to a very small number such as 0.001.
 
-\\[ f(x) = max(x,0.001)\\]
+\\[f(x) = max(x,0.001)\\]
 
 
 #### Loss Function
@@ -223,7 +223,7 @@ pd.options.display.max_rows = 10
 pd.options.display.float_format = "{:.1f}".format
 
 ~~~
-
+{: .python}
 
 ### Getting Started With Pytorch
 
@@ -234,13 +234,15 @@ Welcome to the world of PyTorch! This section serves as a comprehensive introduc
 
 Tensors are the fundamental building blocks of PyTorch. They are similar to NumPy arrays but come with additional features optimized for deep learning tasks. Let's begin by understanding how to create and manipulate tensors.
 
-```python
+~~~
 import torch
 
 # Initialize a tensor of size 5x3 filled with zeros
 x = torch.Tensor(5, 3)
 print(x)
-```
+~~~
+{: .python}
+
 
 In the above code snippet, we create a 5x3 tensor initialized with zeros using the `torch.Tensor` constructor.
 
@@ -254,11 +256,12 @@ tensor([[0., 0., 0.],
 {: .output}
 
 
-```python
+~~~
 # Create a tensor of size 5x4 with random values sampled from a uniform distribution
 x = torch.rand(5, 4)
 print(x)
-```
+~~~
+{: .python}
 
 Here, we create a 5x4 tensor filled with random values sampled from a uniform distribution using the `torch.rand` function.
 
@@ -276,14 +279,15 @@ tensor([[0.4294, 0.8854, 0.5739, 0.2666],
 
 PyTorch supports a wide range of tensor operations, making it easy to perform computations on tensors. Let's explore some common operations.
 
-```python
+~~~
 # Element-wise addition of two tensors
 x = torch.tensor([1, 2, 3, 4], dtype=torch.float32)
 y = torch.tensor([5, 6, 7, 8], dtype=torch.float32)
 
 result_add = x + y
 print(result_add)
-```
+~~~
+{: .python}
 
 In this snippet, we perform element-wise addition of two tensors `x` and `y`.
 
@@ -293,13 +297,14 @@ tensor([ 6.,  8., 10., 12.])
 {: .output}
 
 
-```python
+~~~
 # Matrix multiplication (dot product)
 matrix1 = torch.tensor([[1, 2], [3, 4]], dtype=torch.float32)
 matrix2 = torch.tensor([[5, 6], [7, 8]], dtype=torch.float32)
 result_matmul = torch.mm(matrix1, matrix2)
 print(result_matmul)
-```
+~~~
+{: .python}
 
 Here, we calculate the matrix multiplication between two tensors `matrix1` and `matrix2`.
 
@@ -314,11 +319,12 @@ tensor([[19., 22.],
 
 Sometimes, we need to reshape tensors to match the required input shapes for neural networks. Let's see how to reshape tensors.
 
-```python
+~~~
 x_reshape = x.view(1, 4)
 print(x_reshape.shape)
 print(x.shape)
-```
+~~~
+{: .python}
 
 This code reshapes the tensor `x` into a 1x4 matrix and prints the shapes of the reshaped and original tensors.
 
@@ -347,7 +353,7 @@ PyTorch provides support for GPU acceleration, which significantly speeds up com
 
 
 
-```python
+~~~
 if torch.cuda.is_available():
     device = torch.device("cuda")
     x_cuda = x.to(device)
@@ -366,7 +372,8 @@ else:
     y_cpu = y.to(device)
     result_add_cpu = x_cpu + y_cpu
     print("Using CPU addition:",result_add_cpu)
-```
+~~~
+{: .python}
 
 ~~~
 Using MPS addition: tensor([ 6.,  8., 10., 
@@ -533,7 +540,6 @@ torch.manual_seed(42);
 
 dataset = fetch_california_housing()
 print(dataset.data)
-
 ~~~
 {: .python}
 
