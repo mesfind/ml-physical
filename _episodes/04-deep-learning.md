@@ -40,13 +40,13 @@ ANNs consists of multiple nodes (the circles) and layers that are all connected 
 
  In each individual node the values coming in are weighted and summed together and bias term is added and activation. Hence, the linear regression mapping by an activation function to produce non-linear model as shown below:
 
- \[ Z = \sigma( W^T \cdot X) \]
+ \\[ Z = \sigma( W^T \cdot X) \\]
 
 
 <img src="../fig/ANN_activation.png" width="500">
 
 
- ### Activation functions
+### Activation functions
 
 Activation function determines, if information is moving forward from that specific node.
 This is the step that allows for nonlinearity in these algorithms, without activation all we would be doing is linear algebra. Some of the common activation functions are indicated in figure below:
