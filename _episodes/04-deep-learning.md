@@ -398,92 +398,97 @@ print("\nSequential Model:\n", sequential_ANN)
 ~~~
 
 
-### Linear Regression with ANN
+### Regression Model with Neural Networks
+
+Because it is not directly compatible with PyTorch, we cannot simply feed the data to our PyTorch neural network. For doing so, it needs to be prepared. This is actually quite easy: we can create a PyTorch Dataset for this purpose.
 
 ~~~
+import copy
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import numpy as np
+from sklearn.model_selection import train_test_split 
+from sklearn.datasets import fetch_california_housing 
+from sklearn.preprocessing import StandardScaler
+from torch.utils.data import DataLoader, TensorDataset 
+from tqdm.notebook import tqdm
+import warnings
+import seaborn as sns
+sns.set()
+warnings.filterwarnings("ignore")
+# Set fixed random number seed
+torch.manual_seed(42);
 
-# Define the neural network architecture
-class ANN(nn.Module):
+dataset = fetch_california_housing()
+print(dataset.data)
+
+~~~
+{: .python}
+
+~~~
+array([[   8.3252    ,   41.        ,    6.98412698, ...,    2.55555556,
+          37.88      , -122.23      ],
+       [   8.3014    ,   21.        ,    6.23813708, ...,    2.10984183,
+          37.86      , -122.22      ],
+       [   7.2574    ,   52.        ,    8.28813559, ...,    2.80225989,
+          37.85      , -122.24      ],
+       ...,
+       [   1.7       ,   17.        ,    5.20554273, ...,    2.3256351 ,
+          39.43      , -121.22      ],
+       [   1.8672    ,   18.        ,    5.32951289, ...,    2.12320917,
+          39.43      , -121.32      ],
+       [   2.3886    ,   16.        ,    5.25471698, ...,    2.61698113,
+          39.37      , -121.24      ]])
+~~~
+{: .output}
+
+
+When training on a machine that has a GPU, you need to tell PyTorch you want to use it • You’ll see the following at the top of most PyTorch code:
+
+~~~
+
+~~~
+
+### Representing the Dataset as Tensor
+
+Because it is not directly compatible with PyTorch, we cannot simply feed the data to our PyTorch neural network. For doing so, it needs to be prepared. This is actually quite easy: we can create a PyTorch Dataset for this purpose.
+
+~~~
+class MLP(nn.Module): 
     def __init__(self):
-        super(ANN, self).__init__()
-        self.hidden_layer = nn.Linear(1, 3)  # Input size: 1, Output size: 3
-        self.output_layer = nn.Linear(3, 1)  # Input size: 3, Output size: 1
-
-    def forward(self, x):
-        x = torch.relu(self.hidden_layer(x))
-        x = self.output_layer(x)
+    super(MLP, self).__init__()
+        self.layer1 = nn.Linear(8, 24)
+        self.relu1 = nn.ReLU()
+        self.layer2 = nn.Linear(24, 12)
+        self.relu2 = nn.ReLU()
+        self.layer3 = nn.Linear(12, 6)
+        self.relu3 = nn.ReLU()
+        self.layer4 = nn.Linear(6, 1)
+    def forward(self, x): 
+        x = self.layer1(x) 
+        x = self.relu1(x) 
+        x = self.layer2(x) 
+        x = self.relu2(x) 
+        x = self.layer3(x) 
+        x = self.relu3(x) 
+        x = self.layer4(x) 
         return x
 
-# Instantiate the model
-model = ANN()
-
-# Define the loss function (Mean Squared Error)
-criterion = nn.MSELoss()
-
-# Define the optimizer (Stochastic Gradient Descent)
-optimizer = optim.SGD(model.parameters(), lr=0.01)
-
-# Generate some toy data for linear regression
-X = torch.randn(100, 1)  # Input data
-Y = 3 * X + 2 + torch.randn(100, 1) * 0.1  # Output data (with some noise)
-
-# Training loop
-num_epochs = 1000
-for epoch in range(num_epochs):
-    # Forward pass
-    outputs = model(X)
-    
-    # Compute the loss
-    loss = criterion(outputs, Y)
-    
-    # Backward pass and optimization
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    
-    # Print progress
-    if (epoch+1) % 100 == 0:
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
-
-# Evaluate the trained model
-with torch.no_grad():
-    predicted = model(X)
-    print("\nPredicted:\n", predicted)
-    print("True:\n", Y)
+model = MLP()
+device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
+# Check the selected device
+print("Selected device:", device)
+model.to('device')
 ~~~
 {: .python}
 
 
 ~~~
-Epoch [100/1000], Loss: 3.4240
-Epoch [200/1000], Loss: 1.4735
-Epoch [300/1000], Loss: 0.8952
-Epoch [400/1000], Loss: 0.5910
-Epoch [500/1000], Loss: 0.4097
-Epoch [600/1000], Loss: 0.2935
-Epoch [700/1000], Loss: 0.2209
-Epoch [800/1000], Loss: 0.1740
-Epoch [900/1000], Loss: 0.1407
-Epoch [1000/1000], Loss: 0.1161
-
-Predicted:
- tensor([[-3.0566],
-        [ 6.6177],
-        [ 1.6550],
-        [-1.2901],
-        [ 0.9237],
-        [ 0.7224],
-        [-2.6410],
-        [ 6.6177],
-        [ 0.9411],
-        [ 2.2640],
-        [-2.7480],
+# Read data
+df = pd.DataFrame(dataset.data, columns=[dataset.feature_names])
+df.head()
 ~~~
-{: .output}
-
-
 
