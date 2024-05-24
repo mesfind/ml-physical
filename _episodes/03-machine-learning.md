@@ -40,6 +40,7 @@ There are three main categories of machine learning algorithms:
 - Unsupervised Learning: Algorithms find hidden patterns in unlabeled data. A common task is clustering, which groups similar examples together.
 - Reinforcement Learning: Algorithms learn by interacting with an environment and receiving rewards or penalties for actions to maximize performance
 
+![](../fig/ML_type.png)
 
 
 ## Evaluation Metrics and Model Selection
