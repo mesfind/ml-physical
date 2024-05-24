@@ -624,9 +624,9 @@ plt.show()
 > 3. Experiment with different optimizers listed at the end of the slide (MLP).
 > 4. Implement torch DataLoader techniques to handle batch processing for large datasets.
 > 
-> > ### Solution
+> > ## Solution
 > > 
-> > ```python
+> > ~~~
 > > import torch
 > > import torch.nn as nn
 > > import torch.optim as optim
