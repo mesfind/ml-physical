@@ -459,7 +459,7 @@ Because it is not directly compatible with PyTorch, we cannot simply feed the da
 ~~~
 class MLP(nn.Module): 
     def __init__(self):
-    super(MLP, self).__init__()
+        super(MLP, self).__init__()
         self.layer1 = nn.Linear(8, 24)
         self.relu1 = nn.ReLU()
         self.layer2 = nn.Linear(24, 12)
@@ -481,9 +481,24 @@ model = MLP()
 device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
 # Check the selected device
 print("Selected device:", device)
-model.to('device')
+model.to(device)
 ~~~
 {: .python}
+
+~~~
+Selected device: mps
+Out[13]: 
+MLP(
+  (layer1): Linear(in_features=8, out_features=24, bias=True)
+  (relu1): ReLU()
+  (layer2): Linear(in_features=24, out_features=12, bias=True)
+  (relu2): ReLU()
+  (layer3): Linear(in_features=12, out_features=6, bias=True)
+  (relu3): ReLU()
+  (layer4): Linear(in_features=6, out_features=1, bias=True)
+)
+~~~
+{: .output}
 
 
 ~~~
@@ -491,4 +506,15 @@ model.to('device')
 df = pd.DataFrame(dataset.data, columns=[dataset.feature_names])
 df.head()
 ~~~
+{: .python}
 
+
+~~~
+   MedInc HouseAge  AveRooms AveBedrms Population  AveOccup Latitude Longitude
+0  8.3252     41.0  6.984127  1.023810      322.0  2.555556    37.88   -122.23
+1  8.3014     21.0  6.238137  0.971880     2401.0  2.109842    37.86   -122.22
+2  7.2574     52.0  8.288136  1.073446      496.0  2.802260    37.85   -122.24
+3  5.6431     52.0  5.817352  1.073059      558.0  2.547945    37.85   -122.25
+4  3.8462     52.0  6.281853  1.081081      565.0  2.181467    37.85   -122.25
+~~~
+{: .output}
