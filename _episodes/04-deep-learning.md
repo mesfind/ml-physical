@@ -64,7 +64,7 @@ So training of the network is merely determining the weights "w" and bias/offset
 
 You know the data and the goal you’re working towards, so you know the best, which loss function to use. Basic MSE or MAE works well for regression tasks. The basic MSE and MAE works well for regression task is given by:
 
-\\[ loss = \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_{i} - y_{i})^2 \\]
+\\[loss = \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_{i} - y_{i})^2 \\]
 
 
 
@@ -86,12 +86,12 @@ As the loss function depends on the linear function and its weights \(w_0\) and 
 
 The only other thing one must pay attention to is the learning rate \\(lambda\\) (how big of a step to take). Too small and finding the right weights takes forever, too big and you might miss the minimum.
 
-\\[ w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i} \\]
+\\[w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i} \\]
 
 
 Backpropagation is a technique used to compute the gradient of the loss function when its functional form is unknown. This method calculates the gradient with respect to the neural network's weights, allowing for the optimization of these weights to minimize the loss. A critical requirement for the activation functions in this process is that they must be differentiable, as this property is essential for the gradient computation necessary in backpropagation.
 
 
-\\[ \frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\left( \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i - y_i)^2 \right) = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i - y_{i}) \frac{\partial \hat{y}_i}{\partial w_{k}} \\]
+\\[\frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\left( \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i - y_i)^2 \right) = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i - y_{i}) \frac{\partial \hat{y}_i}{\partial w_{k}} \\]
 
 
