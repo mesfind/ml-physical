@@ -722,7 +722,7 @@ if torch.cuda.is_available():
     y_tensor = y_tensor.cuda()
 
 # Define batch size
-batch_size = 64
+batch_size = 256
 
 # Create TensorDataset instances for training and testing data
 dataset = TensorDataset(X_tensor, y_tensor)
@@ -1092,4 +1092,68 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > 
 {: .challenge}
 
+
+
+## Transformers for Timeseries
+
+Time series analysis for the prediction of multi-variable  data stands as a significant challenge, crucial for various applications ranging from finance to weather forecasting. Leveraging cutting-edge techniques like Transforms for Time Series (TFT), researchers and practitioners aim to enhance predictive accuracy and uncover intricate temporal patterns embedded within multidimensional data streams.
+
+
+This sectionfocuses on leveraging Transforms for Time Series (TFT) to predict multi-variable time series data, a critical task in various domains such as finance, healthcare, and environmental science. Through a series of concise code snippets and explanations, participants will gain a solid understanding of implementing TFT for accurate forecasting. The goal  is to illustrate the use of a transformer for timeseries prediction. 
+
+###  Preparing the Dataset
+~~~
+import torch
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import time
+import matplotlib.pyplot as  plt
+import torch
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# File path for the energy dataset
+file_path = "data/energydata_complete.csv"
+
+df = pd.read_csv(file_path, index_col='date', parse_dates=['date'])
+df.head()
+~~~
+{: .python}
+
+
+
+
+
+### Sliding Window Generator
+
+~~~
+
+# Initialize the generator
+# if label_width=1 it will be single-step forecasting
+swg = SlidingWindowGenerator(seq_length=30, label_width=7, shift=1, df=df, label_columns=['rv2']])
+print(swg)
+# Generate windows
+X, y = swg.sliding_windows()
+print("-----------------------------")
+print(X.shape)
+print(y.shape)
+
+
+~~~
+{: .python}
+~~~
+Total window size: 31
+Input indices: [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+ 24 25 26 27 28 29]
+Label indices: [28 29 30]
+Label column name(s): ['rv2']
+
+--------------------------
+(420521, 30, 8)
+(420521, 1)
+
+~~~
+{: .output}
 

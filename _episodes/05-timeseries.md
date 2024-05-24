@@ -314,8 +314,25 @@ class CustomDataset(torch.utils.data.Dataset):
 
 # Instantiate the custom dataset
 custom_data = CustomDataset(data, ['co2'], transform=transforms.ToTensor())
-
+custom_data.data
 ~~~
 {: .python}
 
 
+~~~
+       datestamp    co2
+0     1958-03-29  316.1
+1     1958-04-05  317.3
+2     1958-04-12  317.6
+3     1958-04-19  317.5
+4     1958-04-26  316.4
+...          ...    ...
+2279  2001-12-01  370.3
+2280  2001-12-08  370.8
+2281  2001-12-15  371.2
+2282  2001-12-22  371.3
+2283  2001-12-29  371.5
+
+[2284 rows x 2 columns]
+~~~
+{: .python}
