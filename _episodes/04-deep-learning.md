@@ -64,7 +64,7 @@ So training of the network is merely determining the weights "w" and bias/offset
 
 You know the data and the goal you’re working towards, so you know the best, which loss function to use. Basic MSE or MAE works well for regression tasks. The basic MSE and MAE works well for regression task is given by:
 
-\[ loss = \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_{i} - y_{i})^2 \]
+\\[ loss = \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_{i} - y_{i})^2 \\]
 
 
 
