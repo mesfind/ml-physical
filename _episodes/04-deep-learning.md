@@ -36,14 +36,14 @@ Ultimately, machine learning represents a valuable addition to the climate scien
 
 ANNs consists of multiple nodes (the circles) and layers that are all connected and using basic math gives out a result. These are called feed forward networks. 
 
-![](../fig/ANN_forward.png)
+<img src="../fig/ANN_forward.png" width="200">
 
  In each individual node the values coming in are weighted and summed together and bias term is added and activation. Hence, the linear regression mapping by an activation function to produce non-linear model as shown below:
 
  \[ Z = \sigma( W^T \cdot X) \]
 
 
- ![](../fig/ANN_activation.png)
+<img src="../fig/ANN_activation.png" width="200">
 
 
  ### Activation functions
@@ -51,8 +51,9 @@ ANNs consists of multiple nodes (the circles) and layers that are all connected 
 Activation function determines, if information is moving forward from that specific node.
 This is the step that allows for nonlinearity in these algorithms, without activation all we would be doing is linear algebra. Some of the common activation functions are indicated in figure below:
 
- ![](../fig/ANN_activation2.png)
 
+
+<img src="../fig/ANN_activation2.png" width="200">
 
 So training of the network is merely determining the weights “w” and bias/offset “b"  with the addition of nonlinear activation function. Goal is to determine the best function so that the output is as  correct as possible; typically involves choosing “weights”. 
 
@@ -67,9 +68,8 @@ You know the data and the goal you’re working towards, so you know the best, w
 
 The quantinty you want ot determine("loss") help to determine the best weights and bias terms in the model. Gradient descent is a technique to find the weight that minimizes the loss function.  This is done by starting with a random point, the gradient (the black lines) is calculated at that point. Then the negative of that gradient is followed to the next point and so on. This is repeated until the minimum is reached.
 
-![](../fig/loss_function.png)
 
-
+<img src="../fig/loss_function.png" width="200">
 
 The gradeint descent formula tells us that the next location depends on the negative gradient of J multiplied by the learning rate \(\lambda\).
 
@@ -78,7 +78,8 @@ The gradeint descent formula tells us that the next location depends on the nega
 
 As the loss function depends on the linear function and its weights \(w_0\) and \(w_1\), the gradient is calculated as parital derviatives with relation to the weights.
 
-![](../fig/loss_function2.png)
+
+<img src="../fig/loss_function2.png" width="200">
 
 
 The only other thing one must pay attention to is the learning rate \(lambda\) (how big of a step to take). Too small and finding the right weights takes forever, too big and you might miss the minimum.
@@ -89,5 +90,7 @@ The only other thing one must pay attention to is the learning rate \(lambda\) (
 Backpropagation is a technique used to compute the gradient of the loss function when its functional form is unknown. This method calculates the gradient with respect to the neural network's weights, allowing for the optimization of these weights to minimize the loss. A critical requirement for the activation functions in this process is that they must be differentiable, as this property is essential for the gradient computation necessary in backpropagation.
 
 \[ \frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\begin{pmatrix} \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i-y_i)^2\end{pmatrix} = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i-y_i)\frac{\partial \hat{y}}{\partial w_{k}}\]
+
+
 
 
