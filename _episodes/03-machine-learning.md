@@ -101,39 +101,143 @@ By updating Equation and repeat unitil convergence
 - **Effect on Coefficients:** Lasso can lead to sparse models with some coefficients exactly zero, effectively performing feature selection. Ridge tends to shrink coefficients toward zero without making them exactly zero.
 - **Use Cases:** Lasso is beneficial when feature selection is crucial, while Ridge is useful for preventing multicollinearity and stabilizing the model.
 
+#### Linear Regression
+~~~
+# Linear Regression
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Generate synthetic data
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize and train the linear regression model
+linear_model = LinearRegression()
+linear_model.fit(X_train, y_train)
+
+# Predict
+y_pred_linear = linear_model.predict(X_test)
+
+# Calculate Mean Squared Error
+mse_linear = mean_squared_error(y_test, y_pred_linear)
+
+# Print coefficients and MSE
+print("Linear Regression Coefficients:", linear_model.coef_)
+print("Linear Regression Intercept:", linear_model.intercept_)
+print("Linear Regression MSE:", mse_linear)
+
+# Plot results
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='red', label='Data')
+plt.plot(X_test, y_pred_linear, label='Linear Regression', color='blue')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.title('Linear Regression')
+plt.show()
+~~~
+{: .python}
 
 ~~~
+Linear Regression Coefficients: [[2.79932366]]
+Linear Regression Intercept: [4.14291332]
+Linear Regression MSE: 0.6536995137170021
+~~~
+{: .output}
+
+![](../fig/LiR1.png)
+
+
+#### Lasso
+
+~~~
+#Lasso
+from sklearn.linear_model import Lasso
+
+# Initialize and train the lasso regression model
+lasso_model = Lasso(alpha=0.1)
+lasso_model.fit(X_train, y_train)
+
+# Predict
+y_pred_lasso = lasso_model.predict(X_test)
+
+# Calculate Mean Squared Error
+mse_lasso = mean_squared_error(y_test, y_pred_lasso)
+
+# Print coefficients and MSE
+print("Lasso Regression Coefficients:", lasso_model.coef_)
+print("Lasso Regression Intercept:", lasso_model.intercept_)
+print("Lasso Regression MSE:", mse_lasso)
+
+# Plot results
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='red', label='Data')
+plt.plot(X_test, y_pred_lasso, label='Lasso Regression', color='blue')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.title('Lasso Regression')
+plt.show()
 
 ~~~
 {: .python}
 
 ~~~
-
+Lasso Regression Coefficients: [2.50457141]
+Lasso Regression Intercept: [4.41885953]
+Lasso Regression MSE: 0.6584189249611411
 ~~~
 {: .output}
 
+![](../fig/Lasso1.png)
 
 ~~~
+from sklearn.linear_model import Ridge
 
+# Initialize and train the ridge regression model
+ridge_model = Ridge(alpha=1)
+ridge_model.fit(X_train, y_train)
+
+# Predict
+y_pred_ridge = ridge_model.predict(X_test)
+
+# Calculate Mean Squared Error
+mse_ridge = mean_squared_error(y_test, y_pred_ridge)
+
+# Print coefficients and MSE
+print("Ridge Regression Coefficients:", ridge_model.coef_)
+print("Ridge Regression Intercept:", ridge_model.intercept_)
+print("Ridge Regression MSE:", mse_ridge)
+
+# Plot results
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='blue', label='Data')
+plt.plot(X_test, y_pred_ridge, label='Ridge Regression', color='green')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.title('Ridge Regression')
+plt.show()
 ~~~
 {: .python}
 
 ~~~
-
+Ridge Regression Coefficients: [[2.69985029]]
+Ridge Regression Intercept: [4.23604]
+Ridge Regression MSE: 0.647613237305426
 ~~~
 {: .output}
 
-
-~~~
-
-~~~
-{: .python}
-
-~~~
-
-~~~
-{: .output}
-
+![](../fig/Rigde1.png)
 
 ~~~
 
