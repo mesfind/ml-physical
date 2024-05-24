@@ -331,7 +331,7 @@ d: 0.1512451320886612
 ~~~
 {: .output}
 
-![](../fig/computational_graph2.png)
+![](../fig/computational_graph.png)
 
 
 ## Building Artificial Neural Networks Model
@@ -350,7 +350,7 @@ In this session, we aim to create an Artificial Neural Network (ANN) that learns
 By systematically following these steps, we construct a sequential neural network capable of discerning and modeling the underlying relationship between the input features and output labels.
 
 
-<div> <img src="img/ANN1.png" alt="Drawing" style="width: 200px;"/></div>
+<div> <img src="../fig/ANN1.png" alt="Drawing" style="width: 200px;"/></div>
 
 
 ~~~
