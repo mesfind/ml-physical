@@ -972,7 +972,7 @@ Accuracy: 0.0000
 ~~~
 {: .output}
 
-> ## Exercise: Training and Evaluating an ANN Classifier
+> ## Exercise 1: Training and Evaluating an ANN Classifier
 >
 > In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
 >
