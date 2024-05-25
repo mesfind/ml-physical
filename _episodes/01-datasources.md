@@ -78,7 +78,7 @@ keypoints:
 
 **Temporal Coverage/Duration**: 1979/01/01 to Present. 
 
-**Time Step**: Daily 
+**Time Step**: Daily, Monthly
 
 **Spatial Resolution**: 0.5x0.5 deg
 
