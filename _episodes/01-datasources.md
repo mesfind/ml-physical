@@ -93,6 +93,9 @@ keypoints:
 **Key Limitations**: 
 
 - Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
+
+  ### Downloading CPC Data  
+- [Jupyter Note Book Script]()
                  
 ---
 
