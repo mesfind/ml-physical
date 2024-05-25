@@ -5,4 +5,13 @@
 
 Open the Command Prompt on your Windows machine. You can do this by pressing `Win + R`, typing `cmd,` and pressing `Enter`.
 
-cd D:  # Change to drive D (replace with your desired drive)
+#### Navigate to Drive D: (replace with your desired drive)
+Switch to drive D: by typing the following command and pressing Enter:
+
+`cd D:`
+
+#### 3. Create a New Directory
+Create a new directory named `ml_train` or any name you want by typing in the command line and pressing `Enter`:
+
+`mkdir ml_train`
+
