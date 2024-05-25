@@ -33,77 +33,77 @@ CHIRPS stands out for its high spatial and temporal resolution of rainfall estim
 
 With spatial resolution at approximately 5 km, CHIRPS is instrumental in various applications. It aids in disaster management by monitoring droughts and floods, supports climate research for studying climate change impacts, facilitates agricultural planning, and assists in water resource management.
 
-- It's a high-resolution gridded precipitation dataset.
-- Combines satellite observations with rain gauge data.
-- Provides daily, monthly, and seasonal precipitation estimates.
-- Long-term Data: Available from 1981 onwards, useful for trend analysis.
-- Frequent Updates: Data updated in near real-time for timely information.
+  - It's a high-resolution gridded precipitation dataset.
+  - Combines satellite observations with rain gauge data.
+  - Provides daily, monthly, and seasonal precipitation estimates.
+  - Long-term Data: Available from 1981 onwards, useful for trend analysis.
+  - Frequent Updates: Data updated in near real-time for timely information.
   
 ### Data Source
 
 Spearheaded by the Climate Hazards Group and USGS scientists, CHIRPS receives support from USAID, NASA, and NOAA.
 
-- **Organization**: Climate Hazards Group and USGS scientists—supported by funding from USAID, NASA, and NOAA
-- **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
-- **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
+  - **Organization**: Climate Hazards Group and USGS scientists—supported by funding from USAID, NASA, and NOAA
+  - **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
+  - **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
 
 ### Description
 
 The dataset features high-resolution gridded precipitation data, providing daily, monthly, and seasonal estimates. Covering temporal data from 1981 onwards, CHIRPS facilitates trend analysis and is regularly updated in near real-time, ensuring timely information availability.
 
-- **Temporal Coverage**: 1981 to present
-- **Spatial Coverage**: 50°S to 50°N, all longitudes
-- **Resolution**: 
+  - **Temporal Coverage**: 1981 to present
+  - **Spatial Coverage**: 50°S to 50°N, all longitudes
+  - **Resolution**: 
   - **Temporal**: 6-hourly, Daily, Pentad, Monthly, Seasonal
   - **Spatial**: 0.05° (approx. 5 km) and 0.1°
  
     
 ### Applications
-- **Disaster Management**: Crucial for monitoring droughts and floods.
-- **Climate Research**: Supports climate change research and impact assessments.
-- **Agricultural Monitoring**: Informs agricultural planning and risk management.
-- **Water resources**: Valuable for water resource management.
+  - **Disaster Management**: Crucial for monitoring droughts and floods.
+  - **Climate Research**: Supports climate change research and impact assessments.
+  - **Agricultural Monitoring**: Informs agricultural planning and risk management.
+  - **Water resources**: Valuable for water resource management.
 
 ### Key Strengths
-- High spatial and temporal resolution of rainfall estimates
-- Accounts for regional variations in the relationships between different datasets
-- Relatively long-term record (1981-present) with nearly immediate updates of the dataset
+  - High spatial and temporal resolution of rainfall estimates
+  - Accounts for regional variations in the relationships between different datasets
+  - Relatively long-term record (1981-present) with nearly immediate updates of the dataset
 
 ### Key Limitations
-- Rainfall only; does not include snow or ice
-- Land-only due to its heavy reliance on station data and not available outside of 50S-50N
-- Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
+  - Rainfall only; does not include snow or ice
+  - Land-only due to its heavy reliance on station data and not available outside of 50S-50N
+  - Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
 
 ### Downloading CHIRPS Data  
-- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily_Precip.ipynb)
+  - [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily_Precip.ipynb)
 
 
 ## 2) CPC Global Unified Gauge-Based Analysis of Daily Precipitation
 
-- The CPC Global Unified Gauge-Based Analysis of Daily Precipitation is a comprehensive dataset developed by the **Climate Prediction Center (CPC)** of the **National Oceanic and Atmospheric Administration (NOAA)** by taking advantage of the **optimal interpolation (OI)** (> 30,000 gauges (optimal interp. with orographic effects).
+  - The CPC Global Unified Gauge-Based Analysis of Daily Precipitation is a comprehensive dataset developed by the **Climate Prediction Center (CPC)** of the **National Oceanic and Atmospheric Administration (NOAA)** by taking advantage of the **optimal interpolation (OI)** (> 30,000 gauges (optimal interp. with orographic effects).
 
-- This dataset provides **global daily** precipitation estimates based on **gauge observations**, offering valuable insights for various applications in **climate research**, **hydrology**, and **weather forecasting**.
+  - This dataset provides **global daily** precipitation estimates based on **gauge observations**, offering valuable insights for various applications in **climate research**, **hydrology**, and **weather forecasting**.
 
-**Temporal Coverage/Duration**: 1979/01/01 to Present. 
+   - **Temporal Coverage/Duration**: 1979/01/01 to Present. 
 
-**Time Step**: Daily, Monthly
+   - **Time Step**: Daily, Monthly
 
-**Spatial Resolution**: 0.5x0.5 deg
+   - **Spatial Resolution**: 0.5x0.5 deg
 
-**Missing data**:  flagged with a value of -9.96921e+36f.
+   - **Missing data**:  flagged with a value of -9.96921e+36f.
 
-**Source**: https://psl.noaa.gov/data/gridded/data.cpc.globalprecip.html
+   - **Source**: https://psl.noaa.gov/data/gridded/data.cpc.globalprecip.html
 
 **Key Strengths**: 
 
-- High station density
+  - High station density
 
 **Key Limitations**: 
 
-- Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
+  - Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
 
-  ### Downloading CPC Data  
-- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
+### Downloading CPC Data  
+ - [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
                  
 
 ## Meteostat 
