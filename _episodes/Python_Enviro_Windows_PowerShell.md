@@ -46,6 +46,7 @@ Prerequisites:
 ### 6) Activate the Virtual Environment
 
 `Set-ExecutionPolicy Bypass -Scope Process -Force`
+
 `.\ml_env\Scripts\Activate.ps1`
 
 ### 7) Upgrade pip (optional)
