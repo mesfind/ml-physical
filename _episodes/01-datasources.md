@@ -20,15 +20,18 @@ keypoints:
 # Climate and weather Data sources
 
 
----
-
 ## 1) CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
 
+**CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)** offers a comprehensive global precipitation dataset, combining satellite observations with ground-based station data to deliver accurate rainfall estimates. 
 
-### Overview
-**CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
 
-### Features
+CHIRPS stands out for its high spatial and temporal resolution of rainfall estimates, accommodating regional variations in dataset relationships. Despite its strengths, the dataset has limitations, including its focus solely on rainfall, limited coverage to land areas between 50S-50N, and its primary application in drought and environmental monitoring.
+
+
+
+### Main Features
+
+With spatial resolution at approximately 5 km, CHIRPS is instrumental in various applications. It aids in disaster management by monitoring droughts and floods, supports climate research for studying climate change impacts, facilitates agricultural planning, and assists in water resource management.
 
 - It's a high-resolution gridded precipitation dataset.
 - Combines satellite observations with rain gauge data.
@@ -37,11 +40,17 @@ keypoints:
 - Frequent Updates: Data updated in near real-time for timely information.
   
 ### Data Source
+
+Spearheaded by the Climate Hazards Group and USGS scientists, CHIRPS receives support from USAID, NASA, and NOAA.
+
 - **Organization**: Climate Hazards Group and USGS scientists—supported by funding from USAID, NASA, and NOAA
 - **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
 - **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
 
 ### Description
+
+The dataset features high-resolution gridded precipitation data, providing daily, monthly, and seasonal estimates. Covering temporal data from 1981 onwards, CHIRPS facilitates trend analysis and is regularly updated in near real-time, ensuring timely information availability.
+
 - **Temporal Coverage**: 1981 to present
 - **Spatial Coverage**: 50°S to 50°N, all longitudes
 - **Resolution**: 
@@ -68,7 +77,6 @@ keypoints:
 ### Downloading CHIRPS Data  
 - [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily_Precip.ipynb)
 
----
 
 ## 2) CPC Global Unified Gauge-Based Analysis of Daily Precipitation
 
@@ -97,7 +105,6 @@ keypoints:
   ### Downloading CPC Data  
 - [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
                  
----
 
 ## Meteostat 
 
