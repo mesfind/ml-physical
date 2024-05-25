@@ -46,14 +46,26 @@ keypoints:
 - **Temporal Coverage**: 1981 to present
 - **Spatial Coverage**: 50°S to 50°N, all longitudes
 - **Resolution**: 
-  - **Temporal**: Daily, Pentad, Monthly
-  - **Spatial**: 0.05° (approx. 5 km)
+  - **Temporal**: 6-hourly, Daily, Pentad, Monthly, Seasonal
+  - **Spatial**: 0.05° (approx. 5 km) and 0.1°
+ 
     
-## Applications
+### Applications
 - **Disaster Management**: Crucial for monitoring droughts and floods.
 - **Climate Research**: Supports climate change research and impact assessments.
 - **Agricultural Monitoring**: Informs agricultural planning and risk management.
 - **Water resources**: Valuable for water resource management.
+
+### Key Strengths
+- High spatial and temporal resolution of rainfall estimates
+- Accounts for regional variations in the relationships between different datasets
+- Relatively long-term record (1981-present) with nearly immediate updates of the dataset
+
+### Key Limitations
+- Rainfall only; does not include snow or ice
+- Land-only due to its heavy reliance on station data and not available outside of 50S-50N
+- Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
+
 ---
 
 
