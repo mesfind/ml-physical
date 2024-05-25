@@ -28,9 +28,6 @@ keypoints:
 ### Overview
 **CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
 
-- 
-
-
 ### Features
 
 - It's a high-resolution gridded precipitation dataset.
