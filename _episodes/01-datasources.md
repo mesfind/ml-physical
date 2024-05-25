@@ -122,10 +122,16 @@ The dataset features high-resolution gridded precipitation data, providing daily
 
 - Source: https://iridl.ldeo.columbia.edu/
 
-Some Examples: 
+Example1: 
 
-- [IRI](https://github.com/mesfind/ml-physical/blob/gh-pages/fig/IRI_ARC.png)
+<img src="../fig/IRI_CPC.png" width="80%"/>
 
+Example2: 
+
+<img src="../fig/IRI_ARC.png" width="80%"/>
+
+
+---
 
 
 
