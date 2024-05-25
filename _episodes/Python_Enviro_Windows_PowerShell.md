@@ -13,13 +13,13 @@ Prerequisites:
 
 ## Steps:
 
-### 1) Open Windows PowerShell:
+### 1) Open Windows PowerShell
 
 - Open the Start menu and search for `Windows PowerShell`.
 
 - Right-click on `Windows PowerShell` and select `Open` (or run as administrator if needed).
 
-### 2) Navigate to Drive D: (replace with your desired drive):
+### 2) Navigate to Drive D: (replace with your desired drive)
 
 - Use the `Set-Location` cmdlet to change to the desired drive
 
@@ -31,19 +31,19 @@ Prerequisites:
 
 `New-Item -ItemType Directory -Path ml_train`  or `mkdir ml_train`
 
-### 4) Navigate to the New Directory:
+### 4) Navigate to the New Directory
 
 - Change the current directory to `ml_train` using `Set-Location`:
 
 `Set-Location -Path ./ml_train`
 
-### 5) Create a Virtual Environment:
+### 5) Create a Virtual Environment
 
 - Use the Invoke-Expression cmdlet to execute the Python command for creating a virtual environment:
 
 `Invoke-Expression -Command python -m venv ml_env`
 
-### 6) Activate the Virtual Environment:
+### 6) Activate the Virtual Environment
 
 #### Load environment variables
 `$env:Path += ".\ml_env\Scripts"`
@@ -51,17 +51,17 @@ Prerequisites:
 #### Activate the environment
 `Import-Module .\ml_env\Scripts\Activate.ps1`
 
-### 7) Upgrade pip (optional):
+### 7) Upgrade pip (optional)
 
 - Upgrade pip (the Python package installer) to the latest version:
 
 `python.exe -m pip install --upgrade pip`
 
-### 8) Install Jupyter Notebook:
+### 8) Install Jupyter Notebook
 
 `pip install notebook`
 
-### 9) Verify Installation:
+### 9) Verify Installation
 
 To verify that Jupyter Notebook is installed correctly, you can start it:
 
