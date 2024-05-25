@@ -90,24 +90,20 @@ for epoch in range(num_epochs):
 
     if (epoch + 1) % 10 == 0:
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
-
 # Evaluation
 model.eval()  # Set the model to evaluation mode
 with torch.no_grad():
     predY = model(X_test_tensor)
     predY = np.round(predY.cpu().numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
-
 # Calculate classification metrics
 accuracy = np.mean(predY == testY.reshape(-1))
 conf_matrix = confusion_matrix(testY, predY)
 class_report = classification_report(testY, predY, target_names=le.classes_)
-
 print(f'Accuracy: {accuracy:.4f}')
 print('Confusion Matrix:')
 print(conf_matrix)
 print('\nClassification Report:')
 print(class_report)
-
 # Plot the confusion matrix
 disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=le.classes_)
 disp.plot(cmap=plt.cm.Blues)

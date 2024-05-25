@@ -29,7 +29,7 @@ keypoints:
  Advances in computational power, experimental techniques, and simulations are producing vast quantities of data across fields like particle physics, cosmology, atomospherica science, materials science, and quantum computing. However, traditional analysis methods struggle to keep up with the scale and complexity of this "big data". Machine learning algorithms excel at finding patterns and making predictions from large, high-dimensional datasets. By training on this wealth of data, ML models can accelerate scientific discovery, optimize experiments, and uncover hidden insights that would be difficult for humans to discern alone. As the pace of data generation continues to outstrip human processing capabilities, machine learning will only grow in importance for driving progress in the physical sciences.
 
 
-Ultimately, machine learning represents a valuable addition to the climate scientist's toolbox, but should be applied judiciously in conjunction with established physical and statistical methods to gain the most robust insights about the Earth's complex climate system
+Ultimately, machine learning represents a valuable addition to the climate scientist's toolbox, but should be applied to gain the most robust insights about the Physical sciences.
 
 
 
@@ -840,6 +840,15 @@ plt.show()
 > {: .solution}
 {: .challenge}
 
+the R² score provides a measure of how well the regression model explains the variance in the target variable relative to a baseline model (usually the mean of the target variable). The R2 (coefficient of determination) is calculated as follows:
+
+1. **Total Sum of Squares (TSS)**: This represents the total variance in the target variable (y). It is calculated as the sum of squared differences between each observed value and the mean of all observed values.
+   \\[ \text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2 \\]
+
+2. **Residual Sum of Squares (RSS)**: This represents the unexplained variance in the target variable after fitting the regression model. It is calculated as the sum of squared differences between each observed value and its corresponding predicted value.
+   \\[ \text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2 \\] 
+3. **R2 Score**: The R2 score is then calculated as the proportion of the variance in the target variable that is explained by the regression model. It is defined as:
+   \\[ R^2 = 1 - \frac{\text{RSS}}{\text{TSS}} \\]  
 ##  ANN Classification with ANN
 
 The Multilayer Perceptron (MLP) was developed to overcome the limitations of simple perceptrons. Unlike the linear mappings in perceptrons, MLPs utilize non-linear mappings between inputs and outputs. An MLP consists of an input layer, an output layer, and one or more hidden layers, each containing multiple neurons. While neurons in a perceptron typically employ threshold-based activation functions like ReLU or sigmoid, neurons in an MLP can use a variety of arbitrary activation functions, enhancing the network's ability to model complex relationships.
@@ -861,9 +870,10 @@ from sklearn.preprocessing import StandardScaler
 
 df = pd.read_csv('data/wine-quality-white-and-red.csv')
 df.head()
-
 ~~~
 {: .python}
+
+
 
 ~~~
     type  fixed acidity  volatile acidity  citric acid  residual sugar  chlorides  free sulfur dioxide  total sulfur dioxide  density    pH  sulphates  alcohol  quality
@@ -1107,8 +1117,8 @@ The ROC curve provides a visual representation of a model's performance across d
 ### ROC Curve
 - **ROC Curve (Receiver Operating Characteristic Curve)**: A graphical plot used to evaluate the performance of a binary classification model.
 - **Axes**: 
-  - **X-axis (False Positive Rate, FPR)**: The proportion of negative instances incorrectly classified as positive (calculated as \( \text{FPR} = \frac{\text{False Positives}}{\text{False Positives} + \text{True Negatives}} \)).
-  - **Y-axis (True Positive Rate, TPR)**: The proportion of positive instances correctly classified (calculated as \( \text{TPR} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}} \)).
+  - **X-axis (False Positive Rate, FPR)**: The proportion of negative instances incorrectly classified as positive (calculated as \\( \text{FPR} = \frac{\text{False Positives}}{\text{False Positives} + \text{True Negatives}} \\)).
+  - **Y-axis (True Positive Rate, TPR)**: The proportion of positive instances correctly classified (calculated as \\( \text{TPR} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}} \\)).
 - **Purpose**: The ROC curve shows the trade-off between TPR and FPR at different classification thresholds. 
 
 ### AUC
@@ -1181,3 +1191,8 @@ mpl_model = torch.load(model_path)
 
 
 
+## Convolutional Neural Networks
+
+Convolutional Neural Networks (CNNs) offer a powerful alternative to fully connected neural networks, especially for handling spatially structured data like images. Unlike fully connected networks, where each neuron in one layer is connected to every neuron in the next, CNNs employ a unique architecture that addresses two key limitations. Firstly, fully connected networks result in a large number of parameters, making the models complex and computationally intensive. Secondly, these networks do not consider the order of input features, treating them as if their arrangement does not matter. This can be particularly problematic for image data, where spatial relationships between pixels are crucial.
+
+In contrast, CNNs introduce local connectivity and parameter sharing. Neurons in a CNN layer connect only to a small region of the previous layer, known as the receptive field, preserving the spatial structure of the data. Moreover, CNNs apply the same set of weights (filters or kernels) across different parts of the input through a process called convolution, significantly reducing the number of parameters compared to fully connected networks. This approach not only enhances computational efficiency but also enables CNNs to capture hierarchical patterns in data, such as edges, textures, and more complex structures in images. For instance, a simple 3x3 filter sliding over a 5x5 image can create a feature map that highlights specific patterns, effectively learning from the spatial context of the image.
