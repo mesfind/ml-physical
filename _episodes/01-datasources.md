@@ -135,6 +135,9 @@ Example2:
 
 <img src="../fig/IRI_ARC.png" width="80%"/>
 
+Hands-on:
+
+- Download  daily TAMSAT rainfall data for Ethiopia at least for one year from the Reading University dataset.
 
 ---
 
