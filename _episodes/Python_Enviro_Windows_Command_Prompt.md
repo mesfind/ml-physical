@@ -58,6 +58,8 @@ Prerequisites:
 
 `jupyter notebook`
 
+This will open Jupyter Notebook in your default web browser, and you can start creating and running Jupyter notebooks.
+
 ### 10) Deactivate the Environment (Optional)
 
 When you're finished, deactivate the environment by typing:
@@ -66,9 +68,7 @@ When you're finished, deactivate the environment by typing:
 
 - This exits the virtual environment and returns you to your system's default Python environment.
 
-
 ---
-This will open Jupyter Notebook in your default web browser, and you can start creating and running Jupyter notebooks.
 
 🥇 Congratulations! You have successfully set up a Python environment with Jupyter Notebook on Windows.
 
