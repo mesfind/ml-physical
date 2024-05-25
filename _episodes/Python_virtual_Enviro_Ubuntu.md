@@ -111,11 +111,13 @@ When finished, deactivate the environment by typing:
 
 ---
 
+If you dont have conda installed on your system.
+
 Install Anaconda on Windows OS:
 
-- https://www.anaconda.com/products/distribution![image](https://github.com/mesfind/ml-physical/assets/20817023/f47f89e0-11eb-4e81-a7cd-6d99c13abd04)
+- https://www.anaconda.com/download
 
-If you dont have conda installed on your system. This tutorial will walk you through the installation of Anaconda on an Ubuntu system. 
+Install Anaconda on Ubuntu OS. 
 
 - https://yonsci.github.io/yon_academic//portfolio/portfolio-2/
 
