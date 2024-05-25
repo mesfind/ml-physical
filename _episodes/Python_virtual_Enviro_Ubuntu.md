@@ -1,4 +1,4 @@
-![image](https://github.com/mesfind/ml-physical/assets/20817023/cb0a8d5c-fcb5-4e38-9755-ce3b5cfcd8e3)# Setting Up a Python virtual environment on Ubuntu 
+# Setting Up a Python virtual environment on Ubuntu 
 ---
 
 ## Method 1: Using venv Module (Recommended)
