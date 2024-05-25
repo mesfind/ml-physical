@@ -20,6 +20,17 @@ Installing Python system-wide may seem like the most straightforward approach, i
 
 - **Flexibility**: Virtual environments allow you to experiment with different versions of packages and libraries.
 
+---
+
+Use the follwing steps to install python in Virtual environments both in Windows and Ubuntu OS.
+
+**Windows**:
+- Setting Up a Environment in Windows Command Prompt  (Python Enviro_Windows_Command_Prompt.md)
+- Setting Up a Python Environment on Windows PowerShell  (Python_Enviro_Windows_PowerShell.md)
+  
+**Linux: Ubuntu**:
+- Setting Up a Python Environment on Ubuntu (Python_virtual_Enviro_Ubuntu.md)
+
   
 
 
