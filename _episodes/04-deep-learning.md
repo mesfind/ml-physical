@@ -837,3 +837,43 @@ plt.show()
 > > {: .python}
 > {: .solution}
 {: .challenge}
+
+##  ANN Classification Model for Hot Day Prediction
+
+
+In this session, we'll create a classification model using an Artificial Neural Network (ANN) to predict hot days in Addis Ababa, Ethiopia. We'll utilize historical weather data from the Meteostat library, focusing on the average daily temperature (tavg) as our feature. Our goal is to determine whether the temperature exceeds a threshold value, indicating a hot day. We'll train the model using PyTorch and evaluate its performance.
+
+In the first section of our code, we import the required libraries and set the time period for which we'll fetch historical weather data. We utilize the Meteostat library to access weather data and specify the coordinates for Addis Ababa, Ethiopia.
+
+~~~
+# Import necessary libraries and set time period
+from datetime import datetime
+from meteostat import Point, Daily
+import pandas as pd
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+start = datetime(2023, 1, 1)
+end = datetime(2023, 12, 31)
+addis_ababa = Point(9.03, 38.74, 2355)  # Addis Ababa coordinates
+~~~
+{: .python}
+
+In this section, we fetch the daily weather data for Addis Ababa in the specified time period. We extract the average daily temperature (tavg) as our feature and define a threshold temperature to classify days as hot or not. We then preprocess the data by scaling the features and splitting the dataset into training and testing sets.
+
+~~~
+# Fetch and preprocess data
+data = Daily(addis_ababa, start, end).fetch()
+data['hot_day'] = (data['tavg'] > 25).astype(int)
+X = data[['tavg']].values
+y = data['hot_day'].values
+X_scaled = StandardScaler().fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+data.head()
+~~~
+{: .python}
