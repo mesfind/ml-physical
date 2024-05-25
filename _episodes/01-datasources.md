@@ -19,6 +19,61 @@ keypoints:
 
 # Climate and weather Data sources
 
+
+---
+
+## CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
+
+
+### Overview
+**CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
+
+### Features
+
+- It's a high-resolution gridded precipitation dataset.
+- Combines satellite observations with rain gauge data.
+- Provides daily, monthly, and seasonal precipitation estimates.
+- Long-term Data: Available from 1981 onwards, useful for trend analysis.
+- Frequent Updates: Data updated in near real-time for timely information.
+  
+### Data Source
+- **Organization**: Climate Hazards Group and USGS scientists—supported by funding from USAID, NASA, and NOAA
+- **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
+- **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
+
+### Description
+- **Temporal Coverage**: 1981 to present
+- **Spatial Coverage**: 50°S to 50°N, all longitudes
+- **Resolution**: 
+  - **Temporal**: 6-hourly, Daily, Pentad, Monthly, Seasonal
+  - **Spatial**: 0.05° (approx. 5 km) and 0.1°
+ 
+    
+### Applications
+- **Disaster Management**: Crucial for monitoring droughts and floods.
+- **Climate Research**: Supports climate change research and impact assessments.
+- **Agricultural Monitoring**: Informs agricultural planning and risk management.
+- **Water resources**: Valuable for water resource management.
+
+### Key Strengths
+- High spatial and temporal resolution of rainfall estimates
+- Accounts for regional variations in the relationships between different datasets
+- Relatively long-term record (1981-present) with nearly immediate updates of the dataset
+
+### Key Limitations
+- Rainfall only; does not include snow or ice
+- Land-only due to its heavy reliance on station data and not available outside of 50S-50N
+- Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
+
+---
+
+
+
+
+
+
+
+
 ## Meteostat 
 
 Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
