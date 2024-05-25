@@ -1,4 +1,4 @@
-# Setting Up a Python virtual environment on Ubuntu 
+![image](https://github.com/mesfind/ml-physical/assets/20817023/cb0a8d5c-fcb5-4e38-9755-ce3b5cfcd8e3)# Setting Up a Python virtual environment on Ubuntu 
 ---
 
 ## Method 1: Using venv Module (Recommended)
@@ -110,6 +110,11 @@ When finished, deactivate the environment by typing:
 `conda deactivate`
 
 ---
+
+Install Anaconda on Windows OS:
+
+- https://www.anaconda.com/products/distribution![image](https://github.com/mesfind/ml-physical/assets/20817023/f47f89e0-11eb-4e81-a7cd-6d99c13abd04)
+
 If you dont have conda installed on your system. This tutorial will walk you through the installation of Anaconda on an Ubuntu system. 
 
 - https://yonsci.github.io/yon_academic//portfolio/portfolio-2/
