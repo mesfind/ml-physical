@@ -10,8 +10,6 @@ from sklearn.metrics import confusion_matrix, classification_report, ConfusionMa
 from sklearn.metrics import roc_auc_score, roc_curve
 import matplotlib.pyplot as plt
 
-
-
 # Load the dataset
 df = pd.read_csv('data/wine-quality-white-and-red.csv')
 
@@ -62,6 +60,14 @@ hidden_size = 64
 output_size = 1
 model = ANN(input_size, hidden_size, output_size)
 
+# Move the model to the available device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
+model.to(device)
+
+# Move the tensors to the device
+X_train_tensor, y_train_tensor = X_train_tensor.to(device), y_train_tensor.to(device)
+X_test_tensor, y_test_tensor = X_test_tensor.to(device), y_test_tensor.to(device)
+
 # Define the loss function and optimizer
 criterion = nn.BCELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -70,10 +76,12 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 
-# Training the model
+# Train the model
 num_epochs = 100
 for epoch in range(num_epochs):
+    model.train()  # Set the model to training mode
     for inputs, targets in train_loader:
+        inputs, targets = inputs.to(device), targets.to(device)
         outputs = model(inputs)
         loss = criterion(outputs, targets)
         optimizer.zero_grad()
@@ -84,9 +92,10 @@ for epoch in range(num_epochs):
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
 
 # Evaluation
+model.eval()  # Set the model to evaluation mode
 with torch.no_grad():
-    predY= model(X_test_tensor)
-    predY = np.round(predY.numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
+    predY = model(X_test_tensor)
+    predY = np.round(predY.cpu().numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
 
 # Calculate classification metrics
 accuracy = np.mean(predY == testY.reshape(-1))
@@ -106,17 +115,15 @@ plt.title('Confusion Matrix')
 plt.savefig("fig/wine_quality_confusion_matrix.png")
 plt.show()
 
-
-
 # Calculate predicted probabilities using sigmoid activation
 with torch.no_grad():
-    ypred = torch.sigmoid(model(X_test_tensor)).numpy()
+    ypred_proba = torch.sigmoid(model(X_test_tensor)).cpu().numpy()
 
 # Calculate ROC AUC score
-roc_auc = roc_auc_score(testY, ypred)
+roc_auc = roc_auc_score(testY, ypred_proba)
 
 # Compute ROC curve
-fpr, tpr, _ = roc_curve(testY, ypred)
+fpr, tpr, _ = roc_curve(testY, ypred_proba)
 
 # Plot ROC curve in a single figure
 plt.figure(figsize=(8, 6))

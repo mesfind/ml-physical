@@ -12,7 +12,9 @@ objectives:
 - "Installing, updating, and importing packages."
 - "Verify that everyone's Python environment is ready."
 keypoints:
-- "Are you flying yet?"
+- "Building high-performing models can be quite challenging, in fact, it’s a real test of your skills"
+- "You’ve taken the crucial step of preprocessing CSV files and transforming the data into tensors."
+- ""
 ---
 <!-- MathJax -->
 
@@ -896,14 +898,14 @@ trainY = np.array(trainY).reshape(-1, 1)
 testY = np.array(testY).reshape(-1, 1)
 
 # Convert data to PyTorch tensors with the correct data type
-X_train_tensor = torch.FloatTensor(X_train)
-y_train_tensor = torch.FloatTensor(trainY)  
-X_test_tensor = torch.FloatTensor(X_test)
-y_test_tensor = torch.FloatTensor(testY)  
-
+X_train = torch.FloatTensor(X_train)
+y_train = torch.FloatTensor(trainY)  
+X_test = torch.FloatTensor(X_test)
+y_test = torch.FloatTensor(testY)  
 ~~~
-
 {: .python}
+
+
 
 ~~~
 # Define the ANN model
@@ -922,23 +924,78 @@ class ANN(nn.Module):
         out = self.sigmoid(out)
         return out
 
-input_size = X_train_tensor.shape[1]
+input_size = X_train.shape[1]
 hidden_size = 64
 output_size = 1
 model = ANN(input_size, hidden_size, output_size)
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
+# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model.to(device)
+# move the tensor to GPU device
+X_train, y_train = X_train.to(device), y_train.to(device)
+X_test, y_test = X_test.to(device), y_test.to(device)
+print(model)
+~~~
+{: .python}
+
+This simple neural network architecture is suitable for binary classification tasks where the input data has 12 features, and the output is a probability indicating the likelihood of belonging to the positive class.
+
+
+~~~
+ANN(
+  (fc1): Linear(in_features=12, out_features=64, bias=True)
+  (relu): ReLU()
+  (fc2): Linear(in_features=64, out_features=1, bias=True)
+  (sigmoid): Sigmoid()
+)
+~~~
+{: .output}
+
+The output is a summary of the architecture of an Artificial Neural Network (ANN) model implemented using PyTorch:
+
+1. **Input Layer**:
+   - The network expects an input with 12 features. This correspond to 12 different measurements or attributes in the dataset.
+
+2. **First Fully Connected Layer (fc1)**:
+   - This layer performs a linear transformation on the 12 input features, producing 64 output features. The transformation can be represented as:
+     \\[
+     \text{output} = \text{input} \times \text{weight} + \text{bias}
+     \\]
+   - The weight is a matrix with dimensions (12, 64) and the bias is a vector with 64 elements.
+
+3. **ReLU Activation Function**:
+   - After the first linear transformation, the ReLU activation function is applied. This introduces non-linearity to the model, enabling it to capture more complex patterns in the data. The ReLU function is defined as:
+     \\[
+     \text{ReLU}(x) = \max(0, x)
+     \\]
+   - This means that any negative values in the output from `fc1` are set to 0, while positive values remain unchanged.
+
+4. **Second Fully Connected Layer (fc2)**:
+   - The second fully connected layer takes the 64 features produced by the ReLU activation and transforms them into a single output feature using another linear transformation. This is typically the final layer in a binary classification network.
+
+5. **Sigmoid Activation Function**:
+   - Finally, the Sigmoid activation function is applied to the output of the second fully connected layer. The Sigmoid function maps the output to a value between 0 and 1, which can be interpreted as the probability of the positive class in a binary classification problem. The Sigmoid function is defined as:
+     \\[
+     \sigma(x) = \frac{1}{1 + e^{-x}}
+     \\]
+
+
+
+~~~
 # Define the loss function and optimizer
 criterion = nn.BCELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Convert data into PyTorch datasets and dataloaders
-train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+# Create DataLoader
+train_dataset = TensorDataset(X_train, y_train)
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 
-# Training the model
+# Train the model
 num_epochs = 100
 for epoch in range(num_epochs):
     for inputs, targets in train_loader:
+        inputs, targets = inputs.to(device), targets.to(device)
         outputs = model(inputs)
         loss = criterion(outputs, targets)
         optimizer.zero_grad()
@@ -948,27 +1005,28 @@ for epoch in range(num_epochs):
     if (epoch + 1) % 10 == 0:
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
 
-# Evaluation
+# Evaluate the model
+model.eval()
 with torch.no_grad():
-    predictions = model(X_test_tensor)
-    predictions = np.round(predictions.numpy())
-    accuracy = np.mean(predictions == y_test)
+    predictions = model(X_test)
+    predictions = np.round(predictions.cpu().numpy()).astype(int).reshape(-1)
+    accuracy = np.mean(predictions == y_test_tensor.cpu().numpy().reshape(-1))
     print(f'Accuracy: {accuracy:.4f}')
 ~~~
 {: .python}
 
 ~~~
-Epoch [10/100], Loss: 0.5175
-Epoch [20/100], Loss: 0.6034
-Epoch [30/100], Loss: 0.5514
-Epoch [40/100], Loss: 0.4760
-Epoch [50/100], Loss: 0.5888
-Epoch [60/100], Loss: 0.7388
-Epoch [70/100], Loss: 0.4659
-Epoch [80/100], Loss: 0.6391
-Epoch [90/100], Loss: 0.9356
-Epoch [100/100], Loss: 0.3923
-Accuracy: 0.0000
+Epoch [10/100], Loss: 0.0194
+Epoch [20/100], Loss: 0.0203
+Epoch [30/100], Loss: 0.0017
+Epoch [40/100], Loss: 0.0030
+Epoch [50/100], Loss: 0.0027
+Epoch [60/100], Loss: 0.0012
+Epoch [70/100], Loss: 0.0003
+Epoch [80/100], Loss: 0.0003
+Epoch [90/100], Loss: 0.0006
+Epoch [100/100], Loss: 0.0004
+Accuracy: 0.9954
 ~~~
 {: .output}
 
@@ -984,39 +1042,31 @@ Accuracy: 0.0000
 > > 
 > > ~~~
 > > from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
-> > # Define the ANN model
-> > class ANN(nn.Module):
-> >     def __init__(self, input_size, hidden_size, output_size):
-> >         super(ANN, self).__init__()
-> >         self.fc1 = nn.Linear(input_size, hidden_size)
-> >         self.relu = nn.ReLU()
-> >         self.fc2 = nn.Linear(hidden_size, output_size)
-> >         self.sigmoid = nn.Sigmoid()
-> > 
-> >     def forward(self, x):
-> >         out = self.fc1(x)
-> >         out = self.relu(out)
-> >         out = self.fc2(out)
-> >         out = self.sigmoid(out)
-> >         return out
-> > 
 > > input_size = X_train_tensor.shape[1]
 > > hidden_size = 64
 > > output_size = 1
 > > model = ANN(input_size, hidden_size, output_size)
 > > 
+> > # Move the model to the available device
+> > device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
+> > model.to(device)
+> > # Move the tensors to the device
+> > X_train_tensor, y_train_tensor = X_train_tensor.to(device), y_train_tensor.to(device)
+> > X_test_tensor, y_test_tensor = X_test_tensor.to(device), y_test_tensor.to(device)
+> > 
 > > # Define the loss function and optimizer
 > > criterion = nn.BCELoss()
 > > optimizer = optim.Adam(model.parameters(), lr=0.001)
-> > 
-> > # Create DataLoader
+> > # Convert data into PyTorch datasets and dataloaders
 > > train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
 > > train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 > > 
 > > # Train the model
 > > num_epochs = 100
 > > for epoch in range(num_epochs):
+> >     model.train()  # Set the model to training mode
 > >     for inputs, targets in train_loader:
+> >        inputs, targets = inputs.to(device), targets.to(device)
 > >         outputs = model(inputs)
 > >         loss = criterion(outputs, targets)
 > >         optimizer.zero_grad()
@@ -1025,27 +1075,25 @@ Accuracy: 0.0000
 > > 
 > >     if (epoch + 1) % 10 == 0:
 > >         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
-> > 
-> > # Evaluate the model
+> > # Evaluation
+> > model.eval()  # Set the model to evaluation mode
 > > with torch.no_grad():
-> >     predictions = model(X_test_tensor)
-> >     predictions = np.round(predictions.numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
-> > 
+> >     predY = model(X_test_tensor)
+> >     predY = np.round(predY.cpu().numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
 > > # Calculate classification metrics
-> > accuracy = np.mean(predictions == testY.reshape(-1))
-> > conf_matrix = confusion_matrix(testY, predictions)
-> > class_report = classification_report(testY, predictions, target_names=le.classes_)
-> > 
+> > accuracy = np.mean(predY == testY.reshape(-1))
+> > conf_matrix = confusion_matrix(testY, predY)
+> > class_report = classification_report(testY, predY, target_names=le.classes_)
 > > print(f'Accuracy: {accuracy:.4f}')
 > > print('Confusion Matrix:')
 > > print(conf_matrix)
 > > print('\nClassification Report:')
 > > print(class_report)
-> > 
 > > # Plot the confusion matrix
 > > disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=le.classes_)
 > > disp.plot(cmap=plt.cm.Blues)
 > > plt.title('Confusion Matrix')
+> > plt.savefig("fig/wine_quality_confusion_matrix.png")
 > > plt.show()
 > > ~~~
 > > {: .python}
@@ -1067,15 +1115,20 @@ Accuracy: 0.0000
 > > import matplotlib.pyplot as plt
 > > import torch
 > > # Calculate predicted probabilities using sigmoid activation
+> > 
+> > # Calculate predicted probabilities using sigmoid activation
 > > with torch.no_grad():
-> >    predictions = torch.sigmoid(model(X_test_tensor)).numpy()
-> >
+> >     ypred_proba = torch.sigmoid(model(X_test_tensor)).cpu().numpy()
+> > 
 > > # Calculate ROC AUC score
-> > roc_auc = roc_auc_score(testY, predictions)
-> >
+> > roc_auc = roc_auc_score(testY, ypred_proba)
+> > 
 > > # Compute ROC curve
-> > fpr, tpr, _ = roc_curve(testY, predictions)
+> > fpr, tpr, _ = roc_curve(testY, ypred_proba)
+> > 
+> > # Plot ROC curve in a single figure
 > > plt.figure(figsize=(8, 6))
+> > 
 > > # Plot ROC curve
 > > plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
 > > plt.plot([0, 1], [0, 1], color='red', lw=2, linestyle='--')
@@ -1086,12 +1139,27 @@ Accuracy: 0.0000
 > > plt.title('Receiver Operating Characteristic (ROC) Curve')
 > > plt.legend(loc='lower right')
 > > plt.grid(True)
-> > plt.tight_layout()
+> > plt.tight_layout()  # Tighten layout to prevent overlap
+> > plt.savefig("fig/wine_quality_roc_auc.png")
 > > plt.show()
 > > ~~~
 > > {: .python}
 > > ![](../fig/wine_quality_roc_auc.png)
 > {: .solution}
 {: .challenge}
+
+
+Training a good model can take a lot of time. And I mean weeks, months or even years. So, let’s make sure that you know how you can save your precious work. Saving is easy:
+
+~~~
+# save the trained model
+model_path = 'model.pth'
+torch.save(model, model_path)
+
+# Restoring your model is easy too
+
+mpl_model = torch.load(model_path)
+~~~
+
 
 
