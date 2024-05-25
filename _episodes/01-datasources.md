@@ -20,7 +20,7 @@ keypoints:
 # Climate and weather Data sources
 
 
-## 1) CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
+## 1) CHIRPS 
 
 **CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)** offers a comprehensive global precipitation dataset, combining satellite observations with ground-based station data to deliver accurate rainfall estimates. 
 
