@@ -13,16 +13,14 @@ Prerequisites:
 
 ### 1) Open Windows PowerShell:
 
-Open the Start menu and search for "Windows PowerShell."
+Open the Start menu and search for `Windows PowerShell`.
 
-Right-click on "Windows PowerShell" and select "Open" (or run as administrator if needed).
+Right-click on `Windows PowerShell` and select `Open` (or run as administrator if needed).
 
-Navigate to Drive D: (replace with your desired drive):
+Navigate to Drive `D:` (replace with your desired drive):
 
-Use the Set-Location cmdlet to change to the desired drive
+Use the `Set-Location` cmdlet to change to the desired drive
 
- # Replace D: with your desired drive letter
- 
-Set-Location -Path D: 
+`Set-Location -Path D:` 
 
 
