@@ -65,6 +65,8 @@ To verify that Jupyter Notebook is installed correctly, you can start it:
 
 `jupyter notebook`
 
+- This will open Jupyter Notebook in your default web browser. You can then start creating and running notebooks.
+
 ### 10) Deactivate the Environment (Optional)
 
 When you're finished, deactivate the environment by typing:
@@ -74,8 +76,6 @@ When you're finished, deactivate the environment by typing:
 - This exits the virtual environment and returns you to your system's default Python environment.
 
 ---
-
-- This will open Jupyter Notebook in your default web browser. You can then start creating and running notebooks.
 
 🥇Congratulations! You have successfully set up a Python environment with Jupyter Notebook on Windows using PowerShell.
 
