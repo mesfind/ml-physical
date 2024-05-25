@@ -93,9 +93,27 @@ When you're finished, deactivate the environment by typing:
 
 `conda create -n my_env python=3.9`
 
-### 2. 
+- This command creates a new environment named my_env with Python version 3.9 (adjust the version as needed).
+  
+- The -n flag specifies the environment name.
 
+### 2. Activate the Environment
 
+Once created, activate the environment using the following command (adjust the environment name if needed):
+
+`conda activate my_env`
+
+### 3. Deactivate the Environment
+
+When finished, deactivate the environment by typing:
+
+`conda deactivate`
+
+---
+
+If you dont have conda installed on your system. This tutorial will walk you through the installation of Anaconda on an Ubuntu system. 
+
+- https://yonsci.github.io/yon_academic//portfolio/portfolio-2/
 
 
 ---
