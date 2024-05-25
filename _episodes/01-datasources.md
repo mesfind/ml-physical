@@ -19,6 +19,68 @@ keypoints:
 
 # Climate and weather Data sources
 
+# Climate Hazards Group Infrared Precipitation with Stations (CHIRPS)
+
+---
+
+## Overview
+**CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
+
+---
+
+## Data Source
+- **Organization**: Climate Hazards Group
+- **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
+- **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
+
+---
+
+## Description
+- **Temporal Coverage**: 1981 to present
+- **Spatial Coverage**: 50°S to 50°N, all longitudes
+- **Resolution**: 
+  - **Temporal**: Daily, Pentad, Monthly
+  - **Spatial**: 0.05° (approx. 5 km)
+- **Data Sources**: 
+  - Infrared satellite imagery
+  - In-situ station data
+  - Atmospheric model data
+
+---
+
+## Features
+- **High Resolution**: Combines the precision of station data with the broad coverage of satellite imagery.
+- **Long-term Data**: Available from 1981 onwards, useful for trend analysis.
+- **Frequent Updates**: Data updated in near real-time for timely information.
+
+---
+
+## Applications
+- **Agricultural Monitoring**: Helps in drought monitoring and crop assessment.
+- **Climate Research**: Essential for studying precipitation patterns and climate change.
+- **Disaster Management**: Provides critical data for managing flood risks and water resources.
+
+---
+
+## Useful Links
+- [CHIRPS Overview](https://www.chc.ucsb.edu/data/chirps)
+- [Data Download](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
+- [Technical Documentation](https://pubs.usgs.gov/ds/832/)
+- [Climate Hazards Group](https://www.chc.ucsb.edu/)
+
+---
+
+## Learn More
+- **Documentation**: [CHIRPS Technical Manual](https://pubs.usgs.gov/ds/832/ds832.pdf)
+---
+
+
+
+
+
+
+
+
 ## Meteostat 
 
 Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
