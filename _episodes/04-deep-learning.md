@@ -1049,7 +1049,7 @@ Accuracy: 0.0000
 > > plt.show()
 > > ~~~
 > > {: .python}
-> > ![](../fig/confusion_logistic.png)
+> > ![](../fig/wine_quality_confusion_matrix.png)
 > {: .solution}
 {: .challenge}
 
