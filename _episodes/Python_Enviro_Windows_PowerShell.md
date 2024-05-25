@@ -39,9 +39,9 @@ Prerequisites:
 
 ### 5) Create a Virtual Environment
 
-- Use the Invoke-Expression cmdlet to execute the Python command for creating a virtual environment:
+- Create a virtual environment:
 
-`Invoke-Expression -Command python -m venv ml_env`
+`python -m venv ml_env`
 
 ### 6) Activate the Virtual Environment
 
