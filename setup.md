@@ -144,13 +144,19 @@ $ pip install 'torchgeo[all]'
 
 - Use the `cd` command to navigate to the location where you want to create the virtual environment. For example:
 
-`cd Documents/my_project`
+~~~
+cd Documents/my_project
+~~~
+{: .bash}
 
 ### 3) Create the Virtual Environment
 
 - Use the `python3 -m venv` command followed by your desired environment name:
 
-`python3 -m venv my_env`
+~~~
+python3 -m venv my_env
+~~~
+{: .bash}
 
 - This creates a virtual environment directory named `my_env` in the current location.
 
@@ -158,19 +164,29 @@ $ pip install 'torchgeo[all]'
 
 - Activate the environment by running the following command (replace my_env accordingly):
 
-`source my_env/bin/activate`
+~~~
+source my_env/bin/activate
+~~~
+{: .bash}
+
 
 ### 5) Install Required Packages
 
 - Once the environment is activated, use pip to install the packages you need for your project:
 
-`pip install <package_name>`
+~~~
+pip install <package_name>
+~~~
+{: .bash}
 
 ### 6) Deactivate the Environment (Optional)
 
 When you're finished, deactivate the environment by typing:
 
-`deactivate`
+~~~
+deactivate
+~~~
+{: .bash}
 
 - This exits the virtual environment and returns you to your system's default Python environment.
 
@@ -182,17 +198,25 @@ This method might require installing virtualenv first:
 
 ### 1) Update package lists
 
-`sudo apt update`  
+~~~
+$ sudo apt update 
+~~~
+{: .bash}
 
 ### 2) Install virtualenv
 
-`sudo apt install python3-venv`
+~~~
+$ sudo apt install python3-venv
+~~~
 
 ### 3) Create the Virtual Environment
 
 - Use the `virtualenv` command followed by your desired environment name:
 
-`virtualenv my_env`
+~~~
+$ virtualenv my_env
+~~~
+{: .bash}
 
 - This creates a virtual environment directory named `my_env` in the current location.
 
@@ -200,19 +224,28 @@ This method might require installing virtualenv first:
 
 - Activate the environment by running the following command (replace my_env accordingly):
 
-`source my_env/bin/activate`
+~~~
+$ source my_env/bin/activate
+~~~
+{: .bash}
 
 ### 5) Install Required Packages
 
 - Once the environment is activated, use pip to install the packages you need for your project:
 
-`pip install <package_name>`
+~~~
+$pip install <package_name>`
+~~~
+{: .bash}
 
 ### 6) Deactivate the Environment (Optional)
 
 When you're finished, deactivate the environment by typing:
 
-`deactivate`
+~~~
+$ deactivate`
+~~~
+{: .bash}
 
 - This exits the virtual environment and returns you to your system's default Python environment.
 
@@ -224,7 +257,10 @@ When you're finished, deactivate the environment by typing:
 
 - Replace "my_env" with your preferred name and "3.9" with the Python version
 
-`conda create -n my_env python=3.9`
+~~~
+$conda create -n my_env python=3.9
+~~~
+{: .bash}
 
 - This command creates a new environment named my_env with Python version 3.9 (adjust the version as needed).
   
@@ -234,13 +270,18 @@ When you're finished, deactivate the environment by typing:
 
 Once created, activate the environment using the following command (adjust the environment name if needed):
 
-`conda activate my_env`
+~~~
+$bconda activate my_env
+~~~
+{: .bash}
 
 ### 3. Deactivate the Environment
 
 When finished, deactivate the environment by typing:
 
-`conda deactivate`
-
+~~~
+$ conda deactivate
+~~~
+{: .bash}
 
 
