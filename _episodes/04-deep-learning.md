@@ -1052,3 +1052,37 @@ Accuracy: 0.0000
 {: .challenge}
 
 
+> ## Exercise 2: Evaluating Model Performance with ROC Curve
+> In this exercise, you will evaluate the performance of the trained ANN model using an ROC curve.
+> 
+> 1. Plot the ROC curve for the MLP classifier.
+> 2. Calculate the area under the ROC curve (AUC) to quantify the model's performance.
+>
+> > ## Solution
+> > 
+> > ```python
+> > plt.figure(figsize=(8, 8))
+> > 
+> > # Calculate the MLP score
+> > mlp_roc_auc = roc_auc_score(y_test, mlp_model.predict(X_test))
+> > 
+> > # Plot the MLP curve
+> > fpr, tpr, thresholds = roc_curve(y_test, mlp_model.predict_proba(X_test)[:,1])
+> > plt.plot(fpr, tpr, 'b', label='MLP Classifier (area = %0.3f)' % mlp_roc_auc)
+> > 
+> > # Plot the random guessing line
+> > plt.plot([0, 1], [0, 1],'r--')
+> > 
+> > plt.xlim([0.0, 1.0])
+> > plt.ylim([0.0, 1.05])
+> > plt.xlabel('False Positive Rate')
+> > plt.ylabel('True Positive Rate')
+> > plt.title('Receiver Operating Characteristic')
+> > plt.legend(loc="lower right")
+> > 
+> > plt.show()
+> > ```
+> > {: .solution}
+{: .challenge}
+
+
