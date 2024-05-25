@@ -139,44 +139,42 @@ admin@MacBook~ $  conda env remove --name $envname
 
 ## Creating Environments with venv Module 
 
-
 ### 1) Open a Terminal
 
-- Press `Ctrl + Alt + T` or search for `Terminal` in your application launcher.
+- Launch the terminal by pressing `Ctrl + Alt + T` or searching for `Terminal` in your application launcher.
 
 ### 2) Navigate to the Desired Directory
 
-- Use the `cd` command to navigate to the location where you want to create the virtual environment. For example:
+- Use the `cd` command to move to the directory where you want to create the virtual environment. For example:
 
 ~~~
-admin@MacBook~ $ cd Documents/my_project
+admin@MacBook~ $ cd Documents/myproject
 ~~~
 {: .bash}
 
 ### 3) Create the Virtual Environment
 
-- Use the `python3 -m venv` command followed by your desired environment name:
+- Execute the `python3 -m venv` command with your chosen environment name:
 
 ~~~
-admin@MacBook~ $ python3 -m venv my_env
+admin@MacBook~ $ python3 -m venv myenv
 ~~~
 {: .bash}
 
-- This creates a virtual environment directory named `my_env` in the current location.
+- This will create a directory named `myenv` for your virtual environment in the specified location.
 
 ### 4) Activate the Virtual Environment
 
-- Activate the environment by running the following command (replace my_env accordingly):
+- Activate the virtual environment by running the following command, adjusting for your environment name:
 
 ~~~
-admin@MacBook~ $ source my_env/bin/activate
+admin@MacBook~ $ source myenv/bin/activate
 ~~~
 {: .bash}
 
-
 ### 5) Install Required Packages
 
-- Once the environment is activated, use pip to install the packages you need for your project:
+- With the environment activated, use pip to install the necessary packages:
 
 ~~~
 admin@MacBook~ $ pip install <package_name>
@@ -185,22 +183,22 @@ admin@MacBook~ $ pip install <package_name>
 
 ### 6) Deactivate the Environment (Optional)
 
-When you're finished, deactivate the environment by typing:
+- To exit the virtual environment, type:
 
 ~~~
 admin@MacBook~ $ deactivate
 ~~~
 {: .bash}
 
-- This exits the virtual environment and returns you to your system's default Python environment.
-
-
+- This command deactivates the virtual environment and returns you to the default Python environment.
 
 ## Method 2: Using virtualenv (Optional)
 
-This method might require installing virtualenv first:
+This alternative method might require first installing virtualenv.
 
-### 1) Update package lists
+### 1) Update Package Lists
+
+- Update your package lists with:
 
 ~~~
 admin@MacBook~ $ sudo apt update 
@@ -209,49 +207,49 @@ admin@MacBook~ $ sudo apt update
 
 ### 2) Install virtualenv
 
+- Install virtualenv using:
+
 ~~~
 admin@MacBook~ $ sudo apt install python3-venv
 ~~~
 
 ### 3) Create the Virtual Environment
 
-- Use the `virtualenv` command followed by your desired environment name:
+- Use the `virtualenv` command with your chosen environment name:
 
 ~~~
-admin@MacBook~ $ virtualenv my_env
+admin@MacBook~ $ virtualenv myenv
 ~~~
 {: .bash}
 
-- This creates a virtual environment directory named `my_env` in the current location.
+- This will create a directory named `myenv` for your virtual environment in the specified location.
 
 ### 4) Activate the Virtual Environment
 
-- Activate the environment by running the following command (replace my_env accordingly):
+- Activate the virtual environment by running the following command, adjusting for your environment name:
 
 ~~~
-admin@MacBook~ $ source my_env/bin/activate
+admin@MacBook~ $ source myenv/bin/activate
 ~~~
 {: .bash}
 
 ### 5) Install Required Packages
 
-- Once the environment is activated, use pip to install the packages you need for your project:
+- With the environment activated, use pip to install the necessary packages:
 
 ~~~
-admin@MacBook~ $ pip install <package_name>`
+admin@MacBook~ $ pip install <package_name>
 ~~~
 {: .bash}
 
 ### 6) Deactivate the Environment (Optional)
 
-When you're finished, deactivate the environment by typing:
+- To exit the virtual environment, type:
 
 ~~~
-admin@MacBook~ $ deactivate`
+admin@MacBook~ $ deactivate
 ~~~
 {: .bash}
 
-- This exits the virtual environment and returns you to your system's default Python environment.
-
-
+- This command deactivates the virtual environment and returns you to the default Python environment.
 
