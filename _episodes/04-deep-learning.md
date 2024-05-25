@@ -838,17 +838,16 @@ plt.show()
 > {: .solution}
 {: .challenge}
 
-##  ANN Classification Model for Hot Day Prediction
+##  ANN Classification with ANN
+
+The Multilayer Perceptron (MLP) was developed to overcome the limitations of simple perceptrons. Unlike the linear mappings in perceptrons, MLPs utilize non-linear mappings between inputs and outputs. An MLP consists of an input layer, an output layer, and one or more hidden layers, each containing multiple neurons. While neurons in a perceptron typically employ threshold-based activation functions like ReLU or sigmoid, neurons in an MLP can use a variety of arbitrary activation functions, enhancing the network's ability to model complex relationships.
+
+![](../fig/MLP.png)
 
 
-In this session, we'll create a classification model using an Artificial Neural Network (ANN) to predict hot days in Addis Ababa, Ethiopia. We'll utilize historical weather data from the Meteostat library, focusing on the average daily temperature (tavg) as our feature. Our goal is to determine whether the temperature exceeds a threshold value, indicating a hot day. We'll train the model using PyTorch and evaluate its performance.
-
-In the first section of our code, we import the required libraries and set the time period for which we'll fetch historical weather data. We utilize the Meteostat library to access weather data and specify the coordinates for Addis Ababa, Ethiopia.
+### Loading Libraries
 
 ~~~
-# Import necessary libraries and set time period
-from datetime import datetime
-from meteostat import Point, Daily
 import pandas as pd
 import numpy as np
 import torch
@@ -858,22 +857,237 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-start = datetime(2023, 1, 1)
-end = datetime(2023, 12, 31)
-addis_ababa = Point(9.03, 38.74, 2355)  # Addis Ababa coordinates
+df = pd.read_csv('data/wine-quality-white-and-red.csv')
+df.head()
+
 ~~~
 {: .python}
 
-In this section, we fetch the daily weather data for Addis Ababa in the specified time period. We extract the average daily temperature (tavg) as our feature and define a threshold temperature to classify days as hot or not. We then preprocess the data by scaling the features and splitting the dataset into training and testing sets.
+~~~
+    type  fixed acidity  volatile acidity  citric acid  residual sugar  chlorides  free sulfur dioxide  total sulfur dioxide  density    pH  sulphates  alcohol  quality
+0  white            7.0              0.27         0.36            20.7      0.045                 45.0                 170.0   1.0010  3.00       0.45      8.8        6
+1  white            6.3              0.30         0.34             1.6      0.049                 14.0                 132.0   0.9940  3.30       0.49      9.5        6
+2  white            8.1              0.28         0.40             6.9      0.050                 30.0                  97.0   0.9951  3.26       0.44     10.1        6
+3  white            7.2              0.23         0.32             8.5      0.058                 47.0                 186.0   0.9956  3.19       0.40      9.9        6
+4  white            7.2              0.23         0.32             8.5      0.058                 47.0                 186.0   0.9956  3.19       0.40      9.9        6
+~~~
+{: .output}
+
+
+### Data Preprocessing
 
 ~~~
-# Fetch and preprocess data
-data = Daily(addis_ababa, start, end).fetch()
-data['hot_day'] = (data['tavg'] > 25).astype(int)
-X = data[['tavg']].values
-y = data['hot_day'].values
-X_scaled = StandardScaler().fit_transform(X)
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-data.head()
+X = df.drop('type', axis=1)
+y = df['type']
+
+# Convert categorical values to numerical values using LabelEncoder
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+sc = StandardScaler()
+X = sc.fit_transform(X)
+
+
+trainX, testX, trainY, testY = train_test_split(X, y, test_size=0.2)
+
+
+# Convert target variables to NumPy arrays and reshape
+trainY = np.array(trainY).reshape(-1, 1)
+testY = np.array(testY).reshape(-1, 1)
+
+# Convert data to PyTorch tensors with the correct data type
+X_train_tensor = torch.FloatTensor(X_train)
+y_train_tensor = torch.FloatTensor(trainY)  
+X_test_tensor = torch.FloatTensor(X_test)
+y_test_tensor = torch.FloatTensor(testY)  
+
+~~~
+
+{: .python}
+
+~~~
+# Define the ANN model
+class ANN(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(ANN, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        out = self.fc1(x)
+        out = self.relu(out)
+        out = self.fc2(out)
+        out = self.sigmoid(out)
+        return out
+
+input_size = X_train_tensor.shape[1]
+hidden_size = 64
+output_size = 1
+model = ANN(input_size, hidden_size, output_size)
+
+# Define the loss function and optimizer
+criterion = nn.BCELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Convert data into PyTorch datasets and dataloaders
+train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+
+# Training the model
+num_epochs = 100
+for epoch in range(num_epochs):
+    for inputs, targets in train_loader:
+        outputs = model(inputs)
+        loss = criterion(outputs, targets)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# Evaluation
+with torch.no_grad():
+    predictions = model(X_test_tensor)
+    predictions = np.round(predictions.numpy())
+    accuracy = np.mean(predictions == y_test)
+    print(f'Accuracy: {accuracy:.4f}')
 ~~~
 {: .python}
+
+~~~
+Epoch [10/100], Loss: 0.5175
+Epoch [20/100], Loss: 0.6034
+Epoch [30/100], Loss: 0.5514
+Epoch [40/100], Loss: 0.4760
+Epoch [50/100], Loss: 0.5888
+Epoch [60/100], Loss: 0.7388
+Epoch [70/100], Loss: 0.4659
+Epoch [80/100], Loss: 0.6391
+Epoch [90/100], Loss: 0.9356
+Epoch [100/100], Loss: 0.3923
+Accuracy: 0.0000
+~~~
+{: .output}
+
+> ## Exercise: Training and Evaluating an ANN Classifier
+>
+> In this exercise, we will enhance the neural network training process with PyTorch by implementing the following steps:
+>
+> 1. Train an ANN model using PyTorch on a wine quality dataset.
+> 2. Evaluate the model using classification metrics.
+> 3. Plot the confusion matrix to visualize the performance of the classifier.
+>
+> ## Solution
+>> 
+>> ```python
+>> import pandas as pd
+>> import numpy as np
+>> import torch
+>> import torch.nn as nn
+>> import torch.optim as optim
+>> from torch.utils.data import DataLoader, TensorDataset
+>> from sklearn.model_selection import train_test_split
+>> from sklearn.preprocessing import StandardScaler, LabelEncoder
+>> from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
+>> import matplotlib.pyplot as plt
+>> 
+>> # Load the dataset
+>> df = pd.read_csv('data/wine-quality-white-and-red.csv')
+>> 
+>> # Prepare the data
+>> X = df.drop('type', axis=1)
+>> y = df['type']
+>> 
+>> # Convert categorical values to numerical values using LabelEncoder
+>> le = LabelEncoder()
+>> y = le.fit_transform(y)
+>> 
+>> # Split the dataset
+>> trainX, testX, trainY, testY = train_test_split(X, y, test_size=0.2, random_state=42)
+>> 
+>> # Normalize the features
+>> scaler = StandardScaler()
+>> X_train = scaler.fit_transform(trainX)
+>> X_test = scaler.transform(testX)
+>> 
+>> # Convert target variables to NumPy arrays and reshape
+>> trainY = np.array(trainY).reshape(-1, 1)
+>> testY = np.array(testY).reshape(-1, 1)
+>> 
+>> # Convert data to PyTorch tensors with the correct data type
+>> X_train_tensor = torch.FloatTensor(X_train)
+>> y_train_tensor = torch.FloatTensor(trainY)  # Use FloatTensor for BCELoss
+>> X_test_tensor = torch.FloatTensor(X_test)
+>> y_test_tensor = torch.FloatTensor(testY)  # Use FloatTensor for BCELoss
+>> 
+>> # Define the ANN model
+>> class ANN(nn.Module):
+>>     def __init__(self, input_size, hidden_size, output_size):
+>>         super(ANN, self).__init__()
+>>         self.fc1 = nn.Linear(input_size, hidden_size)
+>>         self.relu = nn.ReLU()
+>>         self.fc2 = nn.Linear(hidden_size, output_size)
+>>         self.sigmoid = nn.Sigmoid()
+>> 
+>>     def forward(self, x):
+>>         out = self.fc1(x)
+>>         out = self.relu(out)
+>>         out = self.fc2(out)
+>>         out = self.sigmoid(out)
+>>         return out
+>> 
+>> input_size = X_train_tensor.shape[1]
+>> hidden_size = 64
+>> output_size = 1
+>> model = ANN(input_size, hidden_size, output_size)
+>> 
+>> # Define the loss function and optimizer
+>> criterion = nn.BCELoss()
+>> optimizer = optim.Adam(model.parameters(), lr=0.001)
+>> 
+>> # Create DataLoader
+>> train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+>> train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+>> 
+>> # Train the model
+>> num_epochs = 100
+>> for epoch in range(num_epochs):
+>>     for inputs, targets in train_loader:
+>>         outputs = model(inputs)
+>>         loss = criterion(outputs, targets)
+>>         optimizer.zero_grad()
+>>         loss.backward()
+>>         optimizer.step()
+>> 
+>>     if (epoch + 1) % 10 == 0:
+>>         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+>> 
+>> # Evaluate the model
+>> with torch.no_grad():
+>>     predictions = model(X_test_tensor)
+>>     predictions = np.round(predictions.numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
+>> 
+>> # Calculate classification metrics
+>> accuracy = np.mean(predictions == testY.reshape(-1))
+>> conf_matrix = confusion_matrix(testY, predictions)
+>> class_report = classification_report(testY, predictions, target_names=le.classes_)
+>> 
+>> print(f'Accuracy: {accuracy:.4f}')
+>> print('Confusion Matrix:')
+>> print(conf_matrix)
+>> print('\nClassification Report:')
+>> print(class_report)
+>> 
+>> # Plot the confusion matrix
+>> disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=le.classes_)
+>> disp.plot(cmap=plt.cm.Blues)
+>> plt.title('Confusion Matrix')
+>> plt.show()
+>> ```
+>> {: .solution}
+{: .challenge}
+
+
