@@ -23,14 +23,14 @@ Conda has a default environment called base that include a Python installation a
 Conda environments behave similarly to global environments - installed packages are available to all projects using that environment. It allows you to create environments that isolate each project, thereby preventing dependency conflicts between projects. You can create a new environment with a specific version of Python and multiple packages using the following command:
 
 ~~~
-admin@MacBook~ $ $conda create -n <env_name> python=<version#> 
+admin@MacBook~ $ conda create -n <env_name> python=<version#> 
 ~~~
 {: bash}
 
 For instance, to create a new conda environment called `pygmt` with Python 3.12:
 
 ~~~
-admin@MacBook~ $conda create --name pygmt python=3.11
+admin@MacBook~ $ conda create --name pygmt python=3.11
 ~~~
 {: .shell}
 
@@ -104,7 +104,7 @@ dependencies:
 The next command we will cover in this workshop lets us export the configuration of an environment to a file, so that we can share it with others. Instead of bundling the packages themselves, `conda` exports a list of the package names and their versions, as we have them on our system. In addition to package details, the file contains also the list of all channels we defined in our configuration, both globally and environment-specific. Finally, the file is written in `YAML`, a human-readable text format that we can inspect manually and edit if necessary. Let’s export the `pygmt` environment to a file:
 
 ~~~
-admin@MacBook~ $  conda env export --no-builds --file pygmt.yaml
+admin@MacBook~ $ conda env export --no-builds --file pygmt.yaml
 ~~~
 {: .bash}
 
@@ -131,7 +131,7 @@ admin@MacBook~ $ pip install <package_name>
 Finally, let’s see how we remove environments. Removing environments is useful when you make mistakes and environments become unusable, or just because you finished a project and you need to clear some disk space. The command to remove an environment is the following:
 
 ~~~
-admin@MacBook~ $  conda env remove --name $envname
+admin@MacBook~ $ conda env remove --name $envname
 ~~~
 {: .bash}
 
