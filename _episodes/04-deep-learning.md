@@ -1062,7 +1062,6 @@ Accuracy: 0.0000
 > > ## Solution
 > > 
 > > ~~~
-> > plt.figure(figsize=(8, 8))
 > > from sklearn.metrics import roc_auc_score, roc_curve
 > > import matplotlib.pyplot as plt
 > > import torch
@@ -1086,7 +1085,7 @@ Accuracy: 0.0000
 > > plt.ylabel('True Positive Rate')
 > > plt.title('Receiver Operating Characteristic (ROC) Curve')
 > > plt.legend(loc='lower right')
-> > plt.tigh_layout()
+> > plt.tight_layout()
 > > plt.show()
 > > ~~~
 > > {: .python}
