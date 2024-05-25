@@ -1290,7 +1290,7 @@ print(X)
 {: .output}
 
 
-## Splitting Dataset into Training set and Test set
+### Splitting Dataset into Training set and Test set
 
 * Splitting a dataset into training and test sets is a fundamental step in machine learning to evaluate the performance of a model. The training set is used to train the model, while the test set is used to evaluate its performance on unseen data. Here's how you can split a dataset into training and test sets in Python:
 ~~~
@@ -1633,7 +1633,7 @@ F1-Score: 0.5875791662728046
 
 ### Ensemble Learning Techniques
 
-# Ensembele Learning
+### Ensembele Learning
 
 * Ensemble Learning is a powerful machine learning paradigm where multiple models (often called "weak learners") are trained and combined to solve a particular problem. The idea is that combining the predictions of multiple models can often produce better results than any single model alone. Here are key points and concepts related to Ensemble Learning:
 
