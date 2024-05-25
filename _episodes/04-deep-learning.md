@@ -980,7 +980,7 @@ Accuracy: 0.0000
 > 2. Evaluate the model using classification metrics.
 > 3. Plot the confusion matrix to visualize the performance of the classifier.
 >
-> ## Solution
+>> ## Solution
 >> 
 >> ```python
 >> import pandas as pd
