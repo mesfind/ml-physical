@@ -95,7 +95,7 @@ keypoints:
 - Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
 
   ### Downloading CPC Data  
-- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip)
+- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
                  
 ---
 
