@@ -66,7 +66,7 @@ keypoints:
 - Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
 
 ### Downloading CHIRPS Data  
-- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily.ipynb)
+- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily_Precip.ipynb)
 
 ---
 
@@ -95,7 +95,7 @@ keypoints:
 - Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
 
   ### Downloading CPC Data  
-- [Jupyter Note Book Script]()
+- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
                  
 ---
 
