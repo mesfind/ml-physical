@@ -982,7 +982,7 @@ Accuracy: 0.0000
 >
 > > ## Solution
 > > 
-> > ```python
+> > ~~~
 > > from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
 > > # Define the ANN model
 > > class ANN(nn.Module):
@@ -1047,7 +1047,8 @@ Accuracy: 0.0000
 > > disp.plot(cmap=plt.cm.Blues)
 > > plt.title('Confusion Matrix')
 > > plt.show()
-> > ```
+> > ~~~
+> > {: .python}
 > {: .solution}
 {: .challenge}
 
@@ -1060,28 +1061,34 @@ Accuracy: 0.0000
 >
 > > ## Solution
 > > 
-> > ```python
+> > ~~~
 > > plt.figure(figsize=(8, 8))
-> > 
-> > # Calculate the MLP score
-> > mlp_roc_auc = roc_auc_score(y_test, mlp_model.predict(X_test))
-> > 
-> > # Plot the MLP curve
-> > fpr, tpr, thresholds = roc_curve(y_test, mlp_model.predict_proba(X_test)[:,1])
-> > plt.plot(fpr, tpr, 'b', label='MLP Classifier (area = %0.3f)' % mlp_roc_auc)
-> > 
-> > # Plot the random guessing line
-> > plt.plot([0, 1], [0, 1],'r--')
-> > 
+> > from sklearn.metrics import roc_auc_score, roc_curve
+> > import matplotlib.pyplot as plt
+> > import torch
+> > # Calculate predicted probabilities using sigmoid activation
+> > with torch.no_grad():
+> >    predictions = torch.sigmoid(model(X_test_tensor)).numpy()
+> >
+> > # Calculate ROC AUC score
+> > roc_auc = roc_auc_score(testY, predictions)
+> >
+> > # Compute ROC curve
+> > fpr, tpr, _ = roc_curve(testY, predictions)
+> >
+> > # Plot ROC curve
+> > plt.figure(figsize=(8, 6))
+> > plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+> > plt.plot([0, 1], [0, 1], color='red', lw=2, linestyle='--')
 > > plt.xlim([0.0, 1.0])
 > > plt.ylim([0.0, 1.05])
 > > plt.xlabel('False Positive Rate')
 > > plt.ylabel('True Positive Rate')
-> > plt.title('Receiver Operating Characteristic')
-> > plt.legend(loc="lower right")
-> > 
+> > plt.title('Receiver Operating Characteristic (ROC) Curve')
+> > plt.legend(loc='lower right')
 > > plt.show()
-> > ```
+> > ~~~
+> > {: .python}
 > {: .solution}
 {: .challenge}
 
