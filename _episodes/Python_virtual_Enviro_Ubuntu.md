@@ -110,13 +110,8 @@ When finished, deactivate the environment by typing:
 `conda deactivate`
 
 ---
-
 If you dont have conda installed on your system. This tutorial will walk you through the installation of Anaconda on an Ubuntu system. 
 
 - https://yonsci.github.io/yon_academic//portfolio/portfolio-2/
 
-
 ---
-
-
-
