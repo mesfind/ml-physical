@@ -58,6 +58,15 @@ Prerequisites:
 
 `jupyter notebook`
 
+### 10) Deactivate the Environment (Optional)
+
+When you're finished, deactivate the environment by typing:
+
+`deactivate`
+
+- This exits the virtual environment and returns you to your system's default Python environment.
+
+
 ---
 This will open Jupyter Notebook in your default web browser, and you can start creating and running Jupyter notebooks.
 
