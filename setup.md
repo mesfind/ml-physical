@@ -27,12 +27,12 @@ admin@MacBook~ $ conda create -n <env_name> python=<version#>
 ~~~
 {: bash}
 
-For instance, to create a new conda environment called `pygmt` with Python 3.12:
+For instance, to create a new conda environment called `pygmt` with Python 3.11:
 
 ~~~
 admin@MacBook~ $ conda create --name pygmt python=3.11
 ~~~
-{: .shell}
+{: .bash}
 
 To activate the environment:
 
@@ -157,11 +157,11 @@ admin@MacBook~ $ cd Documents/myproject
 - Execute the `python3 -m venv` command with your chosen environment name:
 
 ~~~
-admin@MacBook~ $ python3 -m venv myenv
+admin@MacBook~ $ python3 -m venv pygmt
 ~~~
 {: .bash}
 
-- This will create a directory named `myenv` for your virtual environment in the specified location.
+- This will create a directory named `pygmt` for your virtual environment in the specified location.
 
 ### 4) Activate the Virtual Environment
 
@@ -218,7 +218,7 @@ admin@MacBook~ $ sudo apt install python3-venv
 - Use the `virtualenv` command with your chosen environment name:
 
 ~~~
-admin@MacBook~ $ virtualenv myenv
+admin@MacBook~ $ virtualenv  pygmt
 ~~~
 {: .bash}
 
