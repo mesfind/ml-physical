@@ -532,6 +532,7 @@ To minimize errors, let's normalize the target variable and see how it affects t
 * The goal is to bring the values of different features to a similar scale, preventing certain features from dominating the others due to their inherent magnitude. 
 * This process aids in improving the performance of algorithms, especially those sensitive to the scale of input features.
 
+
 ~~~
 from sklearn.preprocessing import StandardScaler
 
