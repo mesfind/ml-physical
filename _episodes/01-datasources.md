@@ -65,6 +65,9 @@ keypoints:
 - Land-only due to its heavy reliance on station data and not available outside of 50S-50N
 - Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
 
+### Downloading CHIRPS Data  
+- Jupyter Note Book Script: []()
+
 ---
 
 
