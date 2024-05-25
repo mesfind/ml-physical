@@ -141,98 +141,23 @@ Hands-on:
 
 ---
 
+## 4) Copernicus Climate Data Store (CDS)
 
+- This is a web portal providing a single point of access to a wide range of information.
 
+- This is a service operated by the [European Centre for Medium-range Weather Forecasts (ECMWF)](https://www.ecmwf.int/) on behalf of the European Union. 
 
+- Free and Open Access Climate Data: C3S offers free and open access to a vast collection of climate data and information.
 
-
-
-
-
-                 
-
-## Meteostat 
-
-Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
-
-### Installation
-
-The Meteostat Python package is available through PyPI
-
-~~~
-$ pip install meteostat
-~~~
-{: .bash}
-
-### Weather Stations
-
-In contrast to other meteorological data interfaces Meteostat does not use a global data model. Instead, Meteostat provides weather observations and long-term climate statistics for individual weather stations. Understandably, no one knows the identifiers of each and every weather station. Therefore, Meteostat provides the Stations class - a simple interface for querying weather stations using several filters.
-
-~~~
-# Import Meteostat library
-# pip install meteostat
-from meteostat import Stations
-# Get nearby weather stations
-stations = Stations()
-stations = stations.nearby(9.03, 38.74,)
-station = stations.fetch(1)
-# Print DataFrame
-print(station)
-~~~
-{: .python}
-
-~~~
-     name country region    wmo  icao  latitude  longitude  elevation            timezone hourly_start hourly_end daily_start  daily_end monthly_start monthly_end     distance
-id                                                                                                                                                                                      
-63450  Addis Ababa      ET     CN  63450  HAAB    8.9833       38.8     2355.0  Africa/Addis_Ababa   1957-01-01 2024-05-17  1957-02-13 2024-05-10    1898-01-01  2021-01-01  8389.627629
-~~~
-{: .output}
-
-Let's pretend you want to plot temperature data for Addis Ababa, Ethiopia from 2023:
-
-~~~
-# Import Meteostat library and dependencies
-from datetime import datetime
-import matplotlib.pyplot as plt
-from meteostat import Point, Daily
-
-# Set time period
-start = datetime(2023, 1, 1)
-end = datetime(2023, 12, 31)
-
-# Create Point for Addis Ababa, Ethiopia
-addis_ababa = Point(9.03, 38.74, 2355) # lat, lon ,  elevation
-
-# Get daily data for 2023
-data = Daily(addis_ababa, start, end)
-data = data.fetch()
-
-# Plot line chart including average, minimum and maximum temperature
-data.plot(y=['tavg', 'tmin', 'tmax'])
-plt.title('Daily Temperature in Addis Ababa for 2023')
-plt.xlabel('Date')
-plt.ylabel('Temperature (°C)')
-plt.legend(['Average Temperature', 'Minimum Temperature', 'Maximum Temperature'])
-plt.grid(True)
-plt.show()
-~~~
-
-![](../fig/daily_temp_addis_ababa_2013.png)
-
-
-## Copernicus Climate Data Store (CDS)
-
-There are many online services to get climate data, and it is often difficult to know which ones are up-to date and which resources to trust. Also different services provide different Application Programming Interfaces (API), use different terminologies, different file formats etc., which make it difficult for new users to master them all. Therefore in this lesson, we will be focusing on the [Copernicus Climate Change Service (C3S)](https://climate.copernicus.eu/).
-
-## Copernicus Climate Change Service (C3S)
-
-This is a service operated by the [European Centre for Medium-range Weather Forecasts (ECMWF)](https://www.ecmwf.int/) on behalf of the European Union. The [C3S](https://climate.copernicus.eu/) combines observations of the climate system with the latest science to develop authoritative, quality-assured information about the past, current and future states of the climate in Europe and worldwide.
+- This includes:
+  -  observations (i.e., in-situ measurements, remote sensing data, etc.),
+  -  historical climate data records,
+  -  estimates of Essential Climate Variables (ECVs) derived from Earth observations,
+  -  global and regional climate reanalyses of past observations,
+  -  seasonal forecasts and
+  -  climate projections.
 
 ![](../fig/C3S_frontpage.png)
-
-## The Climate Data Store (CDS)
-
-This is a web portal providing a single point of access to a wide range of information. This includes observations (i.e., in-situ measurements, remote sensing data, etc.), historical climate data records, estimates of Essential Climate Variables (ECVs) derived from Earth observations, global and regional climate reanalyses of past observations, seasonal forecasts and climate projections.
 
 ### Climate Data Store (CDS) Registration
 
@@ -601,6 +526,78 @@ However, for now let's concentrate on the dataset we downloaded to make our firs
 > *Precipitation, either liquid or solid, is the most important climate variable directly affecting humans. Through either its duration, intensity and frequency or its lack of occurrence, it influences the supply of water, causes risks to life and livelihoods when associated with floods, landslides and droughts, and affects infrastructure planning, leisure activities and more. Precipitation is closely related to cloud properties, a number of terrestrial ECVs and to ocean-surface salinity. It is indicative of the release of latent heat within the energy cycle, as well as being at the heart of the hydrological cycle.*
 > 
 {: .callout}
+
+
+## Meteostat 
+
+Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
+
+### Installation
+
+The Meteostat Python package is available through PyPI
+
+~~~
+$ pip install meteostat
+~~~
+{: .bash}
+
+### Weather Stations
+
+In contrast to other meteorological data interfaces Meteostat does not use a global data model. Instead, Meteostat provides weather observations and long-term climate statistics for individual weather stations. Understandably, no one knows the identifiers of each and every weather station. Therefore, Meteostat provides the Stations class - a simple interface for querying weather stations using several filters.
+
+~~~
+# Import Meteostat library
+# pip install meteostat
+from meteostat import Stations
+# Get nearby weather stations
+stations = Stations()
+stations = stations.nearby(9.03, 38.74,)
+station = stations.fetch(1)
+# Print DataFrame
+print(station)
+~~~
+{: .python}
+
+~~~
+     name country region    wmo  icao  latitude  longitude  elevation            timezone hourly_start hourly_end daily_start  daily_end monthly_start monthly_end     distance
+id                                                                                                                                                                                      
+63450  Addis Ababa      ET     CN  63450  HAAB    8.9833       38.8     2355.0  Africa/Addis_Ababa   1957-01-01 2024-05-17  1957-02-13 2024-05-10    1898-01-01  2021-01-01  8389.627629
+~~~
+{: .output}
+
+Let's pretend you want to plot temperature data for Addis Ababa, Ethiopia from 2023:
+
+~~~
+# Import Meteostat library and dependencies
+from datetime import datetime
+import matplotlib.pyplot as plt
+from meteostat import Point, Daily
+
+# Set time period
+start = datetime(2023, 1, 1)
+end = datetime(2023, 12, 31)
+
+# Create Point for Addis Ababa, Ethiopia
+addis_ababa = Point(9.03, 38.74, 2355) # lat, lon ,  elevation
+
+# Get daily data for 2023
+data = Daily(addis_ababa, start, end)
+data = data.fetch()
+
+# Plot line chart including average, minimum and maximum temperature
+data.plot(y=['tavg', 'tmin', 'tmax'])
+plt.title('Daily Temperature in Addis Ababa for 2023')
+plt.xlabel('Date')
+plt.ylabel('Temperature (°C)')
+plt.legend(['Average Temperature', 'Minimum Temperature', 'Maximum Temperature'])
+plt.grid(True)
+plt.show()
+~~~
+
+![](../fig/daily_temp_addis_ababa_2013.png)
+
+
+
 
 ## What data format for Climate data?
 
