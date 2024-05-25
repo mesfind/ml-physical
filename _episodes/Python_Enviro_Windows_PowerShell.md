@@ -45,11 +45,8 @@ Prerequisites:
 
 ### 6) Activate the Virtual Environment
 
-#### Load environment variables
-`$env:Path += ".\ml_env\Scripts"`
-
-#### Activate the environment
-`Import-Module .\ml_env\Scripts\Activate.ps1`
+`Set-ExecutionPolicy Bypass -Scope Process -Force`
+`.\ml_env\Scripts\Activate.ps1`
 
 ### 7) Upgrade pip (optional)
 
@@ -70,7 +67,7 @@ To verify that Jupyter Notebook is installed correctly, you can start it:
 
 - This will open Jupyter Notebook in your default web browser. You can then start creating and running notebooks.
 
-Congratulations! You have successfully set up a Python environment with Jupyter Notebook on Windows using PowerShell.
+🥇Congratulations! You have successfully set up a Python environment with Jupyter Notebook on Windows using PowerShell.
 
 ---
 
