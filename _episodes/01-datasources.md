@@ -22,7 +22,7 @@ keypoints:
 
 ---
 
-## CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
+## 1) CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
 
 
 ### Overview
@@ -70,7 +70,7 @@ keypoints:
 
 ---
 
-## CPC Global Unified Gauge-Based Analysis of Daily Precipitation
+## 2) CPC Global Unified Gauge-Based Analysis of Daily Precipitation
 
 - The CPC Global Unified Gauge-Based Analysis of Daily Precipitation is a comprehensive dataset developed by the **Climate Prediction Center (CPC)** of the **National Oceanic and Atmospheric Administration (NOAA)** by taking advantage of the **optimal interpolation (OI)** (> 30,000 gauges (optimal interp. with orographic effects).
 
