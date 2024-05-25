@@ -1082,7 +1082,7 @@ Accuracy: 0.0000
 > > 
 > > plt.show()
 > > ```
-> > {: .solution}
+> {: .solution}
 {: .challenge}
 
 
