@@ -104,6 +104,33 @@ The dataset features high-resolution gridded precipitation data, providing daily
 
 ### Downloading CPC Data  
  - [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CPC_global_daily_Precip.ipynb)
+
+---
+
+## 3) International Research Institute for Climate and Society (IRI), Data Library (DL) 
+
+- a collection of datasets, collected from various sources, designed to make them more accessible for the library’s users. (Bluementhal, 2004).
+
+- It includes wide range of climate datasets:
+     
+  **Seasonal forecasts**
+  **Historical observations**
+  **Climate model outputs**
+  **Reanalysis data**
+  **Global and regional coverage**
+  **Freely available for download**
+
+- Source: https://iridl.ldeo.columbia.edu/
+
+Some Examples: 
+
+
+
+
+
+
+
+
                  
 
 ## Meteostat 
