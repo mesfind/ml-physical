@@ -17,10 +17,34 @@ Open the Start menu and search for `Windows PowerShell`.
 
 Right-click on `Windows PowerShell` and select `Open` (or run as administrator if needed).
 
-Navigate to Drive `D:` (replace with your desired drive):
+### 2) Navigate to Drive D: (replace with your desired drive):
 
 Use the `Set-Location` cmdlet to change to the desired drive
 
-`Set-Location -Path D:` 
+`Set-Location -Path D:` or cd `D:`
+
+### 3) Create a New Directory
+
+Use the `New-Item` cmdlet to create a directory named ml_train (or any preferred name):
+
+`New-Item -ItemType Directory -Path ml_train`  or `mkdir ml_train`
+
+### 4) Navigate to the New Directory:
+
+Change the current directory to `ml_train` using `Set-Location`:
+
+`Set-Location -Path ./ml_train`
+
+### 5) Create a Virtual Environment:
+
+- Use the Invoke-Expression cmdlet to execute the Python command for creating a virtual environment:
+
+`Invoke-Expression -Command python -m venv ml_env`
+
+### 6) 
+
+
+
+
 
 
