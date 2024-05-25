@@ -29,6 +29,14 @@ keypoints:
 **CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
 
 
+### Features
+
+- It's a high-resolution gridded precipitation dataset.
+- Combines satellite observations with rain gauge data.
+- Provides daily, monthly, and seasonal precipitation estimates.
+- Long-term Data: Available from 1981 onwards, useful for trend analysis.
+- Frequent Updates: Data updated in near real-time for timely information.
+  
 ### Data Source
 - **Organization**: Climate Hazards Group
 - **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
@@ -40,21 +48,12 @@ keypoints:
 - **Resolution**: 
   - **Temporal**: Daily, Pentad, Monthly
   - **Spatial**: 0.05° (approx. 5 km)
-- **Data Sources**: 
-  - Infrared satellite imagery
-  - In-situ station data
-  - Atmospheric model data
-
-### Features
-- **High Resolution**: Combines the precision of station data with the broad coverage of satellite imagery.
-- **Long-term Data**: Available from 1981 onwards, useful for trend analysis.
-- **Frequent Updates**: Data updated in near real-time for timely information.
-
+    
 ## Applications
-- **Agricultural Monitoring**: Helps in drought monitoring and crop assessment.
-- **Climate Research**: Essential for studying precipitation patterns and climate change.
-- **Disaster Management**: Provides critical data for managing flood risks and water resources.
-
+- **Disaster Management**: Crucial for monitoring droughts and floods.
+- **Climate Research**: Supports climate change research and impact assessments.
+- **Agricultural Monitoring**: Informs agricultural planning and risk management.
+- **Water resources**: Valuable for water resource management.
 ---
 
 
