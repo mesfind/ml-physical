@@ -33,7 +33,7 @@
 
 `pip install <package_name>`
 
-### 6) Deactivate the Environment (Optional):
+### 6) Deactivate the Environment (Optional)
 
 When you're finished, deactivate the environment by typing:
 
