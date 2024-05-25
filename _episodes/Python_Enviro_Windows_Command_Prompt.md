@@ -48,6 +48,7 @@ To verify that Jupyter Notebook is installed correctly, you can start it by typi
 
 `jupyter notebook`
 
+---
 This will open Jupyter Notebook in your default web browser, and you can start creating and running Jupyter notebooks.
 Congratulations! You have successfully set up a Python environment with Jupyter Notebook on Windows.
 
