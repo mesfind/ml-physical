@@ -22,7 +22,7 @@ keypoints:
 
 ---
 
-## CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
+## 1) CHIRPS (Climate Hazards Group Infrared Precipitation with Stations)
 
 
 ### Overview
@@ -65,14 +65,39 @@ keypoints:
 - Land-only due to its heavy reliance on station data and not available outside of 50S-50N
 - Intended for drought and environmental monitoring; less known is its performance as a dataset to study low-frequency climate variability and trends
 
+### Downloading CHIRPS Data  
+- [Jupyter Note Book Script](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/CHIRPS_global_daily.ipynb)
+
 ---
 
+## 2) CPC Global Unified Gauge-Based Analysis of Daily Precipitation
 
+- The CPC Global Unified Gauge-Based Analysis of Daily Precipitation is a comprehensive dataset developed by the **Climate Prediction Center (CPC)** of the **National Oceanic and Atmospheric Administration (NOAA)** by taking advantage of the **optimal interpolation (OI)** (> 30,000 gauges (optimal interp. with orographic effects).
 
+- This dataset provides **global daily** precipitation estimates based on **gauge observations**, offering valuable insights for various applications in **climate research**, **hydrology**, and **weather forecasting**.
 
+**Temporal Coverage/Duration**: 1979/01/01 to Present. 
 
+**Time Step**: Daily, Monthly
 
+**Spatial Resolution**: 0.5x0.5 deg
 
+**Missing data**:  flagged with a value of -9.96921e+36f.
+
+**Source**: https://psl.noaa.gov/data/gridded/data.cpc.globalprecip.html
+
+**Key Strengths**: 
+
+- High station density
+
+**Key Limitations**: 
+
+- Quality of the gauge-based analysis is poor over tropical Africa and Antarctica (gauge network density).
+
+  ### Downloading CPC Data  
+- [Jupyter Note Book Script]()
+                 
+---
 
 ## Meteostat 
 
