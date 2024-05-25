@@ -17,7 +17,7 @@ A Conda environment is a directory that contains a specific collection of Conda 
 Conda has a default environment called base that include a Python installation and some core system libraries and dependencies of Conda. It is a “best practice” to avoid installing additional packages into your base software environment. Additional packages needed for a new project should always be installed into a newly created Conda environment.
 
 
-## Creating Environments on Ubuntu with conda (Recommended)
+## Creating Environments on Linux/MacOS with conda (Recommended)
 
 
 Conda environments behave similarly to global environments - installed packages are available to all projects using that environment. It allows you to create environments that isolate each project, thereby preventing dependency conflicts between projects. You can create a new environment with a specific version of Python and multiple packages using the following command:
