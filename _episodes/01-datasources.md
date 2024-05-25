@@ -124,6 +124,10 @@ The dataset features high-resolution gridded precipitation data, providing daily
 
 Some Examples: 
 
+- [IRI](https://github.com/mesfind/ml-physical/blob/gh-pages/fig/IRI_ARC.png)
+
+
+
 
 
 
