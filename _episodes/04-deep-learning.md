@@ -1074,9 +1074,8 @@ Accuracy: 0.0000
 > >
 > > # Compute ROC curve
 > > fpr, tpr, _ = roc_curve(testY, predictions)
-> >
-> > # Plot ROC curve
 > > plt.figure(figsize=(8, 6))
+> > # Plot ROC curve
 > > plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
 > > plt.plot([0, 1], [0, 1], color='red', lw=2, linestyle='--')
 > > plt.xlim([0.0, 1.0])
@@ -1085,6 +1084,7 @@ Accuracy: 0.0000
 > > plt.ylabel('True Positive Rate')
 > > plt.title('Receiver Operating Characteristic (ROC) Curve')
 > > plt.legend(loc='lower right')
+> > plt.grid(True)
 > > plt.tight_layout()
 > > plt.show()
 > > ~~~
