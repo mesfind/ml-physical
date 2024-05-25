@@ -1016,17 +1016,17 @@ with torch.no_grad():
 {: .python}
 
 ~~~
-Epoch [10/100], Loss: 0.0194
-Epoch [20/100], Loss: 0.0203
-Epoch [30/100], Loss: 0.0017
-Epoch [40/100], Loss: 0.0030
-Epoch [50/100], Loss: 0.0027
-Epoch [60/100], Loss: 0.0012
-Epoch [70/100], Loss: 0.0003
-Epoch [80/100], Loss: 0.0003
-Epoch [90/100], Loss: 0.0006
-Epoch [100/100], Loss: 0.0004
-Accuracy: 0.9954
+Epoch [10/100], Loss: 0.4843
+Epoch [20/100], Loss: 0.0108
+Epoch [30/100], Loss: 0.0026
+Epoch [40/100], Loss: 0.0033
+Epoch [50/100], Loss: 0.0012
+Epoch [60/100], Loss: 0.0005
+Epoch [70/100], Loss: 0.0015
+Epoch [80/100], Loss: 0.0010
+Epoch [90/100], Loss: 0.0007
+Epoch [100/100], Loss: 0.0006
+Accuracy: 0.9969
 ~~~
 {: .output}
 
@@ -1100,6 +1100,24 @@ Accuracy: 0.9954
 > > ![](../fig/wine_quality_confusion_matrix.png)
 > {: .solution}
 {: .challenge}
+
+
+The ROC curve provides a visual representation of a model's performance across different thresholds, and the AUC quantifies this performance into a single value for easier comparison.
+
+### ROC Curve
+- **ROC Curve (Receiver Operating Characteristic Curve)**: A graphical plot used to evaluate the performance of a binary classification model.
+- **Axes**: 
+  - **X-axis (False Positive Rate, FPR)**: The proportion of negative instances incorrectly classified as positive (calculated as \( \text{FPR} = \frac{\text{False Positives}}{\text{False Positives} + \text{True Negatives}} \)).
+  - **Y-axis (True Positive Rate, TPR)**: The proportion of positive instances correctly classified (calculated as \( \text{TPR} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}} \)).
+- **Purpose**: The ROC curve shows the trade-off between TPR and FPR at different classification thresholds. 
+
+### AUC
+- **AUC (Area Under the Curve)**: A single scalar value that summarizes the performance of the model by measuring the entire two-dimensional area underneath the ROC curve.
+- **Range**: 0 to 1.
+  - **AUC = 1**: Perfect model.
+  - **AUC = 0.5**: Model with no discriminative power (random guessing).
+  - **AUC < 0.5**: Model performing worse than random guessing.
+- **Purpose**: A higher AUC indicates a better performing model, as it reflects higher TPRs at lower FPRs across all possible thresholds.
 
 
 > ## Exercise 2: Evaluating Model Performance with ROC Curve
