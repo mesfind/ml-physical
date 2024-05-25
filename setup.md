@@ -196,7 +196,7 @@ admin@MacBook~ $ deactivate
 
 This alternative method might require first installing virtualenv.
 
-### 1) Update Package Lists
+### Update Package Lists
 
 - Update your package lists with:
 
@@ -205,7 +205,7 @@ admin@MacBook~ $ sudo apt update
 ~~~
 {: .bash}
 
-### 2) Install virtualenv
+### Install virtualenv
 
 - Install virtualenv using:
 
@@ -213,7 +213,7 @@ admin@MacBook~ $ sudo apt update
 admin@MacBook~ $ sudo apt install python3-venv
 ~~~
 
-### 3) Create the Virtual Environment
+### Create the Virtual Environment
 
 - Use the `virtualenv` command with your chosen environment name:
 
@@ -224,7 +224,7 @@ admin@MacBook~ $ virtualenv  pygmt
 
 - This will create a directory named `myenv` for your virtual environment in the specified location.
 
-### 4) Activate the Virtual Environment
+### Activate the Virtual Environment
 
 - Activate the virtual environment by running the following command, adjusting for your environment name:
 
@@ -233,7 +233,7 @@ admin@MacBook~ $ source myenv/bin/activate
 ~~~
 {: .bash}
 
-### 5) Install Required Packages
+### Install Required Packages
 
 - With the environment activated, use pip to install the necessary packages:
 
@@ -242,14 +242,19 @@ admin@MacBook~ $ pip install <package_name>
 ~~~
 {: .bash}
 
-### 6) Deactivate the Environment (Optional)
 
-- To exit the virtual environment, type:
+### Deactivate the Environment (Optional)
+
+When you're done working in your virtual environment and want to return to your system's default Python environment, you can exit the virtual environment. To do this, simply type:
 
 ~~~
 admin@MacBook~ $ deactivate
 ~~~
 {: .bash}
 
-- This command deactivates the virtual environment and returns you to the default Python environment.
+This command deactivates the virtual environment, restoring the original environment settings and paths. After deactivation, your terminal will return to using the system-wide Python installation and its associated packages.
+
+
+## Creating Environments on Windows with conda (Recommended)
+
 
