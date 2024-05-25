@@ -28,6 +28,8 @@ keypoints:
 ### Overview
 **CHIRPS** is a global precipitation dataset that provides high-resolution rainfall estimates, integrating satellite data with in-situ station data for accurate monitoring.
 
+- 
+
 
 ### Features
 
@@ -38,7 +40,7 @@ keypoints:
 - Frequent Updates: Data updated in near real-time for timely information.
   
 ### Data Source
-- **Organization**: Climate Hazards Group
+- **Organization**: Climate Hazards Group and USGS scientists—supported by funding from USAID, NASA, and NOAA
 - **Website**: [CHG Official Site](https://www.chc.ucsb.edu/data/chirps)
 - **Data Access**: [CHIRPS Data Access](https://data.chc.ucsb.edu/products/CHIRPS-2.0/)
 
