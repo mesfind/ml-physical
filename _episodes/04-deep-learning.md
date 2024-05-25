@@ -1090,6 +1090,7 @@ Accuracy: 0.0000
 > > plt.show()
 > > ~~~
 > > {: .python}
+> > ![](../fig/wine_quality_roc_auc.png)
 > {: .solution}
 {: .challenge}
 
