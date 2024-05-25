@@ -133,6 +133,7 @@ $ pip install 'torchgeo[all]'
 
 # Setting Up a Python virtual environment on Ubuntu 
 
+
 ## Method 1: Using venv Module (Recommended)
 
 ### 1) Open a Terminal
@@ -173,7 +174,7 @@ When you're finished, deactivate the environment by typing:
 
 - This exits the virtual environment and returns you to your system's default Python environment.
 
----
+
 
 ## Method 2: Using virtualenv (Optional)
 
@@ -224,6 +225,22 @@ When you're finished, deactivate the environment by typing:
 - Replace "my_env" with your preferred name and "3.9" with the Python version
 
 `conda create -n my_env python=3.9`
+
+- This command creates a new environment named my_env with Python version 3.9 (adjust the version as needed).
+  
+- The -n flag specifies the environment name.
+
+### 2. Activate the Environment
+
+Once created, activate the environment using the following command (adjust the environment name if needed):
+
+`conda activate my_env`
+
+### 3. Deactivate the Environment
+
+When finished, deactivate the environment by typing:
+
+`conda deactivate`
 
 
 
