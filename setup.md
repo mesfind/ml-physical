@@ -4,7 +4,7 @@ title: Setup
 permalink: /setup/
 ---
 
-# Python environment Managment with conda
+# Python environment Managment
 
 Python environment management with conda involves creating, managing, and switching between different Python environments, each with its own set of packages and dependencies. Conda is a package, dependency, and environment management tool that is widely used in the scientific community, especially on the Windows platform where the installation of binary extensions can be difficult
 
@@ -23,21 +23,21 @@ Conda has a default environment called base that include a Python installation a
 Conda environments behave similarly to global environments - installed packages are available to all projects using that environment. It allows you to create environments that isolate each project, thereby preventing dependency conflicts between projects. You can create a new environment with a specific version of Python and multiple packages using the following command:
 
 ~~~
-(base) admin@MacBook~ $conda create -n <env_name> python=<version#> 
+admin@MacBook~ $ $conda create -n <env_name> python=<version#> 
 ~~~
 {: bash}
 
 For instance, to create a new conda environment called `pygmt` with Python 3.12:
 
 ~~~
-(base) admin@MacBook~ $ conda create --name pygmt python=3.11
+admin@MacBook~ $conda create --name pygmt python=3.11
 ~~~
 {: .shell}
 
 To activate the environment:
 
 ~~~
-(base) admin@MacBook~ $ conda activate pygmt
+admin@MacBook~ $ conda activate pygmt
 ~~~
 {: .bash}
 
@@ -47,7 +47,7 @@ In order to make your results more reproducible and to make it easier for resear
 
 
 ~~~
-(pygmt) admin@MacBook~ $ conda search $PACKAGE_NAME
+admin@MacBook~ $ conda search $PACKAGE_NAME
 ~~~
 {: .bash}
 
@@ -55,7 +55,7 @@ So, for example, if you wanted to see which versions of Scikit-learn, a popular 
 
 
 ~~~
-(pygmt) admin@MacBook~ $ conda search xarray
+admin@MacBook~ $ conda search xarray
 ~~~
 {: .bash}
 
@@ -63,7 +63,7 @@ In order to create a new environment you use the conda create command as follows
 
 
 ~~~
-(pygmt) admin@MacBook~ $ conda create --name pygmt \
+admin@MacBook~ $ conda create --name pygmt \
  scikit-learn \
  geopandas \
  cartopy \
@@ -104,7 +104,7 @@ dependencies:
 The next command we will cover in this workshop lets us export the configuration of an environment to a file, so that we can share it with others. Instead of bundling the packages themselves, `conda` exports a list of the package names and their versions, as we have them on our system. In addition to package details, the file contains also the list of all channels we defined in our configuration, both globally and environment-specific. Finally, the file is written in `YAML`, a human-readable text format that we can inspect manually and edit if necessary. Let’s export the `pygmt` environment to a file:
 
 ~~~
-(pygmt) admin@MacBook~ $  conda env export --no-builds --file pygmt.yaml
+admin@MacBook~ $  conda env export --no-builds --file pygmt.yaml
 ~~~
 {: .bash}
 
@@ -115,7 +115,7 @@ There are some options to unpack in this command. First, we do not use conda but
 Finally, let’s see how we remove environments. Removing environments is useful when you make mistakes and environments become unusable, or just because you finished a project and you need to clear some disk space. The command to remove an environment is the following:
 
 ~~~
-(pygmt) admin@MacBook~ $  conda env remove --name $envname
+admin@MacBook~ $  conda env remove --name $envname
 ~~~
 {: .bash}
 
@@ -126,7 +126,7 @@ TorchGeo is a PyTorch domain library, similar to torchvision, providing datasets
 The recommended way to install TorchGeo is with pip
 
 ~~~
-$ pip install 'torchgeo[all]'
+admin@MacBook~ $ pip install 'torchgeo[all]'
 ~~~
 {: .bash}
 
@@ -145,7 +145,7 @@ $ pip install 'torchgeo[all]'
 - Use the `cd` command to navigate to the location where you want to create the virtual environment. For example:
 
 ~~~
-cd Documents/my_project
+admin@MacBook~ $ cd Documents/my_project
 ~~~
 {: .bash}
 
@@ -154,7 +154,7 @@ cd Documents/my_project
 - Use the `python3 -m venv` command followed by your desired environment name:
 
 ~~~
-python3 -m venv my_env
+admin@MacBook~ $ python3 -m venv my_env
 ~~~
 {: .bash}
 
@@ -165,7 +165,7 @@ python3 -m venv my_env
 - Activate the environment by running the following command (replace my_env accordingly):
 
 ~~~
-source my_env/bin/activate
+admin@MacBook~ $ source my_env/bin/activate
 ~~~
 {: .bash}
 
@@ -175,7 +175,7 @@ source my_env/bin/activate
 - Once the environment is activated, use pip to install the packages you need for your project:
 
 ~~~
-pip install <package_name>
+admin@MacBook~ $ pip install <package_name>
 ~~~
 {: .bash}
 
@@ -184,7 +184,7 @@ pip install <package_name>
 When you're finished, deactivate the environment by typing:
 
 ~~~
-deactivate
+admin@MacBook~ $ deactivate
 ~~~
 {: .bash}
 
@@ -199,14 +199,14 @@ This method might require installing virtualenv first:
 ### 1) Update package lists
 
 ~~~
-$ sudo apt update 
+admin@MacBook~ $ sudo apt update 
 ~~~
 {: .bash}
 
 ### 2) Install virtualenv
 
 ~~~
-$ sudo apt install python3-venv
+admin@MacBook~ $ sudo apt install python3-venv
 ~~~
 
 ### 3) Create the Virtual Environment
@@ -214,7 +214,7 @@ $ sudo apt install python3-venv
 - Use the `virtualenv` command followed by your desired environment name:
 
 ~~~
-$ virtualenv my_env
+admin@MacBook~ $ virtualenv my_env
 ~~~
 {: .bash}
 
@@ -225,7 +225,7 @@ $ virtualenv my_env
 - Activate the environment by running the following command (replace my_env accordingly):
 
 ~~~
-$ source my_env/bin/activate
+admin@MacBook~ $ source my_env/bin/activate
 ~~~
 {: .bash}
 
@@ -234,7 +234,7 @@ $ source my_env/bin/activate
 - Once the environment is activated, use pip to install the packages you need for your project:
 
 ~~~
-$pip install <package_name>`
+admin@MacBook~ $ pip install <package_name>`
 ~~~
 {: .bash}
 
@@ -243,45 +243,11 @@ $pip install <package_name>`
 When you're finished, deactivate the environment by typing:
 
 ~~~
-$ deactivate`
+admin@MacBook~ $ deactivate`
 ~~~
 {: .bash}
 
 - This exits the virtual environment and returns you to your system's default Python environment.
 
-## Method 3: Python virtual environment using the conda package manager
-
-### 1. Create the Environment
-
-- Open a terminal window. Use the conda create command followed by the desired environment name and the Python version you want.
-
-- Replace "my_env" with your preferred name and "3.9" with the Python version
-
-~~~
-$conda create -n my_env python=3.9
-~~~
-{: .bash}
-
-- This command creates a new environment named my_env with Python version 3.9 (adjust the version as needed).
-  
-- The -n flag specifies the environment name.
-
-### 2. Activate the Environment
-
-Once created, activate the environment using the following command (adjust the environment name if needed):
-
-~~~
-$bconda activate my_env
-~~~
-{: .bash}
-
-### 3. Deactivate the Environment
-
-When finished, deactivate the environment by typing:
-
-~~~
-$ conda deactivate
-~~~
-{: .bash}
 
 
