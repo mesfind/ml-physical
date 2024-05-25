@@ -1048,7 +1048,7 @@ Accuracy: 0.0000
 > > plt.title('Confusion Matrix')
 > > plt.show()
 > > ```
-> > {: .solution}
+> {: .solution}
 {: .challenge}
 
 
