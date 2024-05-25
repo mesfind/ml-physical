@@ -70,12 +70,6 @@ keypoints:
 
 ---
 
-## Learn More
-- **Documentation**: [CHIRPS Technical Manual](https://pubs.usgs.gov/ds/832/ds832.pdf)
----
-
-
-
 
 
 
