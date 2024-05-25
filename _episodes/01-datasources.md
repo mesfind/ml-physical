@@ -114,10 +114,15 @@ The dataset features high-resolution gridded precipitation data, providing daily
 - It includes wide range of climate datasets:
      
   **Seasonal forecasts**
+  
   **Historical observations**
+  
   **Climate model outputs**
+  
   **Reanalysis data**
+  
   **Global and regional coverage**
+  
   **Freely available for download**
 
 - Source: https://iridl.ldeo.columbia.edu/
