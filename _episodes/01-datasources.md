@@ -54,8 +54,8 @@ The dataset features high-resolution gridded precipitation data, providing daily
   - **Temporal Coverage**: 1981 to present
   - **Spatial Coverage**: 50°S to 50°N, all longitudes
   - **Resolution**: 
-  - **Temporal**: 6-hourly, Daily, Pentad, Monthly, Seasonal
-  - **Spatial**: 0.05° (approx. 5 km) and 0.1°
+    - **Temporal**: 6-hourly, Daily, Pentad, Monthly, Seasonal
+    - **Spatial**: 0.05° (approx. 5 km) and 0.1°
  
     
 ### Applications
