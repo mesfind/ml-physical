@@ -1,7 +1,17 @@
 # Setting Up a Python Environment on Windows Command Prompt
 ---
 
-Follow these steps to create and set up a Python environment for your machine learning projects:
+This guide provides step-by-step instructions on setting up a **Python environment** for machine learning training in **Windows Command Prompt**.
+
+A virtual environment isolates project-specific packages and dependencies, ensuring a clean and organized workflow.
+
+Prerequisites:
+
+- Windows Operating System: This guide assumes you're using a Windows machine.
+
+- Administrator Privileges (Optional): Certain commands might require administrator rights to create directories and install software. Right-click on "Command Prompt" and select "Run as administrator" if necessary.
+
+## Steps 
 
 ### 1. Open Command Prompt
 
