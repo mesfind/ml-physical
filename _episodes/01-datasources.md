@@ -394,5 +394,5 @@ $ pip install meteostat
 - CliMetLab also provides very **high-level map plotting facilities**. By default CliMetLab will automatically select the **most appropriate way to plot a dataset**, choosing the best **projection**, **colours** and other **graphical attributes**. Users can then control how maps are drawn by overriding the automatic choices with their own.
 
 
-![](../fig/daily_temp_addis_ababa_2013.png)
+![](../fig/CliMetLab.png)
 
