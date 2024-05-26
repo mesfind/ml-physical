@@ -193,6 +193,10 @@ key: UID:KEY
 
 Where UID is your `uid` and KEY your API key. See [documentation](https://cds.climate.copernicus.eu/api-how-to) to get your API and related information.
 
+~~~
+pip3 install cdsapi
+~~~
+
 ### Use CDS API
 
 Once the CDS API client is installed, it can be used to request data from the datasets listed in the CDS catalogue. It is necessary to agree to the Terms of Use of every datasets that you intend to download.
