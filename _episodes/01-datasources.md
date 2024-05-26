@@ -402,3 +402,12 @@ TO install CliMetLab, just run the following command:
 ~~~
 pip install climetlab
 ~~~
+
+
+CliMetLab provides two main ways to access climate and meteorological data
+
+1) Data Sources
+ -  refers to a **local** or **remote storage server** or data archive from where we can download or access files related to climate data.
+
+   
+2) Datasets 
