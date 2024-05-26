@@ -45,14 +45,16 @@ Ultimately, machine learning represents a valuable addition to the climate scien
 ### Layer
 Layers are the building block of neural network. **Linear layers** are called by different names, such as **dense or fully connected** layers across different frameworks. This model in nn has the form:
 
-\\[ y = w\cdot x+ b \\]
+\\[ y = \sigma(w\cdot x+ b) \\]
 
 where 
 
 1.   y is the predict variable
 2.   x is the predictor variable
 3.   b is the bias and
-3.   w is the weights on the neural network
+4.   w is the weights on the neural network
+5.   \\(\sigma\\) is the activation function
+
 
 
 ANNs consists of multiple nodes (the circles) and layers that are all connected and using basic math gives out a result. These are called feed forward networks. 
@@ -468,7 +470,7 @@ In this session, we aim to create an Artificial Neural Network (ANN) that learns
 By systematically following these steps, we construct a sequential neural network capable of discerning and modeling the underlying relationship between the input features and output labels.
 
 
-<div> <img src="../fig/ANN1.png" alt="Drawing" style="width: 200px;"/></div>
+<div> <img src="../fig/ANN2.png" alt="Drawing" style="width: 200px;"/></div>
 
 
 ~~~
