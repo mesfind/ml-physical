@@ -167,7 +167,7 @@ Before starting, and once registred, login to the Climate Data Store (CDS).
 ![](../fig/CDS_login.png)
 
 
-## Retrieve Climate data with CDS API
+### Retrieve Climate data with CDS API
 
 Using CDS web interface is very useful when you need to retrieve small amount of data and you do not need to customize your request. However, it is often very useful to retrieve climate data directly on the computer where you need to run your postprocessing workflow.
 
@@ -193,6 +193,7 @@ key: UID:KEY
 
 Where UID is your `uid` and KEY your API key. See [documentation](https://cds.climate.copernicus.eu/api-how-to) to get your API and related information.
 
+### Install the CDS API client
 ~~~
 pip3 install cdsapi
 ~~~
