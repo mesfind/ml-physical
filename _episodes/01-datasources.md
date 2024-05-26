@@ -404,8 +404,7 @@ TO install CliMetLab, just run the following command:
 pip install climetlab
 ~~~
 
-
-[Hands-on climetlab](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/Meteostat.ipynb)
+[Hands-on climetlab](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/climetlab.ipynb)
 
 
  
