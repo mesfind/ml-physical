@@ -17,7 +17,7 @@ keypoints:
 - "netCDF and GRIB data formats"
 ---
 
-# Climate and weather Data sources
+# Climate and Weather Data Sources
 
 
 ## 1) CHIRPS 
@@ -419,4 +419,3 @@ plt.show()
 
 ## 6) CliMetLab
 
----
