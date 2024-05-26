@@ -396,3 +396,9 @@ $ pip install meteostat
 
 ![](../fig/CliMetLab.png)
 
+
+TO install CliMetLab, just run the following command:
+
+~~~
+pip install climetlab
+~~~
