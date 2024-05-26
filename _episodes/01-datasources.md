@@ -382,17 +382,18 @@ $ pip install meteostat
 
 ## 6) CliMetLab
 
-- **CliMetLab** is a Python package aiming at **simplifying access** to climate and meteorological datasets, allowing users to focus on science instead of technical issues such as data access and data formats.
+- **CliMetLab** is Python package to support **AI/ML* activities in climate and meteorology.
+
+
+- **CliMetLab** allow users to focus on science instead of technical issues such as data access and data formats.
 
 - It is mostly intended to be used in **Jupyter notebooks**, and be interoperable with all popular data analytic packages, such as **NumPy**, **Pandas**, **Xarray**, **SciPy**, **Matplotlib**, etc.
 
-- Datasets are automatically downloaded, cached and transform into standard Python data structures 
+- Datasets are automatically downloaded, cached and transform into standard Python data structures. 
 
 - As well as machine learning frameworks, such as **TensorFlow**, **Keras** or **PyTorch**.
 
-
-- CliMetLab also provides very **high-level map plotting facilities**. By default CliMetLab will automatically select the **most appropriate way to plot a dataset**, choosing the best **projection**, **colours** and other **graphical attributes**. Users can then control how maps are drawn by overriding the automatic choices with their own.
-
+- CliMetLab also provides very **high-level map plotting facilities**. 
 
 ![](../fig/CliMetLab.png)
 
@@ -404,10 +405,7 @@ pip install climetlab
 ~~~
 
 
-CliMetLab provides two main ways to access climate and meteorological data
+[Hands-on climetlab]()
 
-1) Data Sources
- -  refers to a **local** or **remote storage server** or data archive from where we can download or access files related to climate data.
 
-   
-2) Datasets 
+ 
