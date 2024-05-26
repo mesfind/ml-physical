@@ -393,7 +393,9 @@ $ pip install meteostat
 
 - As well as machine learning frameworks, such as **TensorFlow**, **Keras** or **PyTorch**.
 
-- CliMetLab also provides very **high-level map plotting facilities**. 
+- CliMetLab also provides very **high-level map plotting facilities**.
+
+- Source: https://climetlab.readthedocs.io/en/latest/index.html
 
 ![](../fig/CliMetLab.png)
 
