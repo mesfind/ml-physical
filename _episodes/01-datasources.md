@@ -343,10 +343,9 @@ c.retrieve(
 > {: .solution}
 {: .challenge}
 
-
+---
 ## 5) Meteostat 
 
-# Meteostat 
 
 - A Python library provides a simple API for accessing **open weather** and **climate data**.
 
@@ -379,6 +378,7 @@ $ pip install meteostat
  
 ![](../fig/daily_temp_addis_ababa_2013.png)
 
+---
 
 
 ## 6) CliMetLab
