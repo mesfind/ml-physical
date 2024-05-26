@@ -346,7 +346,12 @@ c.retrieve(
 
 ## 5) Meteostat 
 
-Meteostat is one of the largest vendors of open weather and climate data. Access long-term time series of thousands of weather stations and integrate Meteostat data into your products, applications and workflows. Thanks to our open data policy, Meteostat is an ideal data source for research and educational projects.
+- The Meteostat Python library provides a simple API for accessing open weather and climate data.
+
+-  The historical observations and statistics are collected by Meteostat from different public interfaces, most of which are governmental.
+
+- Among the data sources are national weather services like the National Oceanic and Atmospheric Administration (NOAA) and Germany's national meteorological service (DWD).
+
 
 ### Installation
 
@@ -359,15 +364,15 @@ $ pip install meteostat
 
 ### Weather Stations
 
-In contrast to other meteorological data interfaces Meteostat does not use a global data model. Instead, Meteostat provides weather observations and long-term climate statistics for individual weather stations. Understandably, no one knows the identifiers of each and every weather station. Therefore, Meteostat provides the Stations class - a simple interface for querying weather stations using several filters.
+- In contrast to other meteorological data interfaces Meteostat does not use a global data model. Instead, Meteostat provides weather observations and long-term climate statistics for individual weather stations. 
+
+- Understandably, no one knows the identifiers of each and every weather station. Therefore, Meteostat provides the Stations class - a simple interface for querying weather stations using several filters.
 
 ~~~
-# Import Meteostat library
-# pip install meteostat
 from meteostat import Stations
 # Get nearby weather stations
 stations = Stations()
-stations = stations.nearby(9.03, 38.74,)
+stations = stations.nearby(9.03, 38.74)
 station = stations.fetch(1)
 # Print DataFrame
 print(station)
@@ -413,86 +418,4 @@ plt.show()
 ![](../fig/daily_temp_addis_ababa_2013.png)
 
 
-
-
-## What data format for Climate data?
-
-Climate data can become large very quickly (as we usually need to analyze data over large period of time and covering large geographical areas) so we do not store them as text files (i.e., your usual ASCII format, csv files, tabular, etc.) to compress them as much as possible without loosing any important information.
-
-All Climate data are stored in **binary** format and hence are not *human readable*.
-
-Depending on the type of Climate data, you may have the choice between several data formats:
-
-- [GRIB](https://en.wikipedia.org/wiki/GRIB)
-- [NetCDF](https://en.wikipedia.org/wiki/NetCDF)
-
-> ## Data format: GRIB versus NetCDF
->
-> 
-> ### NetCDF
->
-> [NetCDF](https://en.wikipedia.org/wiki/NetCDF)  ([Network Common Data Form](https://www.unidata.ucar.edu/software/netcdf/)) is a set of software libraries and self-describing, machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data. NetCDF is commonly used to store and distribute scientific data. 
-> The NetCDF software was developed at the [Unidata Program Center](http://www.unidata.ucar.edu/publications/factsheets/current/factsheet_netcdf.pdf) in Boulder, Colorado (USA). 
-> NetCDF files usually have the extension *.nc*. 
-> As for the GRIB format, NetCDF files are binary and you need to use specific tools to read them. NetCDF files can also be manipulated with most programming languages (R, Python, C, Fortran, etc.).
-> 
-> For climate and forecast data stored in NetCDF format there are (non-mandatory) conventions on metadata ([CF Convention](http://cfconventions.org/)). 
-> 
-> ### GRIB
->
-> [GRIB](https://en.wikipedia.org/wiki/GRIB) (GRIdded Binary or General Regularly-distributed Information in Binary form) is a file format designed for storing and distributing weather data. GRIB files are mostly used in meteorological applications. The last ECMWF re-analysis (ERA5) is natively encoded in GRIB and also in a version converted from GRIB to NetCDF. Note that due to limitations of the NetCDF specifications, the NetCDF version contains fewer parameters (variables) and incomplete metadata (information about the data). 
-> As this format is not widely used there are not as many tools or programming languages supported as netCDF.
->
-{: .callout}
-
-
-Whenever we can, we will choose to download data in NetCDF format but we will also add links to documentation with examples using native GRIB format.
-
-
-NetCDF format is a binary format and to be able to read or visualize it, we would need to use dedicated software or libraries that can handle this "special" format.
-
-##  Radiant Earth MLHub
-
-To automatically download the dataset, you need an API key from the [Radiant Earth MLHub](https://mlhub.earth/). This is completely free, and will give you access to a growing catalog of ML-ready remote sensing datasets.
-
-~~~
-# Set this to your API key (available for free at https://beta.source.coop/auth/registration)
-RADIANT_EARTH_API_KEY = ""
-
-data_dir = os.path.join(tempfile.gettempdir(), "cyclone_data")
-
-datamodule = CycloneDataModule(
-    root_dir=data_dir,
-    seed=1337,
-    batch_size=64,
-    num_workers=6,
-    api_key=RADIANT_EARTH_API_KEY
-)
-
-~~~
-{: .python}
-
-## [geospatial-datasets](https://torchgeo.readthedocs.io/en/stable/api/datasets.html#geospatial-datasets)
-
-
-GeoDataset is designed for datasets that contain geospatial information, like latitude, longitude, coordinate system, and projection. Datasets containing this kind of information can be combined using IntersectionDataset and UnionDataset.
-
-
-In most cases, we'll use `geopandas` to read vector files and analyze data:
-
-~~~
-import geopandas as gpd
-
-# Load the countries dataframe using geopandas
-countries = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-countries.head()
-~~~
-{: .python}
-
-We can use shapely attributes and operations to get geometries of interest
-
-~~~
-# Plot the union of all african countries
-countries[countries["continent"] == "Africa"].unary_union
-~~~
-{: .python}
+---
