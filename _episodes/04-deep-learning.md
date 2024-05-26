@@ -451,7 +451,7 @@ d: 0.1512451320886612
 ~~~
 {: .output}
 
-![](../fig/computational_graph.png)
+![](../fig/omputational_graph2.png)
 
 
 ## Building Artificial Neural Networks Model
