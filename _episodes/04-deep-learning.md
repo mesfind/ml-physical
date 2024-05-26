@@ -470,7 +470,7 @@ In this session, we aim to create an Artificial Neural Network (ANN) that learns
 By systematically following these steps, we construct a sequential neural network capable of discerning and modeling the underlying relationship between the input features and output labels.
 
 
-<div> <img src="../fig/ANN2.png" alt="Drawing" style="width: 200px;"/></div>
+<div> <img src="../fig/ANN2.png" alt="Drawing" style="width: 500px;"/></div>
 
 
 ~~~
