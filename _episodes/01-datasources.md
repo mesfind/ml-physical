@@ -409,4 +409,9 @@ pip install climetlab
 [Hands-on climetlab](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/climetlab.ipynb)
 
 
+## Climate Data Processsing with Xarray
+
+[Hands-on xarray](https://github.com/mesfind/ml-physical/blob/gh-pages/code/data_source/hans-on_xarray.ipynb)
+
+
  
