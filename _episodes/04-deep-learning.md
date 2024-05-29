@@ -568,8 +568,10 @@ array([[   8.3252    ,   41.        ,    6.98412698, ...,    2.55555556,
 When training on a machine that has a GPU, you need to tell PyTorch you want to use it • You’ll see the following at the top of most PyTorch code:
 
 ~~~
-
+device = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
 ~~~
+{: .python}
+
 
 ### Representing the Dataset as Tensor
 
