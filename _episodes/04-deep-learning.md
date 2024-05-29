@@ -1689,7 +1689,7 @@ plt.show()
 ~~~
 
 
-![](../fig/class_labels2_CIFAR10.png"))
+![](../fig/class_labels2_CIFAR10.png")
 
 ## Transfer Learning 
 
