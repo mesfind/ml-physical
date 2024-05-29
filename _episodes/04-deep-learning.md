@@ -910,10 +910,10 @@ trainY = np.array(trainY).reshape(-1, 1)
 testY = np.array(testY).reshape(-1, 1)
 
 # Convert data to PyTorch tensors with the correct data type
-X_train = torch.FloatTensor(X_train)
-y_train = torch.FloatTensor(trainY)  
-X_test = torch.FloatTensor(X_test)
-y_test = torch.FloatTensor(testY)  
+X_train = torch.Tensor(trainX)
+y_train = torch.Tensor(trainY)  
+X_test = torch.Tensor(testX)
+y_test = torch.Tensor(testY)  
 ~~~
 {: .python}
 
@@ -942,7 +942,6 @@ output_size = 1
 model = ANN(input_size, hidden_size, output_size)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model.to(device)
 # move the tensor to GPU device
 X_train, y_train = X_train.to(device), y_train.to(device)
@@ -996,7 +995,7 @@ The output is a summary of the architecture of an Artificial Neural Network (ANN
 
 ~~~
 # Define the loss function and optimizer
-criterion = nn.BCELoss()
+criterion = nn.BCELoss() # binary cross-entropy loss
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Create DataLoader
@@ -1054,7 +1053,7 @@ Accuracy: 0.9969
 > > 
 > > ~~~
 > > from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
-> > input_size = X_train_tensor.shape[1]
+> > input_size = X_train.shape[1]
 > > hidden_size = 64
 > > output_size = 1
 > > model = ANN(input_size, hidden_size, output_size)
@@ -1063,14 +1062,14 @@ Accuracy: 0.9969
 > > device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
 > > model.to(device)
 > > # Move the tensors to the device
-> > X_train_tensor, y_train_tensor = X_train_tensor.to(device), y_train_tensor.to(device)
-> > X_test_tensor, y_test_tensor = X_test_tensor.to(device), y_test_tensor.to(device)
+> > X_train, y_train = X_train.to(device), y_train.to(device)
+> > X_test, y_test = X_test.to(device), y_test.to(device)
 > > 
 > > # Define the loss function and optimizer
 > > criterion = nn.BCELoss()
 > > optimizer = optim.Adam(model.parameters(), lr=0.001)
 > > # Convert data into PyTorch datasets and dataloaders
-> > train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+> > train_dataset = TensorDataset(X_train, y_train)
 > > train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 > > 
 > > # Train the model
@@ -1090,7 +1089,7 @@ Accuracy: 0.9969
 > > # Evaluation
 > > model.eval()  # Set the model to evaluation mode
 > > with torch.no_grad():
-> >     predY = model(X_test_tensor)
+> >     predY = model(X_test)
 > >     predY = np.round(predY.cpu().numpy()).astype(int).reshape(-1)  # Ensure predictions are integers
 > > # Calculate classification metrics
 > > accuracy = np.mean(predY == testY.reshape(-1))
@@ -1148,7 +1147,7 @@ The ROC curve provides a visual representation of a model's performance across d
 > > 
 > > # Calculate predicted probabilities using sigmoid activation
 > > with torch.no_grad():
-> >     ypred_proba = torch.sigmoid(model(X_test_tensor)).cpu().numpy()
+> >     ypred_proba = torch.sigmoid(model(X_test)).cpu().numpy()
 > > 
 > > # Calculate ROC AUC score
 > > roc_auc = roc_auc_score(testY, ypred_proba)
@@ -1198,3 +1197,636 @@ mpl_model = torch.load(model_path)
 Convolutional Neural Networks (CNNs) offer a powerful alternative to fully connected neural networks, especially for handling spatially structured data like images. Unlike fully connected networks, where each neuron in one layer is connected to every neuron in the next, CNNs employ a unique architecture that addresses two key limitations. Firstly, fully connected networks result in a large number of parameters, making the models complex and computationally intensive. Secondly, these networks do not consider the order of input features, treating them as if their arrangement does not matter. This can be particularly problematic for image data, where spatial relationships between pixels are crucial.
 
 In contrast, CNNs introduce local connectivity and parameter sharing. Neurons in a CNN layer connect only to a small region of the previous layer, known as the receptive field, preserving the spatial structure of the data. Moreover, CNNs apply the same set of weights (filters or kernels) across different parts of the input through a process called convolution, significantly reducing the number of parameters compared to fully connected networks. This approach not only enhances computational efficiency but also enables CNNs to capture hierarchical patterns in data, such as edges, textures, and more complex structures in images. For instance, a simple 3x3 filter sliding over a 5x5 image can create a feature map that highlights specific patterns, effectively learning from the spatial context of the image.
+
+
+Now let's take a look at convolutional neural networks (CNNs), the models people really use for classifying images.
+
+~~~
+# import PyTorch and its related packages
+import torch as T
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+
+import torchvision
+import torchvision.transforms as transforms
+
+# set default device based on GPU's availability
+device = torch.device("cuda:0" if torch.cuda.is_available() else "mps:0" if torch.backends.mps.is_available() else "cpu")
+print(device)
+~~~
+{: .python}
+
+~~~
+'mps'
+~~~
+{: .output}
+
+
+Download the CIFAR10 dataset from `torchvision` libarary
+~~~
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+batch_size = 32
+image_size = (32, 32, 3)
+
+train_set = torchvision.datasets.CIFAR10(root='./data', train=True,
+                                        download=True, transform=transform)
+train_loader = T.utils.data.DataLoader(train_set, batch_size=batch_size,
+                                          shuffle=True, num_workers=2)
+
+test_set = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                       download=True, transform=transform)
+test_loader = T.utils.data.DataLoader(test_set, batch_size=batch_size,
+                                         shuffle=False, num_workers=2)
+~~~
+{: .python}
+
+~~~
+Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz
+100%|█████████████████████████████| 170498071/170498071 [06:48<00:00, 416929.38it/s]
+Extracting ./data/cifar-10-python.tar.gz to ./data
+Files already downloaded and verified
+~~~
+{: .output}
+
+
+Let's define the loss function as cross entropy as:
+
+~~~
+criterion = nn.CrossEntropyLoss()
+~~~
+{: .python}
+
+Now, let's define the `ConvNet` class as our CNN model for image classification tasks with 10 output classes. This network comprises a feature extraction module followed by a classifier. The feature extractor includes two convolutional layers, each followed by ReLU activation and max pooling, capturing spatial hierarchies and reducing dimensionality. The classifier consists of a dropout layer to prevent overfitting, a fully connected layer to transform the features into a 512-dimensional space with ReLU activation, and a final fully connected layer that maps to the 10 output classes. The `forward` method orchestrates the data flow through these layers, ensuring the input is processed correctly for classification.
+
+~~~
+class ConvNet(nn.Module):
+    def __init__(self, num_classes=10):
+        super(ConvNet, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(128 * 9 * 9, 512),
+            nn.ReLU(inplace=True),
+            nn.Linear(512, 10),
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), 128 * 9 * 9)
+        x = self.classifier(x)
+        return x
+net = ConvNet()
+net.to(device)
+print(net)
+~~~
+{: .python}
+
+
+~~~
+~~~
+{: .output}
+
+
+~~~
+# also the optimizer
+optimizer = optim.Adam(net.parameters(), lr=0.001)
+
+train_loss = []
+test_loss = []
+train_acc = []
+test_acc = []
+
+for epoch in range(1, 33):  # loop over the dataset multiple times
+    
+    running_loss = .0
+    correct = 0
+    total = 0
+    for i, data in enumerate(train_loader):
+        # get the inputs
+        inputs, labels = data
+        if device == 'cuda':
+            inputs, labels = inputs.to(device), labels.to(device)
+
+        # reset the parameter gradients
+        optimizer.zero_grad()
+
+        # forward
+        outputs = net(inputs)
+        loss = criterion(outputs, labels)
+        # backward
+        loss.backward()
+        # optimize
+        optimizer.step()
+        
+        running_loss += loss.item()
+        _, predicted = T.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+        
+    running_loss /= len(train_loader)
+    train_loss.append(running_loss)
+    running_acc = correct / total
+    train_acc.append(running_acc)
+    
+    if epoch % 4 == 0:
+        print('\nEpoch: {}'.format(epoch))
+        print('Train Acc. => {:.3f}%'.format(100 * running_acc), end=' | ')
+        print('Train Loss => {:.5f}'.format(running_loss))
+    
+    # evaluate on the test set
+    # note this is usually performed on the validation set
+    # for simplicity we just evaluate it on the test set
+    with T.no_grad():
+        correct = 0
+        total = 0
+        test_running_loss = .0
+        for data in test_loader:
+            inputs, labels = data
+            if device == 'cuda':
+                inputs, labels = inputs.to(device), labels.to(device)
+            outputs = net(inputs)
+            loss = criterion(outputs, labels)
+            test_running_loss += loss.item()
+            _, predicted = T.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        test_running_loss /= len(test_loader)
+        test_loss.append(test_running_loss)
+        test_running_acc = correct / total
+        test_acc.append(test_running_acc)
+        
+        if epoch % 4 == 0:
+            print('Test Acc.  => {:.3f}%'.format(100 * test_running_acc), end=' | ')
+            print('Test Loss  => {:.5f}'.format(test_running_loss))
+
+print('Finished Training')
+~~~
+{: .python}
+
+~~~
+Epoch: 4
+Train Acc. => 59.444% | Train Loss => 1.14581
+Test Acc.  => 60.100% | Test Loss  => 1.11926
+
+Epoch: 8
+Train Acc. => 69.432% | Train Loss => 0.87285
+Test Acc.  => 67.090% | Test Loss  => 0.93443
+
+Epoch: 12
+Train Acc. => 75.260% | Train Loss => 0.70139
+Test Acc.  => 70.550% | Test Loss  => 0.85366
+
+Epoch: 16
+Train Acc. => 81.078% | Train Loss => 0.54445
+Test Acc.  => 71.850% | Test Loss  => 0.83311
+
+Epoch: 20
+Train Acc. => 85.854% | Train Loss => 0.41174
+Test Acc.  => 72.440% | Test Loss  => 0.82984
+
+Epoch: 24
+Train Acc. => 90.186% | Train Loss => 0.28792
+Test Acc.  => 73.930% | Test Loss  => 0.84632
+
+Epoch: 28
+Train Acc. => 93.288% | Train Loss => 0.19497
+Test Acc.  => 73.710% | Test Loss  => 0.91641
+
+Epoch: 32
+Train Acc. => 95.684% | Train Loss => 0.13074
+Test Acc.  => 74.170% | Test Loss  => 0.99424
+Finished Training
+~~~
+{: .putput}
+
+
+Now, it is time to plot training and test losses and accuracies over 32 epochs using `matplotlib`. The plot has two subplots: one for the loss and one for the accuracy. The first subplot displays the train and test losses, while the second subplot shows the train and test accuracies. Both plots include labels, titles, legends, and grids for clarity. The layout is adjusted to prevent overlap.
+
+~~~
+# Plotting train and test loss
+plt.figure(figsize=(12, 5))
+
+# Subplot for Loss
+plt.subplot(1, 2, 1)
+plt.plot(range(1, 33), train_loss, label='Train Loss')
+plt.plot(range(1, 33), test_loss, label='Test Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Train and Test Loss over Epochs')
+plt.legend()
+plt.grid(True)
+
+# Subplot for Accuracy
+plt.subplot(1, 2, 2)
+plt.plot(range(1, 33), train_acc, label='Train Accuracy')
+plt.plot(range(1, 33), test_acc, label='Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.title('Train and Test Accuracy over Epochs')
+plt.legend()
+plt.grid(True)
+# Display the plots
+plt.tight_layout()
+plt.savefig("fig/loss_accuracy_CIFAR10.png")
+plt.show()
+~~~
+{: .python}
+
+![](../fig/loss_accuracy_CIFAR10.png")
+
+
+The visualizations and the provided metrics clearly highlight the overfitting trend, emphasizing the need for strategies to enhance the model's robustness and generalization capabilities.
+
+
+
+
+Let's define a function to visualize a batch of images from the CIFAR-10 dataset. It first transforms a tensor into a numpy array suitable for plotting, denormalizes the images for correct display, and plots them using matplotlib. The function imshow displays the images with optional titles.
+
+The class names for CIFAR-10 are defined in a list. The code then retrieves a batch of training data, selects the first 10 images and their corresponding labels, and creates a grid of these images using torchvision.utils.make_grid. Finally, it displays the grid with the correct class labels as the title and saves the figure as follows:
+
+~~~
+# Define a function to show images
+def imshow(inp, title=None):
+    """Display image for Tensor."""
+    inp = inp.numpy().transpose((1, 2, 0))
+    mean = np.array([0.5, 0.5, 0.5])
+    std = np.array([0.5, 0.5, 0.5])
+    inp = std * inp + mean
+    inp = np.clip(inp, 0, 1)
+    plt.imshow(inp)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)  # pause a bit so that plots are updated
+
+# Define the class names for CIFAR-10
+class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+# Get a batch of training data
+inputs, classes = next(iter(train_loader))
+
+# Select only the first 10 images and labels
+inputs = inputs[:10]
+classes = classes[:10]
+
+# Make a grid from the selected batch
+out = torchvision.utils.make_grid(inputs, nrow=10)
+
+# Display the images with correct titles
+imshow(out, title=' '.join([class_names[x] for x in classes]))
+plt.savefig("fig/class_labels_CIFAR10.png")
+plt.show()
+~~~
+{: .python}
+
+![](../fig/class_labels_CIFAR10.png"))
+
+
+
+
+To control overfitting there are  several strategies during the training process such as data augmentation, dropout, and early stopping. Additionally, I can also use L2 regularization to the optimizer and a learning rate scheduler to adjust the learning rate during training as follows:
+
+~~~
+
+import torch as T
+import torch.optim as optim
+import torchvision.transforms as transforms
+import torchvision.datasets as datasets
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+
+# Data augmentation
+transform_train = transforms.Compose([
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomCrop(32, padding=4),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
+
+transform_test = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
+
+# Load CIFAR-10 dataset
+train_set = datasets.CIFAR10(root='./data', train=True,
+                             download=True, transform=transform_train)
+train_loader = DataLoader(train_set, batch_size=batch_size,
+                          shuffle=True, num_workers=2)
+
+test_set = datasets.CIFAR10(root='./data', train=False,
+                            download=True, transform=transform_test)
+test_loader = DataLoader(test_set, batch_size=batch_size,
+                         shuffle=False, num_workers=2)
+
+# Define your network (with dropout layers added)
+class ConvNet(nn.Module):
+    def __init__(self, num_classes=10):
+        super(ConvNet, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(128 * 9 * 9, 512),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+            nn.Linear(512, num_classes),
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), 128 * 9 * 9)
+        x = self.classifier(x)
+        return x
+
+# Initialize the network
+net = ConvNet(num_classes=10)
+device = 'cuda' if T.cuda.is_available() else 'cpu'
+net.to(device)
+
+# Define the criterion and optimizer with L2 regularization
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(net.parameters(), lr=0.001, weight_decay=1e-4)
+
+# Learning rate scheduler
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
+train_loss = []
+test_loss = []
+train_acc = []
+test_acc = []
+
+early_stopping_threshold = 5
+no_improvement_count = 0
+best_test_loss = float('inf')
+
+for epoch in range(1, 33):  # loop over the dataset multiple times
+    
+    running_loss = .0
+    correct = 0
+    total = 0
+    net.train()
+    for i, data in enumerate(train_loader):
+        # get the inputs
+        inputs, labels = data
+        if device == 'cuda':
+            inputs, labels = inputs.to(device), labels.to(device)
+
+        # reset the parameter gradients
+        optimizer.zero_grad()
+
+        # forward
+        outputs = net(inputs)
+        loss = criterion(outputs, labels)
+        # backward
+        loss.backward()
+        # optimize
+        optimizer.step()
+        
+        running_loss += loss.item()
+        _, predicted = T.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+        
+    running_loss /= len(train_loader)
+    train_loss.append(running_loss)
+    running_acc = correct / total
+    train_acc.append(running_acc)
+    
+    if epoch % 4 == 0:
+        print('\nEpoch: {}'.format(epoch))
+        print('Train Acc. => {:.3f}%'.format(100 * running_acc), end=' | ')
+        print('Train Loss => {:.5f}'.format(running_loss))
+    
+    # evaluate on the test set
+    net.eval()
+    with T.no_grad():
+        correct = 0
+        total = 0
+        test_running_loss = .0
+        for data in test_loader:
+            inputs, labels = data
+            if device == 'cuda':
+                inputs, labels = inputs.to(device), labels.to(device)
+            outputs = net(inputs)
+            loss = criterion(outputs, labels)
+            test_running_loss += loss.item()
+            _, predicted = T.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        test_running_loss /= len(test_loader)
+        test_loss.append(test_running_loss)
+        test_running_acc = correct / total
+        test_acc.append(test_running_acc)
+        
+        if epoch % 4 == 0:
+            print('Test Acc.  => {:.3f}%'.format(100 * test_running_acc), end=' | ')
+            print('Test Loss  => {:.5f}'.format(test_running_loss))
+
+    scheduler.step()
+
+    # Early stopping
+    if test_running_loss < best_test_loss:
+        best_test_loss = test_running_loss
+        no_improvement_count = 0
+    else:
+        no_improvement_count += 1
+        if no_improvement_count >= early_stopping_threshold:
+            print('Early stopping at epoch {}'.format(epoch))
+            break
+
+print('Finished Training')
+~~~
+{: .python}
+
+
+~~~
+# Plotting train and test loss
+plt.figure(figsize=(12, 5))
+
+# Subplot for Loss
+plt.subplot(1, 2, 1)
+plt.plot(range(1, 33), train_loss, label='Train Loss')
+plt.plot(range(1, 33), test_loss, label='Test Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Train and Test Loss over Epochs')
+plt.legend()
+plt.grid(True)
+
+# Subplot for Accuracy
+plt.subplot(1, 2, 2)
+plt.plot(range(1, 33), train_acc, label='Train Accuracy')
+plt.plot(range(1, 33), test_acc, label='Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.title('Train and Test Accuracy over Epochs')
+plt.legend()
+plt.grid(True)
+# Display the plots
+plt.tight_layout()
+plt.savefig("fig/loss_accuracy2_CIFAR10.png")
+plt.show()
+~~~
+
+
+![](../fig/class_labels2_CIFAR10.png"))
+
+## Transfer Learning 
+
+
+Transfer learning involves leveraging knowledge gained from solving one problem and applying it to a different, but related, problem. This approach can significantly improve learning efficiency, especially when labeled data is limited for the target task. There are two common strategies for transfer learning: fine-tuning and feature extraction.
+
+Fine-tuning begins with a pretrained model, typically trained on a large dataset, and updates all of the model's parameters to adapt it to the new task. Essentially, the entire model is retrained using the new dataset, allowing it to learn task-specific features while retaining the general knowledge learned from the original task.
+
+On the other hand, feature extraction involves starting with a pretrained model and keeping its parameters fixed, except for the final layer weights responsible for making predictions. This approach treats the pretrained model as a fixed feature extractor, extracting useful features from the input data, and only trains a new classifier on top of these extracted features.
+
+Both fine-tuning and feature extraction are valuable techniques in transfer learning, offering flexibility in adapting pretrained models to new tasks with varying amounts of available data. Fine-tuning allows for more adaptation to the new task, while feature extraction can be faster and requires less computational resources, particularly when dealing with limited data or computational constraints.
+
+
+
+~~~
+import torch
+import torchvision
+import torchvision.transforms as transforms
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import models
+
+# Define data transformations
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
+
+# Load CIFAR-10 dataset
+train_set = torchvision.datasets.CIFAR10(root='./data', train=True,
+                                         download=True, transform=transform)
+train_loader = torch.utils.data.DataLoader(train_set, batch_size=32,
+                                           shuffle=True, num_workers=2)
+
+test_set = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                        download=True, transform=transform)
+test_loader = torch.utils.data.DataLoader(test_set, batch_size=32,
+                                          shuffle=False, num_workers=2)
+
+# Define pretrained ResNet model
+model = models.resnet18(pretrained=True)
+
+# Freeze model parameters
+for param in model.parameters():
+    param.requires_grad = False
+
+# Replace the final fully connected layer with new layer for CIFAR-10 classification
+num_ftrs = model.fc.in_features
+model.fc = nn.Linear(num_ftrs, 10)
+
+# Define loss function and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
+
+# Train the model
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model.to(device)
+
+num_epochs = 10
+for epoch in range(num_epochs):
+    model.train()
+    running_loss = 0.0
+    correct = 0
+    total = 0
+    for inputs, labels in train_loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+        _, predicted = torch.max(outputs, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+    train_loss = running_loss / len(train_loader)
+    train_acc = correct / total
+    
+    # Validation
+    model.eval()
+    test_loss = 0.0
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for inputs, labels in test_loader:
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            test_loss += loss.item()
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    test_loss /= len(test_loader)
+    test_acc = correct / total
+    
+    # Print epoch statistics
+    print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}')
+
+print('Finished Training')
+~~~
+{: .python}
+
+
+~~~
+import matplotlib.pyplot as plt
+
+# Plotting train and test loss
+plt.figure(figsize=(12, 5))
+
+# Subplot for Loss
+plt.subplot(1, 2, 1)
+plt.plot(range(1, num_epochs+1), train_loss, label='Train Loss')
+plt.plot(range(1, num_epochs+1), test_loss, label='Test Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Train and Test Loss over Epochs')
+plt.legend()
+plt.grid(True)
+
+# Subplot for Accuracy
+plt.subplot(1, 2, 2)
+plt.plot(range(1, num_epochs+1), train_acc, label='Train Accuracy')
+plt.plot(range(1, num_epochs+1), test_acc, label='Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.title('Train and Test Accuracy over Epochs')
+plt.legend()
+plt.grid(True)
+
+# Display the plots
+plt.tight_layout()
+plt.savefig("fig/loss_accuracy3_CIFAR10.png")
+plt.show()
+
+~~~
+{: .python}
+
+![](../fig/class_labels3_CIFAR10.png"))
+
