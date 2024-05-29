@@ -1752,9 +1752,15 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
 num_epochs = 10
+
+train_loss = []
+test_loss = []
+train_acc = []
+test_acc = []
+
 for epoch in range(num_epochs):
     model.train()
-    running_loss = 0.0
+    running_train_loss = 0.0
     correct = 0
     total = 0
     for inputs, labels in train_loader:
@@ -1764,16 +1770,16 @@ for epoch in range(num_epochs):
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        running_loss += loss.item()
+        running_train_loss += loss.item() * inputs.size(0)  # Update running train loss
         _, predicted = torch.max(outputs, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
-    train_loss = running_loss / len(train_loader)
-    train_acc = correct / total
+    train_loss.append(running_train_loss / len(train_loader.dataset))  # Append epoch's train loss
+    train_acc.append(correct / total)
     
     # Validation
     model.eval()
-    test_loss = 0.0
+    test_running_loss = 0.0
     correct = 0
     total = 0
     with torch.no_grad():
@@ -1781,13 +1787,12 @@ for epoch in range(num_epochs):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)
             loss = criterion(outputs, labels)
-            test_loss += loss.item()
+            test_running_loss += loss.item() * inputs.size(0)  # Update running test loss
             _, predicted = torch.max(outputs, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-    test_loss /= len(test_loader)
-    test_acc = correct / total
-    
+    test_loss.append(test_running_loss / len(test_loader.dataset))  # Append epoch's test loss
+    test_acc.append(correct / total)
     # Print epoch statistics
     print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}')
 
@@ -1800,6 +1805,13 @@ Epoch [1/10], Train Loss: 0.8026, Train Acc: 0.7322, Test Loss: 0.6058, Test Acc
 Epoch [2/10], Train Loss: 0.6374, Train Acc: 0.7806, Test Loss: 0.6237, Test Acc: 0.7908
 Epoch [3/10], Train Loss: 0.6161, Train Acc: 0.7862, Test Loss: 0.5727, Test Acc: 0.8025
 Epoch [4/10], Train Loss: 0.6004, Train Acc: 0.7913, Test Loss: 0.5847, Test Acc: 0.8018
+Epoch [5/10], Train Loss: 0.5951, Train Acc: 0.7942, Test Loss: 0.5852, Test Acc: 0.8011
+Epoch [6/10], Train Loss: 0.5907, Train Acc: 0.7956, Test Loss: 0.5838, Test Acc: 0.8027
+Epoch [7/10], Train Loss: 0.5942, Train Acc: 0.7946, Test Loss: 0.5909, Test Acc: 0.8009
+Epoch [8/10], Train Loss: 0.5919, Train Acc: 0.7954, Test Loss: 0.6120, Test Acc: 0.7938
+Epoch [9/10], Train Loss: 0.5812, Train Acc: 0.7986, Test Loss: 0.5728, Test Acc: 0.8050
+Epoch [10/10], Train Loss: 0.5874, Train Acc: 0.7989, Test Loss: 0.5765, Test Acc: 0.8030
+Finished Training
 ~~~
 {: .output}
 
