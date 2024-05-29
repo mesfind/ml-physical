@@ -1835,5 +1835,5 @@ plt.show()
 ~~~
 {: .python}
 
-![](../fig/class_labels3_CIFAR10.png"))
+![](../fig/class_labels3_CIFAR10.png")
 
