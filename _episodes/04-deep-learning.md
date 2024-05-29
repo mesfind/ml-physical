@@ -1793,6 +1793,13 @@ print('Finished Training')
 ~~~
 {: .python}
 
+~~~
+Epoch [1/10], Train Loss: 0.8026, Train Acc: 0.7322, Test Loss: 0.6058, Test Acc: 0.7934
+Epoch [2/10], Train Loss: 0.6374, Train Acc: 0.7806, Test Loss: 0.6237, Test Acc: 0.7908
+Epoch [3/10], Train Loss: 0.6161, Train Acc: 0.7862, Test Loss: 0.5727, Test Acc: 0.8025
+Epoch [4/10], Train Loss: 0.6004, Train Acc: 0.7913, Test Loss: 0.5847, Test Acc: 0.8018
+~~~
+{: .output}
 
 ~~~
 import matplotlib.pyplot as plt
