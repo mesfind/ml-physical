@@ -8,3 +8,4 @@ _site
 .jekyll-cache
 data/ERSSTv5_deseasoneddetrended_5monthrunningmean_1950-2021.nc
 data/cifar*
+ .virtual_documents/*
