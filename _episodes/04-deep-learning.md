@@ -1794,7 +1794,7 @@ for epoch in range(num_epochs):
     test_loss.append(test_running_loss / len(test_loader.dataset))  # Append epoch's test loss
     test_acc.append(correct / total)
     # Print epoch statistics
-    print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}')
+    print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss[-1]:.4f}, Train Acc: {train_acc[-1]:.4f}, Test Loss: {test_loss[-1]:.4f}, Test Acc: {test_acc[-1]:.4f}')
 
 print('Finished Training')
 ~~~
