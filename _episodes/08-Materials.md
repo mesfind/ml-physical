@@ -3,13 +3,19 @@ title: ML for Materials
 teaching: 1
 exercises: 0
 questions:
-- ""
+- "Can we have a comprehensive dataset consisting of large structures from various compounds spanning the whole periodic table"
+- "Do we have an machine learning libary that able to study electron interactions and charge distribution in atomistic modeling with near DFT accuracy"
 objectives:
 - "Describe approaches for materials representation including chemical composition and crystal structure."
 - "Discover structure and property information from public databases using Python."
 - "Predict materials property using transfer learning"
 keypoints:
-- ""
+- "Artificial intelligence and machine learning are being increasingly used in scientific domains such as computational science"
+- "RDKit can be used to calculate various molecular properties for machine learning in materials science"
+- "PyMatGen help to query structures w  from MP repository"
+- "Crystal Hamiltonian Graph neural Network is pretrained on the GGA/GGA+U static and relaxation trajectories from Materials Project"
+- "Charge-informed molecular dynamics can be simulated with pretrained CHGNet through ASE python interface"
+- "CHGNet can perform fast structure optimization and provide site-wise magnetic moments. This makes it ideal for pre-relaxation and MAGMOM initialization in spin-polarized DFT"
 ---
 
 <script type="text/javascript"
