@@ -580,27 +580,39 @@ We can see from the correlation heatmap, few parameters like Relative Humidity a
 In this section, we begin by loading the dataset and performing initial preprocessing steps. The dataset, stored in a CSV file, contains various meteorological measurements such as pressure, temperature, and wind direction. We extract relevant features and reformat the data to facilitate further processing. Additionally, we normalize the data to ensure that all features are on a similar scale, which is crucial for training neural networks effectively.
 
 ~~~
-# Convert '"DateTime' column to datetime format
-df["DateTime"] = pd.to_datetime(df["DateTime"])
+
+# Clean the 'DateTime' column by removing malformed entries
+df = df[df['DateTime'].str.match(r'\d{4}-\d{2}-\d{2}.*')]
+# Convert 'DateTime' column to datetime format, allowing pandas to infer the format
+df["DateTime"] = pd.to_datetime(df["DateTime"], errors='coerce')
+# Drop rows where the 'DateTime' conversion resulted in NaT (not-a-time)
+df.dropna(subset=["DateTime"], inplace=True)
+
 # Reindex the DataFrame before splitting
 df.set_index('DateTime', inplace=True)
                                                                                                                                                                
 # select only important features
 features = ['p(mbar)','T(degC)', 'VPmax(mbar)','VPdef(mbar)', 'sh(g/kg)', 'rho(g/m**3)',  'wv(m/s)', 'wd(deg)' ]
 df = df[features]
-df.head()
+
+# Resample the DataFrame by day and compute the mean for each day 
+df_daily = df.resample('D').mean() 
+# Display the first few rows of the resampled DataFrame 
+df_daily.head()
 ~~~
 {: .python}
 
 
 ~~~
-                     p(mbar)  T(degC)  VPmax(mbar)  VPdef(mbar)  sh(g/kg)  rho(g/m**3)  wv(m/s)  wd(deg)
-DateTime                                                                                                
-2009-01-01 00:10:00   996.52    -8.02         3.33         0.22      1.94      1307.75     1.03    152.3
-2009-01-01 00:20:00   996.57    -8.41         3.23         0.21      1.89      1309.80     0.72    136.1
-2009-01-01 00:30:00   996.53    -8.51         3.21         0.20      1.88      1310.24     0.19    171.6
-2009-01-01 00:40:00   996.51    -8.31         3.26         0.19      1.92      1309.19     0.34    198.0
-2009-01-01 00:50:00   996.51    -8.27         3.27         0.19      1.92      1309.00     0.32    214.3
+               p(mbar)   T(degC)  ...   wv(m/s)     wd(deg)
+DateTime                          ...                      
+2009-01-01  999.145594 -6.810629  ...  0.778601  181.863077
+2009-01-02  999.600625 -3.728194  ...  1.419514  125.072014
+2009-01-03  998.548611 -5.271736  ...  1.250903  190.383333
+2009-01-04  988.510694 -1.375208  ...  1.720417  213.069861
+2009-01-05  990.405694 -4.867153  ...  3.800278  118.287361
+
+[5 rows x 8 columns]
 ~~~
 {: .output}
 
@@ -664,8 +676,7 @@ class SlidingWindowGenerator:
         return X, y.reshape(-1, 1)
 
 # Initialize the generator
-# if label_width=1 it will be single-step forecasting
-swg = SlidingWindowGenerator(seq_length=30, label_width=7, shift=1, df=df, label_columns=['T(degC)'])
+swg = SlidingWindowGenerator(seq_length=30, label_width=7, shift=1, df=df, label_columns=['wv(m/s)'])
 print(swg)
 # Generate windows
 X, y = swg.sliding_windows()
@@ -680,13 +691,11 @@ print(y.shape)
 Total window size: 31
 Input indices: [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
  24 25 26 27 28 29]
-Label indices: [28 29 30]
-Label column name(s): ['T(degC
-
---------------------------
+Label indices: [24 25 26 27 28 29 30]
+Label column name(s): ['wv(m/s)']
+-----------------------------
 (420521, 30, 8)
 (420521, 1)
-
 ~~~
 {: .output}
 
@@ -699,6 +708,7 @@ Label column name(s): ['T(degC
 To prepare the data for training the neural network, we first normalize it using MinMaxScaler to ensure that all features have a common scale. This step helps in accelerating the training process and improving the model's performance. The normalized data is then converted into PyTorch tensors and moved to the GPU if available. Finally, we create TensorDataset instances and split them into training and testing sets, which are loaded into DataLoader objects for efficient batch processing.
 
 ~~~
+
 # Normalize the data
 scaler_X = MinMaxScaler()
 scaler_y = MinMaxScaler()
@@ -712,29 +722,24 @@ y_flat = y.reshape(-1, y_shape[-1])
 X = scaler_X.fit_transform(X_flat).reshape(X_shape)
 y = scaler_y.fit_transform(y_flat).reshape(y_shape)
 
-# Convert data to PyTorch tensors
-X_tensor = torch.Tensor(X)
-y_tensor = torch.Tensor(y)
+# train and test data loading in tensor format
+train_size = int(len(y) * 0.7)
+test_size = len(y) - train_size
 
-# Move data to GPU if available
-if torch.cuda.is_available():
-    X_tensor = X_tensor.cuda()
-    y_tensor = y_tensor.cuda()
+X_train = Variable(torch.Tensor(np.array(X[0:train_size])))
+y_train = Variable(torch.Tensor(np.array(y[0:train_size])))
 
-# Define batch size
-batch_size = 256
+X_test = Variable(torch.Tensor(np.array(X[train_size:len(X)])))
+y_test = Variable(torch.Tensor(np.array(y[train_size:len(y)])))
 
 # Create TensorDataset instances for training and testing data
-dataset = TensorDataset(X_tensor, y_tensor)
+train_data = TensorDataset(X_train, y_train)
+test_data = TensorDataset(X_test, y_test)
 
-# Split the dataset into train and test sets
-train_size = int(0.7 * len(dataset))
-test_size = len(dataset) - train_size
-train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
-
-# Initialize DataLoader objects for both datasets
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+# Initialize DataLoader objects for both datasets with batch size 256
+batch_size = 256
+train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=False)
+test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
 
 ~~~
 {: .python}
@@ -810,28 +815,25 @@ The training process involves iteratively optimizing the LSTM model's parameters
 # Check for GPU availability including CUDA and Apple's MPS GPU
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'mps:0' if torch.backends.mps.is_available() else 'cpu')
-# Initialize the model
-input_size = X.shape[2]  # feature fecture 
-hidden_size = 5
-num_layers = 1
-output_size = 1
-seq_length = 30
-lstm = LSTM(input_size, hidden_size, num_layers, output_size).to(device)
-lstm.to(device)
-# Define loss function and optimizer
-criterion = torch.nn.MSELoss()    # Mean-squared error for regression
-optimizer = torch.optim.Adam(lstm.parameters(), lr=0.01)
-
 # Training the model
-num_epochs = 200
+num_epochs = 20
+learning_rate = 0.01
+input_size = X.shape[2] # feature fecture 
+hidden_size = 5
+num_layers = 2
+output_size = 1
+lstm = LSTM(input_size, hidden_size, num_layers, output_size)
 
+criterion = torch.nn.MSELoss()    # Mean-squared error for regression
+optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
+
+# Train the model
 train_losses = []
 test_losses = []
 for epoch in range(num_epochs):
     # Train
     lstm.train()
     for inputs, targets in train_loader:
-        inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = lstm(inputs)
         train_loss = criterion(outputs, targets)
@@ -843,20 +845,22 @@ for epoch in range(num_epochs):
     lstm.eval()
     with torch.no_grad():
         for inputs, targets in test_loader:
-            inputs, targets = inputs.to(device), targets.to(device)
             test_outputs = lstm(inputs)
             test_loss = criterion(test_outputs, targets)
             test_losses.append(test_loss.item())
     
-    if epoch % 10 == 0:
+    if epoch % 100 == 0:
         print(f"Epoch: {epoch}, Train Loss: {np.mean(train_losses[-len(train_loader):]):.5f}, Test Loss: {np.mean(test_losses[-len(test_loader):]):.5f}")
 
 ~~~
 {: .python}
 
 ~~~
-Epoch: 0, Train Loss: 0.00062, Test Loss: 0.00003
-Epoch: 100, Train Loss: 0.00001, Test Loss: 0.00001
+Epoch: 0, Train Loss: 0.57703, Test Loss: 0.23651
+Epoch: 5, Train Loss: 0.00306, Test Loss: 0.00215
+Epoch: 10, Train Loss: 0.00003, Test Loss: 0.00098
+Epoch: 15, Train Loss: 0.00000, Test Loss: 0.00097
+Epoch: 20, Train Loss: 0.00000, Test Loss: 0.00097
 ~~~
 {: .output}
 
@@ -870,20 +874,18 @@ After training the LSTM model, we evaluate its performance on both the training 
 
 ~~~
 # Compute final MSE and R² for train and test sets
-train_predict = lstm(X_tensor[:train_size].to(device)).cpu().detach().numpy()
-test_predict = lstm(X_tensor[train_size:].to(device)).cpu().detach().numpy()
-
-# Inverse transform the predictions
-train_predict = scaler_y.inverse_transform(train_predict.reshape(-1, 1))
-test_predict = scaler_y.inverse_transform(test_predict.reshape(-1, 1))
-
-# Compute MSE and R2 scores
-train_mse = mean_squared_error(y[:train_size], train_predict)
-test_mse = mean_squared_error(y[train_size:], test_predict)
-
-train_r2 = r2_score(y[:train_size], train_predict)
-test_r2 = r2_score(y[train_size:], test_predict)
-
+train_predict = lstm(X_train).data.numpy()
+test_predict = lstm(X_test).data.numpy()
+trainY_plot = y_train.data.numpy()
+testY_plot = y_test.data.numpy()
+train_predict = scaler_y.inverse_transform(train_predict)
+trainY_plot = scaler_y.inverse_transform(trainY_plot)
+test_predict = scaler_y.inverse_transform(test_predict)
+testY_plot = scaler_y.inverse_transform(testY_plot)
+train_mse = mean_squared_error(trainY_plot, train_predict)
+train_r2 = r2_score(trainY_plot, train_predict)
+test_mse = mean_squared_error(testY_plot, test_predict)
+test_r2 = r2_score(testY_plot, test_predict)
 # Plot the training and testing loss
 plt.figure(figsize=(10, 5))
 plt.plot(train_losses, label='Train Loss')
@@ -893,23 +895,10 @@ plt.ylabel('Loss')
 plt.legend()
 plt.title('Training and Testing Loss Over Epochs')
 # Add MSE and R² values as annotations
-plt.text(0.5, 0.9, f'Train MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.8, f'Test MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.7, f'Train R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.6, f'Test R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+plt.text(0.5, 0.9, f'MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
+plt.text(0.5, 0.8, f'R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.tight_layout()
 plt.show()
-
-# Plot observed and predicted values for the test dataset
-plt.figure(figsize=(12, 6))
-plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
-plt.plot(df.index[train_size:], test_predict, label='Predicted')
-plt.xlabel('Date')
-plt.ylabel('T(degC)')
-plt.title('Observed vs Predicted Wind Speed')
-plt.legend()
-plt.show()
-
 
 ~~~
 {: .python}
@@ -982,10 +971,10 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.tight_layout()
 > > plt.show()
 > > plt.figure(figsize=(12, 6))
-> > plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
-> > plt.plot(df.index[train_size:], test_predict, label='Predicted')
+> > plt.plot(df_daily.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
+> > plt.plot(df_daily.index[train_size:], test_predict, label='Predicted')
 > > plt.xlabel('Date')
-> > plt.ylabel('T(degC)')
+> > plt.ylabel('wv(m/s)')
 > > plt.title('Observed vs Predicted Temperature')
 > > plt.legend()
 > > plt.show()
@@ -1079,8 +1068,8 @@ These sections and corresponding code snippets provide a comprehensive guide to 
 > > plt.show()
 > > 
 > > plt.figure(figsize=(12, 6))
-> > plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
-> > plt.plot(df.index[train_size:], test_predict, label='Predicted')
+> > plt.plot(df_daily.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
+> > plt.plot(df_daily.index[train_size:], test_predict, label='Predicted')
 > > plt.xlabel('Date')
 > > plt.ylabel('T(degC)')
 > > plt.title('Observed vs Predicted Temperature')
