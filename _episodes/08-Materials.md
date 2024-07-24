@@ -265,6 +265,47 @@ sets
 {: .output}
 
 
+### Python libraries
+
+
+One of the most powerful features of python is its libraries. A library is a python script that was written by someone, and that can perform a set of tasks. You can make use of a python library by just using the `import` command. For example, when you want to calculate the logarithm, the `log()` function you would look for exists in the `numpy` library.
+
+~~~
+import numpy as np
+print(np.log(11))
+~~~
+{: .python}
+
+~~~
+2.3978952727983707
+~~~
+{: .output}
+
+
+### Installing Python Libraries for Material Science
+
+Using Python for material science is made easier with various libraries tailored for analysis and simulations. Here's how to install them:
+
+- **pip**:
+  - Pip is the default package manager for Python, used to install packages from the Python Package Index (PyPI).
+  - It works well with Python’s virtual environments, allowing you to create isolated project environments.
+  - To install a package with pip, use the command `pip install package-name`.
+  - To update pip itself, use the command !pip install pip -U --root-user-action=ignore
+
+- **Conda**:
+  - Conda can install packages for multiple programming languages, including Python, R, Ruby, and JavaScript.
+  - It provides pre-compiled packages, which makes installations faster.
+  - Conda has its own version of pip for installing Python packages within Conda environments.
+  - To install a package with Conda, use the command `conda install package-name`.
+
+
+  ~~~
+  !pip install pip -U --root-user-action=ignore # update the pip on notebook
+  ~~~
+  {: .python}
+
+
+
 A DataFrame organizes data into a 2-dimensional table of rows and columns, much like a spreadsheet. They are useful tools to store, access, and modify large sets of data.
 
 ### Example: Creating and Modifying a DataFrame
