@@ -138,45 +138,49 @@ This simple variable assignment enables us to store and retrieve data efficientl
 
 
 
+### Arithmetic Operations: `+`, `-`, `*`, `/`, `%`, `//`
 
-### Arithmetic operations: `+`, `-`, `*`, `/`, `%`, `//`
+In material science computations, arithmetic operations are frequently used for various calculations. Python supports standard arithmetic operators such as `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), and `%` (modulus). The `//` operator, known as the floor division operator, provides the quotient of a division, discarding any fractional part. For instance, `9 // 4` results in `2`.
 
-Back to operators. You can work with the standard maths operators in python, which are `+`, `-`, `*`, `/` and `%`. The first four are obvious, but `%` might need an introduction. The `//` operator is related to the `/`: it lets you get the quotient of the division, and therefore it is called the floor operator `//`. That is, it just removes the decimal part of the division result. For example, `9//4=2`.
+The `%` operator, or modulus, returns the remainder of a division. In the example `9 / 4 = 2 + 1/4`, the quotient is `2` and the remainder is `1`. Thus, in Python, `9 % 4` equals `1`.
 
-`%` is the modulus operator. It is related to the `//` operator in that: while `a//b`  gives you the integer *quotient*, `%` gives the *remainder*. For example, in the division `9/4=2+1/4`, the quotient is `2` and the remainder is `1`. Then in python, `9%4=1`.
+### Comparison Operations: `==`, `!=`, `<`, `>`, `<=`, `>=`
 
-### Comparison operations: `==`, `!=`, `<`, `>`, `<=`, `>=`
+In material science, comparing values is essential for data analysis and simulations. Python provides comparison operators that yield boolean values (True or False) based on the relationship between variables:
 
-Now that we know how to use operators on numbers to create numbers, the above operators create boolean values. This is because they ask questions about the variables they operate on.
+- `a == b` checks if `a` is exactly equal to `b`.
+- `a != b` checks if `a` is not equal to `b`.
+- `a < b` checks if `a` is less than `b`.
+- `a > b` checks if `a` is greater than `b`.
+- `a <= b` checks if `a` is less than or equal to `b`.
+- `a >= b` checks if `a` is greater than or equal to `b`.
 
-- `a == b` means: is `a` exactly equal to `b`?
-- `a != b` means: is `a` **not** equal to `b`?
-- `a < b` means: is `a` less than `b`?
-- `a > b` means: is `a` greater than `b`?
-- `a <= b` means: is `a` less than **or equal to** `b`?
-- `a >= b` means: is `a` greater than **or equal to** `b`?
-
-Let's evaluate an expression baesd on these operators:
+Here’s an example demonstrating these operations:
 
 ~~~
-#This code demonstrates operations
-a = 3
-b = 5
+# This code demonstrates comparison operations 
+a = 7.5  # represents a property value of a material
+b = 9.8  # represents another property value of a material
+
 c = a == b
-print(c)
+print("Is a equal to b?", c)
+
 d = a > b
-print(d)
+print("Is a greater than b?", d)
+
 e = a <= b
-print(e)
+print("Is a less than or equal to b?", e)
 ~~~
 {: .python}
 
 ~~~
-False
-False
-True
+Is a equal to b? False
+Is a greater than b? False
+Is a less than or equal to b? True
 ~~~
-{:  .output}
+{: .output}
+
+In material science, these operations could be used to compare properties such as tensile strength, thermal conductivity, or electrical resistance between different materials or samples. This enables researchers to make informed decisions based on quantitative data analysis.
 
 
 ### Lists
