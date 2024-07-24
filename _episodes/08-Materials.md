@@ -1,5 +1,5 @@
 ---
-title: ML for Materials
+title: Machine learning for material science
 teaching: 1
 exercises: 0
 questions:
@@ -24,9 +24,242 @@ keypoints:
 
 </script>
 
-# Part 1 : Basics
 
-## Overview of Basic Python
+
+
+This is a  lesson that cover the basics of using machine learning for material science. I will walk you through a few Python scripts that will enable you to classify materials and predict their properties.
+
+The contents are targeted to beginers and scientists who have some experience with crystal structure (just the basics, like lattice constants and atomic positions). I also expect you to have basic experience with programming (in any language; Python, C, C++, C#, Java, JavaScript, etc).
+
+
+
+# What is machine learning
+
+So what to we use machine learning for in material science? The main purpose of machine learning here is the prediction of properties of a given material. This property can either be a class (the classification problem) or a quantity (the regression problem).
+
+
+
+## The machine learning workflow
+
+So how is this all done? Generally, we can think of machine learning as a 3-step process:
+- Step A: First, find numerical/categoricall **descriptors** that can describe your material. That is: every material in your dataset should be uniquely represented by an array of numbers/categories.
+- Step B: Then, apply your procedure to your entire dataset of structures to form a sheet of material descriptors vs. **target properties**.
+- Step C: Use machine learning to predict the target properties based on the descriptors.
+
+
+
+Before we go deeper into the details, we will need to learn a few things today:
+- The programming language (python)
+- The database of materials, from which we will get our data and create the dataset
+
+Let's start!
+
+## Google Colab
+
+If you wish to learn to program in python and you don't have python installed on your computer, or you don't wish to struggle with the headache of setting it up, then you can use the Google Colab. This is a website that was developed by Google and is publicly available for anyone to use. It is pretty much an online python compiler, where you can write python code and run it, all on your web browser.
+
+This tutorial, as you can see, is already running on Google Colab (let's just call it Colab from now on). On Colab, you can create python **notebooks**, which are known as Jupyter notebooks. Jupyter is a programming environment for python that allows the programmer to write documents, just like this one, where there is both text and code. To demonstrate the placement of code here, check out the below section. This is some python code that prints out the text `"Hello Computational Data Science!"`. Press the play button, and it will run that code, and actually print out `"Hello Computational Data Science!"`.
+
+
+~~~
+print("Hello Computational Data Science! Happy you're in HU!")
+~~~
+{: .python}
+
+~~~
+Hello Computational Data Science! Happy you're in HU!
+~~~
+{: .output}
+
+
+## Quick Overview on Python 
+
+### Basic Python: Variables and Operations
+
+Python is an excellent and accessible language for computational tasks in drug discovery. Its simplicity and flexibility make it an ideal tool for researchers. Python code can be executed on various platforms, including laptops, desktops, and even mobile devices, thanks to numerous online Python servers that facilitate code execution without the need for local installations.
+
+### The Print Statement
+
+Let’s begin with a fundamental operation: using Python to print text. Consider the scenario where we want the program to display `"Initiating compound screening protocol"` on the screen. This can be achieved using the `print` statement, which instructs the computer to display a specific text, known as a *string*, on the screen.
+
+Here's an example of how this works:
+
+~~~
+print("Initiating compound screening protocol")
+~~~
+{: .python}
+
+~~~
+Initiating compound screening protocol
+~~~
+{: .output}
+
+Notice the simplicity of the above line of code. It’s an executable line, meaning that when executed, the program will run and display the specified message. This can be done seamlessly on platforms like Google Colab, which allows Python code to be executed directly in the browser.
+
+What exactly happens here? We utilized the `print` function, which takes the string `"Initiating compound screening protocol"` and displays it. This function is essential for providing outputs during various stages of drug discovery computations.
+
+Let’s try printing two messages sequentially:
+
+~~~
+print("Screening initiated")
+print("Analyzing compound interaction with target proteins")
+~~~
+{: .python}
+
+~~~
+Screening initiated
+Analyzing compound interaction with target proteins
+~~~
+{: .output}
+
+### Python Data Types: Strings, Numbers, and Boolean Values
+
+Python supports various data types that are crucial for different operations in drug discovery. Here, we will explore three fundamental data types: strings, numbers, and boolean values.
+
+Numbers are straightforward in Python. If you input a number, say `5`, into the interpreter, it will return `5`.
+
+### Variables
+
+In Python, variables are used to store values in memory, facilitating complex computations and data handling. For instance, we can store a string that represents a step in our drug discovery protocol:
+
+~~~
+protocol_step = "Identifying potential drug candidates"
+print(protocol_step)
+~~~
+{: .python}
+
+~~~
+Identifying potential drug candidates
+~~~
+{: .output}
+
+This simple variable assignment enables us to store and retrieve data efficiently, a fundamental requirement in managing extensive drug discovery workflows.
+
+
+
+
+
+### Arithmetic operations: `+`, `-`, `*`, `/`, `%`, `//`
+
+Back to operators. You can work with the standard maths operators in python, which are `+`, `-`, `*`, `/` and `%`. The first four are obvious, but `%` might need an introduction. The `//` operator is related to the `/`: it lets you get the quotient of the division, and therefore it is called the floor operator `//`. That is, it just removes the decimal part of the division result. For example, `9//4=2`.
+
+`%` is the modulus operator. It is related to the `//` operator in that: while `a//b`  gives you the integer *quotient*, `%` gives the *remainder*. For example, in the division `9/4=2+1/4`, the quotient is `2` and the remainder is `1`. Then in python, `9%4=1`.
+
+### Comparison operations: `==`, `!=`, `<`, `>`, `<=`, `>=`
+
+Now that we know how to use operators on numbers to create numbers, the above operators create boolean values. This is because they ask questions about the variables they operate on.
+
+- `a == b` means: is `a` exactly equal to `b`?
+- `a != b` means: is `a` **not** equal to `b`?
+- `a < b` means: is `a` less than `b`?
+- `a > b` means: is `a` greater than `b`?
+- `a <= b` means: is `a` less than **or equal to** `b`?
+- `a >= b` means: is `a` greater than **or equal to** `b`?
+
+Let's evaluate an expression baesd on these operators:
+
+~~~
+#This code demonstrates operations
+a = 3
+b = 5
+c = a == b
+print(c)
+d = a > b
+print(d)
+e = a <= b
+print(e)
+~~~
+{: .python}
+
+~~~
+False
+False
+True
+~~~
+{:  .output}
+
+
+### Lists
+
+A `list` in python is exactly what its name suggests, a list of things. Like a list of numbers, names, or even a mix of both. To create a list, we have to follow a simple syntax rule: enclose the things in the list between two *square brackets*, like those `[` and `]`, and separate between the list elements using commas, `,`. So for example, here is a list of numbers: `a = [4,6,7,1,0]`, a list of strings: `a = ["a","?","neptune is a planet"]`, a list of both: `a = [3,0,"Where is my car?"]`.
+
+Well, you can also create a list of lists in python! And you can *nest* as many lists as you want. Here is an example: `a = [[1,2],[3,4],[5,6]]`. This is a list of three elements, each element being itself a list of two elements.
+
+### Accessing and Modifying Elements in Arrays
+
+In the context of material science data analysis, accessing and modifying elements within an array is a fundamental task. Here is how you can achieve this:
+
+#### Accessing Array Elements
+
+To access an element in an array, determine its *index* and use square brackets for retrieval. The index is an integer, starting from `0` for the first element. Consider the following example:
+~~~
+data = ["Sample_A", "Fe", "Cu", "Analysis", "Complete", 4.5, "Data", "Confirmed"]
+print(data[0])
+~~~
+{: .python}
+
+~~~
+Sample_A
+~~~
+{: .output}
+
+Here, the string `'Sample_A'` is the first element of the array `data`, hence its index is `0`, accessible via `data[0]`.
+
+#### Modifying Array Elements
+
+To modify an element in an array, simply assign a new value to the specific index.
+
+~~~
+data = ["Sample_A", "Fe", "Cu", "Analysis", "Complete", 4.5, "Data", "Confirmed"]
+data[5] = "Verified"
+print(data)
+~~~
+{: .python}
+
+~~~
+['Sample_A', 'Fe', 'Cu', 'Analysis', 'Complete', 'Verified', 'Data', 'Confirmed']
+~~~
+{: .output}
+
+### Tuples
+
+A tuple is similar to an array but with a critical distinction: tuples are immutable. Once created, the elements within a tuple cannot be changed. Tuples are defined using parentheses `(` and `)`.
+
+For example, let's create a tuple and try to modify one of its elements:
+
+```python
+experiment_results = (7.1, 8.3, 5.4)
+#experiment_results[0] = 6.5
+#The above line will result in an error as tuples do not support item assignment!
+```
+{: .python}
+
+Attempting to execute the commented line will raise an error since tuples are immutable, making them ideal for storing constant data that should not change throughout the analysis process.
+
+
+### Dictionaries
+
+We learned in lists and tuples that the elements are indexed. The index is an integer that starts from `0`. A dictionary extends the indexing concept: a dictionary is a collection of indexed objects, where the indices themselves can be anything *immutable*: numbers, float, strings and tuples (and frozensets, but we won't discuss that one today).
+
+The syntax for creating a dictionary is as follows: `{key:value}`, where `key` is the index, `value` is any data type. For example,
+
+
+~~~
+a = {'C': 6, 'O': 8, 'Fe':26}
+print(a['C'])
+b = {'a':"lists",'b':"tuples",'c':"sets",'d':"dictionaries"}
+print(b['c'])
+~~~
+{: .python}
+
+
+~~~
+6
+sets
+
+~~~
+{: .output}
+
 
 A DataFrame organizes data into a 2-dimensional table of rows and columns, much like a spreadsheet. They are useful tools to store, access, and modify large sets of data.
 

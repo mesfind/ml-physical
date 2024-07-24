@@ -23,14 +23,27 @@ plt.style.use("ggplot")
 
 # Load the dataset
 df = pd.read_csv('data/weather_forecast.csv')
-# Convert '"Date Time' column to datetime format
-df["DateTime"] = pd.to_datetime(df["DateTime"])
+
+
+# Clean the 'DateTime' column by removing malformed entries
+df = df[df['DateTime'].str.match(r'\d{4}-\d{2}-\d{2}.*')]
+
+# Convert 'DateTime' column to datetime format, allowing pandas to infer the format
+df["DateTime"] = pd.to_datetime(df["DateTime"], errors='coerce')
+
+# Drop rows where the 'DateTime' conversion resulted in NaT (not-a-time)
+df.dropna(subset=["DateTime"], inplace=True)
+
 # Reindex the DataFrame before splitting
 df.set_index('DateTime', inplace=True)
 
 # select only important features
 features = ['p(mbar)','T(degC)', 'VPmax(mbar)','VPdef(mbar)', 'sh(g/kg)', 'rho(g/m**3)',  'wv(m/s)', 'wd(deg)' ]
 df = df[features]
+
+# Resample the DataFrame by day and compute the mean for each day
+df_daily = df.resample('D').mean()
+
 
 class SlidingWindowGenerator:
     def __init__(self, seq_length, label_width, shift, df, label_columns=None, dropnan=True):
@@ -81,12 +94,12 @@ class SlidingWindowGenerator:
 
         X, y = np.array(X), np.array(y)
 
-        return X, y.reshape(-1, 1)
+        return X, y[:,-1,]
 
 
 # Initialize the generator
 # if label_width=1 it will be single-step forecasting
-swg = SlidingWindowGenerator(seq_length=720, label_width=72, shift=1, df=df, label_columns=['T(degC)'])
+swg = SlidingWindowGenerator(seq_length=30, label_width=3, shift=1, df=df_daily, label_columns=['wv(m/s)'])
 
 # Generate windows
 X, y = swg.sliding_windows()
@@ -139,17 +152,20 @@ class LSTM(nn.Module):
         out = self.fc(out[:, -1, :])
         return out
 
+
+# Check for GPU availability including CUDA and Apple's MPS GPU
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'mps:0' if torch.backends.mps.is_available() else 'cpu')
+
 # Training the model
-num_epochs = 200
+num_epochs = 21
 learning_rate = 0.01
 
 input_size = X.shape[2] # feature fecture 
 hidden_size = 5
 num_layers = 2
-output_size = 1
-seq_length = 720
+output_size = y.shape[1]
 lstm = LSTM(input_size, hidden_size, num_layers, output_size)
-
+lstm.to(device)
 criterion = torch.nn.MSELoss()    # Mean-squared error for regression
 optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
 
@@ -160,6 +176,7 @@ for epoch in range(num_epochs):
     # Train
     lstm.train()
     for inputs, targets in train_loader:
+        inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = lstm(inputs)
         train_loss = criterion(outputs, targets)
@@ -171,6 +188,7 @@ for epoch in range(num_epochs):
     lstm.eval()
     with torch.no_grad():
         for inputs, targets in test_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
             test_outputs = lstm(inputs)
             test_loss = criterion(test_outputs, targets)
             test_losses.append(test_loss.item())
@@ -210,7 +228,7 @@ plt.title('Training and Testing Loss Over Epochs')
 plt.text(0.5, 0.9, f'MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.text(0.5, 0.8, f'R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.tight_layout()
-plt.savefig("data/wind_train_test_losses.png")
+#plt.savefig("../fig/wind_train_test_losses.png")
 plt.show()
 
 # Testing the model performance
@@ -238,13 +256,13 @@ plt.plot(test_dates, dataY_plot, label='Observed')
 plt.plot(test_dates, data_predict, label='Predicted')
 plt.suptitle(r'$Temperature Prediction$')
 plt.xlabel('Year')
-plt.ylabel(r'$T(^oC)$')
+plt.ylabel(r'$wv(m/s)$')
 plt.legend()
 # Add MSE and R² values as annotations
 plt.text(0.5, 0.9, f'MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.text(0.5, 0.8, f'R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
 plt.tight_layout()
-plt.savefig("data/X_test_temperature.png")
+#plt.savefig("../fig/X_test_temperature.png")
 plt.show()
 
 def plot_time_series(data, X_train, X_test, y_train, y_test, y_pred_train, y_pred_test, model_name, train_r2, test_r2, scaler):

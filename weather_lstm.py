@@ -4,13 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error, r2_score
-import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
 
 # Set seed for reproducibility
 seed = 42
@@ -20,18 +15,30 @@ torch.manual_seed(seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(seed)
 
-plt.style.use("ggplot")
+# Device configuration
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 # Load the dataset
 df = pd.read_csv('data/weather_forecast.csv')
-# Convert 'DateTime' column to datetime format
-df["DateTime"] = pd.to_datetime(df["DateTime"])
+
+# Clean the 'DateTime' column by removing malformed entries
+df = df[df['DateTime'].str.match(r'\d{4}-\d{2}-\d{2}.*')]
+
+# Convert 'DateTime' column to datetime format, allowing pandas to infer the format
+df["DateTime"] = pd.to_datetime(df["DateTime"], errors='coerce')
+
+# Drop rows where the 'DateTime' conversion resulted in NaT (not-a-time)
+df.dropna(subset=["DateTime"], inplace=True)
+
 # Reindex the DataFrame before splitting
 df.set_index('DateTime', inplace=True)
-                                                                                                                                                               
-# select only important features
-features = ['p(mbar)','T(degC)', 'VPmax(mbar)','VPdef(mbar)', 'sh(g/kg)', 'rho(g/m**3)',  'wv(m/s)', 'wd(deg)' ]
+
+# Select only important features
+features = ['p(mbar)', 'T(degC)', 'VPmax(mbar)', 'VPdef(mbar)', 'sh(g/kg)', 'rho(g/m**3)', 'wv(m/s)', 'wd(deg)']
 df = df[features]
+
+# Resample the DataFrame by day and compute the mean for each day
+df_daily = df.resample('D').mean()
 
 class SlidingWindowGenerator:
     def __init__(self, seq_length, label_width, shift, df, label_columns=None, dropnan=True):
@@ -82,13 +89,12 @@ class SlidingWindowGenerator:
 
         X, y = np.array(X), np.array(y)
 
-        return X, y.reshape(-1, 1)
+        return X, y[:, -label_width:]
 
 
 # Initialize the generator
-# if label_width=1 it will be single-step forecasting
-swg = SlidingWindowGenerator(seq_length=30, label_width=3, shift=1, df=df, label_columns=['T(degC)'])
-print(swg)
+swg = SlidingWindowGenerator(seq_length=30, label_width=3, shift=1, df=df_daily, label_columns=['wv(m/s)'])
+
 # Generate windows
 X, y = swg.sliding_windows()
 
@@ -105,30 +111,28 @@ y_flat = y.reshape(-1, y_shape[-1])
 X = scaler_X.fit_transform(X_flat).reshape(X_shape)
 y = scaler_y.fit_transform(y_flat).reshape(y_shape)
 
-# Convert data to PyTorch tensors
-X_tensor = torch.Tensor(X)
-y_tensor = torch.Tensor(y)
+# Train and test data loading in tensor format
+train_size = int(len(y) * 0.7)
+test_size = len(y) - train_size
 
-# Move data to GPU if available
-if torch.cuda.is_available():
-    X_tensor = X_tensor.cuda()
-    y_tensor = y_tensor.cuda()
+X_train = torch.Tensor(X[0:train_size])
+y_train = torch.Tensor(y[0:train_size])
 
-# Define batch size
-batch_size = 256
+X_test = torch.Tensor(X[train_size:len(X)])
+y_test = torch.Tensor(y[train_size:len(y)])
+
+# Move tensors to the configured device
+X_train, y_train = X_train.to(device), y_train.to(device)
+X_test, y_test = X_test.to(device), y_test.to(device)
 
 # Create TensorDataset instances for training and testing data
-dataset = TensorDataset(X_tensor, y_tensor)
+train_data = TensorDataset(X_train, y_train)
+test_data = TensorDataset(X_test, y_test)
 
-# Split the dataset into train and test sets
-train_size = int(0.7 * len(dataset))
-test_size = len(dataset) - train_size
-train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
-
-# Initialize DataLoader objects for both datasets
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-
+# Initialize DataLoader objects for both datasets with batch size 256
+batch_size = 512
+train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
 
 class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size):
@@ -136,46 +140,38 @@ class LSTM(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.fc = nn.Linear(hidden_size, output_size)  # Adjust output size
 
     def forward(self, x):
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
-        if torch.cuda.is_available():
-            h0 = h0.cuda()
-            c0 = c0.cuda()
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
         
         out, _ = self.lstm(x, (h0, c0))
         out = self.fc(out[:, -1, :])
         return out
 
+# Training the model
+num_epochs = 21
+learning_rate = 0.01
 
-# Check for GPU availability including CUDA and Apple's MPS GPU
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-if device.type == 'cuda':
-    if torch.cuda.is_mps_available():
-        device = torch.device('cuda:0')  # Use CUDA GPU 0 with MPS if available
-    else:
-        device = torch.device('cuda')  # Use regular CUDA GPU
-
-# Initialize the model
-input_size = X.shape[2]  # feature fecture 
-hidden_size = 5
-num_layers = 2
-output_size = 1
-seq_length = 20
+input_size = X.shape[2]  # feature dimension
+hidden_size = 15
+num_layers = 10
+output_size = y.shape[1]  # match the label width
 lstm = LSTM(input_size, hidden_size, num_layers, output_size).to(device)
 
-# Define loss function and optimizer
-criterion = torch.nn.MSELoss()    # Mean-squared error for regression
-optimizer = torch.optim.Adam(lstm.parameters(), lr=0.01)
+criterion = torch.nn.MSELoss()  # Mean-squared error for regression
+optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
 
-# Training the model
-num_epochs = 2000
-
+# Train the model
 train_losses = []
 test_losses = []
 for epoch in range(num_epochs):
+    epoch_train_loss = 0.0
+    epoch_test_loss = 0.0
+    num_train_batches = 0
+    num_test_batches = 0
+
     # Train
     lstm.train()
     for inputs, targets in train_loader:
@@ -185,8 +181,9 @@ for epoch in range(num_epochs):
         train_loss = criterion(outputs, targets)
         train_loss.backward()
         optimizer.step()
-        train_losses.append(train_loss.item())
-    
+        epoch_train_loss += train_loss.item()
+        num_train_batches += 1
+
     # Test
     lstm.eval()
     with torch.no_grad():
@@ -194,48 +191,78 @@ for epoch in range(num_epochs):
             inputs, targets = inputs.to(device), targets.to(device)
             test_outputs = lstm(inputs)
             test_loss = criterion(test_outputs, targets)
-            test_losses.append(test_loss.item())
+            epoch_test_loss += test_loss.item()
+            num_test_batches += 1
     
-    if epoch % 100 == 0:
-        print(f"Epoch: {epoch}, Train Loss: {np.mean(train_losses[-len(train_loader):]):.5f}, Test Loss: {np.mean(test_losses[-len(test_loader):]):.5f}")
+    # Average losses over all batches in the epoch
+    epoch_train_loss /= num_train_batches
+    epoch_test_loss /= num_test_batches
+    
+    # Store the average losses
+    train_losses.append(epoch_train_loss)
+    test_losses.append(epoch_test_loss)
+    
+    if epoch % 5 == 0:
+        print(f"Epoch: {epoch}, Train Loss: {epoch_train_loss:.5f}, Test Loss: {epoch_test_loss:.5f}")
 
-# Compute final MSE and R² for train and test sets
-train_predict = lstm(X_tensor[:train_size].to(device)).cpu().detach().numpy()
-test_predict = lstm(X_tensor[train_size:].to(device)).cpu().detach().numpy()
-
-# Inverse transform the predictions
-train_predict = scaler_y.inverse_transform(train_predict.reshape(-1, 1))
-test_predict = scaler_y.inverse_transform(test_predict.reshape(-1, 1))
-
-# Compute MSE and R2 scores
-train_mse = mean_squared_error(y[:train_size], train_predict)
-test_mse = mean_squared_error(y[train_size:], test_predict)
-
-train_r2 = r2_score(y[:train_size], train_predict)
-test_r2 = r2_score(y[train_size:], test_predict)
-
-# Plot the training and testing loss
-plt.figure(figsize=(10, 5))
+# Plot the losses
 plt.plot(train_losses, label='Train Loss')
 plt.plot(test_losses, label='Test Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
+plt.title('Training and Test Losses')
 plt.legend()
-plt.title('Training and Testing Loss Over Epochs')
-# Add MSE and R² values as annotations
-plt.text(0.5, 0.9, f'Train MSE: {train_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.8, f'Test MSE: {test_mse:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.7, f'Train R²: {train_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.text(0.5, 0.6, f'Test R²: {test_r2:.5f}', ha='center', va='center', transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
-plt.tight_layout()
 plt.show()
 
-# Plot observed and predicted values for the test dataset
-plt.figure(figsize=(12, 6))
-plt.plot(df.index[train_size:], scaler_y.inverse_transform(y[train_size:]), label='Actual')
-plt.plot(df.index[train_size:], test_predict, label='Predicted')
-plt.xlabel('Date')
-plt.ylabel('T(degC)')
-plt.title('Observed vs Predicted Wind Speed')
-plt.legend()
-plt.show()
+
+
+import pandas as pd
+
+def sliding_windows(df, n_in=1, n_out=1, dropnan=True):
+    """
+    Convert time series data into a supervised learning format for LSTM modeling.
+
+    Parameters:
+    - data: The input time series data (pandas DataFrame or list of arrays).
+    - n_in: Number of lag observations as input (default: 1).
+    - n_out: Number of future observations as output (default: 1).
+    - dropnan: Whether to drop rows with NaN values (default: True).
+
+    Returns:
+    - Pandas DataFrame with columns representing lag and future observations.
+    """
+
+    # Determine the number of variables (features) in the data
+    data = df.values
+    n_vars = 1 if isinstance(data, list) else data.shape[1]
+
+    # Create a DataFrame from the input data
+    dff = pd.DataFrame(data)
+
+    # Initialize lists for column names
+    cols, names = list(), list()
+
+    # Create columns for lag observations (t-n, ..., t-1)
+    for i in range(n_in, 0, -1):
+        cols.append(dff.shift(i))
+        names += [('var%d(t-%d)' % (j+1, i)) for j in range(n_vars)]
+
+    # Create columns for future observations (t, t+1, ..., t+n)
+    for i in range(0, n_out):
+        cols.append(dff.shift(-i))
+        if i == 0:
+            names += [('var%d(t)' % (j+1)) for j in range(n_vars)]
+        else:
+            names += [('var%d(t+%d)' % (j+1, i)) for j in range(n_vars)]
+
+    # Concatenate the columns to create the final DataFrame
+    agg = pd.concat(cols, axis=1)
+    agg.columns = names
+
+    # Optionally drop rows with NaN values
+    if dropnan:
+        agg.dropna(inplace=True)
+
+    return agg
+
+
