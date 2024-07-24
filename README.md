@@ -1,5 +1,5 @@
 Machine Learning  for Physical Sciences
 ==========================
 
-An introduction to machine learning, deep learing and RNN models for phsyical sciences applications
+An introduction to machine learning and deep learing  for phsyical sciences applications
 
