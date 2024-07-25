@@ -12,8 +12,8 @@ objectives:
 - "Installing, updating, and importing packages."
 - "Verify that everyone's Python environment is ready."
 keypoints:
-- "Building high-performing models can be quite challenging, in fact, it’s a real test of your skills"
-- "You’ve taken the crucial step of preprocessing CSV files and transforming the data into tensors."
+- "Deep Learning algorithms are often represented as graph computation"
+- "We have different non-linear activation functions that help in learning different relationships to solve handle non-linearity in nn problems."
 - ""
 ---
 <!-- MathJax -->
@@ -178,7 +178,7 @@ Leaky ReLU is an attempt to solve a dying problem where, instead of saturating t
 You know the data and the goal you're working towards, so you know the best, which loss function to use. Basic MSE or MAE works well for regression tasks. The basic MSE and MAE works well for regression task is given by:
 
 
-\\[\text{Loss} = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_{i})^2\\]
+\\[ \text{Loss} = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_{i})^2 \\]
 
 
 The quantinty you want ot determine("loss") help to determine the best weights and bias terms in the model. Gradient descent is a technique to find the weight that minimizes the loss function.  This is done by starting with a random point, the gradient (the black lines) is calculated at that point. Then the negative of that gradient is followed to the next point and so on. This is repeated until the minimum is reached.
@@ -199,12 +199,12 @@ As the loss function depends on the linear function and its weights \(w_0\) and 
 
 The only other thing one must pay attention to is the learning rate \\(lambda\\) (how big of a step to take). Too small and finding the right weights takes forever, too big and you might miss the minimum.
 
-\\[w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i} \\]
+\\[ w_{i+1} = w_i - \lambda \frac{\partial J}{\partial w_i} \\]
 
 
 Backpropagation is a technique used to compute the gradient of the loss function when its functional form is unknown. This method calculates the gradient with respect to the neural network's weights, allowing for the optimization of these weights to minimize the loss. A critical requirement for the activation functions in this process is that they must be differentiable, as this property is essential for the gradient computation necessary in backpropagation.
 
-\\[\frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\left( \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i - y_i)^2 \right) = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i - y_i) \frac{\partial \hat{y}_i}{\partial w_{k}}\\]
+\\[ \frac{\partial J}{\partial w_k} = \frac{\partial}{\partial w_k}\left( \frac{1}{2m}\sum_{i=1}^{m}(\hat{y}_i - y_i)^2 \right) = \frac{1}{m}\sum_{i=1}^{m}(\hat{y}_i - y_i) \frac{\partial \hat{y}_i}{\partial w_{k}} \\]
 
 
 
