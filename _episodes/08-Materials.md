@@ -1,5 +1,5 @@
 ---
-title: Machine learning for material science
+title: Machine Learning For Material Science
 teaching: 1
 exercises: 0
 questions:
@@ -12,7 +12,10 @@ objectives:
 keypoints:
 - "Artificial intelligence and machine learning are being increasingly used in scientific domains such as computational science"
 - "RDKit can be used to calculate various molecular properties for machine learning in materials science"
-- "PyMatGen help to query structures w  from MP repository"
+- "PyMatGen help to query structures from MP repository"
+- "Descriptor-based ML approaches focus on using numerical features (descriptors) that summarize key aspects of the material"
+- "Graph-based ML techniques are particularly suitable when dealing with materials that can be represented as networks or graphs"
+- "In practice, hybrid approaches that combine aspects of both graph-based and descriptor-based methods are also gaining traction, leveraging the strengths of each depending on the task at hand."
 - "Crystal Hamiltonian Graph neural Network is pretrained on the GGA/GGA+U static and relaxation trajectories from Materials Project"
 - "Charge-informed molecular dynamics can be simulated with pretrained CHGNet through ASE python interface"
 - "CHGNet can perform fast structure optimization and provide site-wise magnetic moments. This makes it ideal for pre-relaxation and MAGMOM initialization in spin-polarized DFT"
